@@ -206,7 +206,7 @@
             map = new kakao.maps.Map(container, options);
 
             // data/menu.json 불러오기
-            fetch('./data/menu.json')
+            fetch('data/menu.json')
                 .then(response => response.json())
                 .then(data => {
                     bounds = new kakao.maps.LatLngBounds();
