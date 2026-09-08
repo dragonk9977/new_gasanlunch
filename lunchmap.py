@@ -33,7 +33,7 @@ ojeong_weekday_index = min(today_weekday_index, 4)
 print(f"\n{'='*60}\n오늘 날짜 : {today_date_str_space} ({today_weekday}요일)\n{'='*60}")
 
 # ==========================================================
-# 3. 오정 메뉴 (요일별 Crop - 길이감 있게 수정)
+# 3. 오정 메뉴 (요일별 Crop - 원래 설정인 max_height=420으로 길게 출력)
 # ==========================================================
 def crop_ojeong_by_weekday(image_path):
     try:
@@ -48,7 +48,7 @@ def crop_ojeong_by_weekday(image_path):
         crop_left = left_margin + (col_width * ojeong_weekday_index)
         crop_right = crop_left + col_width
         cropped_img = img.crop((crop_left, top_margin, crop_right, bottom_margin))
-        max_height = 420  # 오정 이미지를 더 길게 키움
+        max_height = 420
         if cropped_img.height > max_height:
             ratio = max_height / cropped_img.height
             new_width = int(cropped_img.width * ratio)
@@ -112,7 +112,7 @@ chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 # ==========================================================
-# 7. 이미지 및 런치타임 텍스트 수집 함수
+# 7. 원래의 수집 함수들 (온정찬, 런치투게더, 밥심, 런치타임)
 # ==========================================================
 def get_kakao_posts_image(driver, url):
     print(f" -> [온정찬] 카카오 게시물 이미지 수집 중")
@@ -267,16 +267,16 @@ for item in cafeteria_list:
     html_content = ""
     if item["type"] == "ojeong":
         src = crop_ojeong_by_weekday(item["url"])
-        html_content = f'<img src="{src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if src else "<div>이미지 없음</div>"
+        html_content = f'<img src="{src}" style="display:block; margin:0 auto; max-width:100%; max-height:420px; border-radius:6px;">' if src else "<div>이미지 없음</div>"
     elif item["type"] == "kakao_posts":
         img_src = get_kakao_posts_image(driver, item["url"])
-        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px;">' if img_src else '<div>이미지 없음</div>'
     elif item["type"] == "kakao_profile":
         img_src = get_kakao_profile_image(driver, item["url"], item["name"])
-        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px;">' if img_src else '<div>이미지 없음</div>'
     elif item["type"] == "kakao_first":
         img_src = get_kakao_first_image(driver, item["url"], item["name"])
-        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px;">' if img_src else '<div>이미지 없음</div>'
     elif item["type"] == "threads":
         html_content = get_threads_menu(driver, item["url"])
 
