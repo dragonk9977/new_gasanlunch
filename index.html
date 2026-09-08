@@ -1,437 +1,380 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>가산 점심지도</title>
-
-    <script
-        type="text/javascript"
-        src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_카카오_JavaScript_Key">
-    </script>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>가산 오늘의 점심 🍚</title>
+    <!-- 카카오맵 JavaScript SDK (YOUR_KAKAO_JAVASCRIPT_KEY 부분을 본인의 JavaScript 키로 변경하세요) -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_JAVASCRIPT_KEY"></script>
+    <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2503@1.0/KakaoBigSans-Regular.woff2" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'KakaoBigFont';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2503@1.0/KakaoBigSans-Regular.woff2') format('woff2');
+            font-weight: 400;
+        }
         * {
+            font-family: 'KakaoBigFont', sans-serif !important;
             box-sizing: border-box;
         }
-
-        html,
-        body {
+        body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            font-family: Arial, "Noto Sans KR", sans-serif;
-            background: #f5f6f8;
+            overflow: hidden;
+            background-color: #f4f6f8;
         }
-
-        #app {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 상단 */
-        .header {
-            height: 64px;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            flex-shrink: 0;
-            z-index: 10;
-        }
-
-        .title {
-            font-size: 21px;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        .date {
-            font-size: 14px;
-            color: #6b7280;
-        }
-
-        /* 지도 */
-        .map-area {
-            flex: 1;
-            position: relative;
-            min-height: 0;
-        }
-
         #map {
             width: 100%;
             height: 100%;
         }
-
-        /* 식당 카드 영역 */
-        .restaurant-panel {
-            position: absolute;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-
+        /* 상단 타이틀바 */
+        .top-bar {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 2px solid #111;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-weight: bold;
+            font-size: 16px;
+            color: #111;
+        }
+        /* 우측 플로팅 버튼들 */
+        .float-btn-group {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
             display: flex;
-            gap: 12px;
-
-            overflow-x: auto;
-            padding: 4px 4px 8px;
-
-            z-index: 5;
+            flex-direction: column;
+            gap: 10px;
         }
-
-        .restaurant-card {
-            min-width: 230px;
-            max-width: 230px;
-
-            background: rgba(255, 255, 255, 0.97);
-            border-radius: 14px;
-            padding: 16px;
-
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
-
-            cursor: pointer;
-            transition: transform 0.15s;
-        }
-
-        .restaurant-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .restaurant-name {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #111827;
-        }
-
-        .restaurant-type {
-            display: inline-block;
-            font-size: 11px;
-            padding: 3px 7px;
-            border-radius: 5px;
-            background: #f3f4f6;
-            color: #6b7280;
-            margin-bottom: 10px;
-        }
-
-        .menu-preview {
-            font-size: 13px;
-            color: #4b5563;
-            line-height: 1.55;
-        }
-
-        .distance {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #2563eb;
-            font-weight: 600;
-        }
-
-        /* 마커 */
-        .custom-marker {
+        .action-btn {
             background: #ffffff;
-            border: 2px solid #2563eb;
+            border: 2px solid #111111;
+            padding: 10px 14px;
+            font-weight: bold;
+            font-size: 14px;
             border-radius: 10px;
-            padding: 5px 9px;
-
-            font-size: 12px;
-            font-weight: 700;
-
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            color: #111;
+            text-align: center;
+            transition: background 0.2s;
+        }
+        .action-btn:hover {
+            background: #f0f0f0;
+        }
+        .action-btn.dark {
+            background: #111;
+            color: #fff;
+        }
+        .action-btn.dark:hover {
+            background: #333;
+        }
+        /* 지도 위 커스텀 마커 스타일 */
+        .custom-marker {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 2.5px solid #111111;
+            padding: 6px 12px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #111111;
+            border-radius: 8px;
             white-space: nowrap;
-
-            box-shadow: 0 2px 7px rgba(0,0,0,0.2);
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.25);
+            text-align: center;
+            cursor: pointer;
         }
-
-        .office-marker {
-            background: #111827;
-            color: #ffffff;
-            border: none;
+        .custom-marker:hover {
+            background-color: #fffacd;
         }
-
-        /* 모바일 */
-        @media (max-width: 700px) {
-
-            .header {
-                height: 56px;
-                padding: 0 16px;
-            }
-
-            .title {
-                font-size: 18px;
-            }
-
-            .date {
-                font-size: 12px;
-            }
-
-            .restaurant-panel {
-                left: 10px;
-                right: 10px;
-                bottom: 10px;
-            }
-
-            .restaurant-card {
-                min-width: 210px;
-                max-width: 210px;
-            }
+        /* 전체 메뉴 모달 창 */
+        #dashboardModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        .dashboard-container {
+            background: #f4f6f8;
+            border: 4px solid #111111;
+            width: 96vw;
+            max-width: 1500px;
+            height: 90vh;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+        }
+        .dashboard-grid {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            width: 100%;
+            height: calc(100% - 50px);
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .menu-card {
+            background: #ffffff;
+            border: 2px solid #333333;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            flex: 0 0 280px;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+        /* 마커 클릭 시 뜨는 상세 팝업(CustomOverlay) 스타일 */
+        .wrap { position: absolute; left: 0; bottom: 40px; width: 280px; text-align: left; overflow: hidden; font-size: 12px; font-family: 'KakaoBigFont', sans-serif; line-height: 1.5; }
+        .wrap * { padding: 0; margin: 0; }
+        .wrap .info { width: 280px; border-radius: 12px; border: 2px solid #333; background: #fff; box-shadow: 0 8px 25px rgba(0,0,0,0.3); position: relative; }
+        .info .title { padding: 12px 14px 8px 14px; font-weight: bold; font-size: 16px; border-bottom: 1px solid #ddd; background: #f8f9fa; border-top-left-radius: 10px; border-top-right-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .info .close { width: 22px; height: 22px; border: none; background: #e74c3c; color: #fff; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .info .body { padding: 12px 14px; max-height: 350px; overflow-y: auto; text-align: center; }
+        .info .dist-text { color: #e74c3c; font-weight: bold; margin-bottom: 8px; font-size: 12px; }
+        .info .btn-wrap { padding: 0 14px 12px 14px; text-align: center; }
+        .nav-btn { display: inline-block; width: 100%; padding: 8px; background: #fee500; color: #111; font-weight: bold; text-decoration: none; border-radius: 6px; border: 1px solid #ccb200; text-align: center; }
+        .nav-btn:hover { background: #fdd800; }
+        @media (max-width: 900px) {
+            .dashboard-container { width: 98vw; height: 94vh; padding: 12px; }
         }
     </style>
 </head>
-
 <body>
 
-<div id="app">
+    <div class="top-bar" id="topTitle">🍚 가산 오늘의 점심</div>
 
-    <header class="header">
-        <div class="title">🍚 가산 점심지도</div>
-        <div class="date" id="today"></div>
-    </header>
-
-    <div class="map-area">
-
-        <div id="map"></div>
-
-        <div class="restaurant-panel" id="restaurantPanel"></div>
-
+    <div class="float-btn-group">
+        <button class="action-btn" onclick="resetMapView()">🗺️ 지도 정위치</button>
+        <button class="action-btn dark" onclick="toggleDashboard(true)">📋 메뉴 한번에 보기</button>
+        <button class="action-btn" onclick="panToMyLoc()">📍 내 위치</button>
     </div>
 
-</div>
+    <div id="map"></div>
 
+    <!-- 전체 메뉴 모달 창 -->
+    <div id="dashboardModal" onclick="handleModalClick(event)">
+        <div class="dashboard-container">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h2 style="margin:0; font-size:18px; color:#111; font-weight:bold;">📋 오늘 가산 식단 한번에 보기</h2>
+                <button onclick="toggleDashboard(false)" style="background:#e74c3c; color:#fff; border:none; width:32px; height:32px; border-radius:50%; font-size:20px; font-weight:bold; cursor:pointer;">&times;</button>
+            </div>
+            <div class="dashboard-grid" id="dashboardGrid">
+                <!-- 동적 렌더링 -->
+            </div>
+        </div>
+    </div>
 
-<script>
+    <script>
+        let map;
+        let markers = [];
+        let overlays = [];
+        let bounds;
+        let myLocationOverlay = null;
 
-    /* =========================================
-       기본 데이터
-    ========================================= */
+        // 오늘 날짜 표시
+        const today = new Date();
+        document.getElementById('topTitle').innerText = `🍚 가산 오늘의 점심 (${today.getMonth()+1}월 ${today.getDate()}일)`;
 
-    const restaurants = [
-        {
-            name: "오정",
-            lat: 37.4776,
-            lng: 126.8797,
-            type: "한식뷔페",
-            menu: "오늘의 메뉴를 불러오는 중...",
-            distance: "회사 바로 옆"
-        },
+        function initMap() {
+            const container = document.getElementById('map');
+            const options = {
+                center: new kakao.maps.LatLng(37.4795, 126.8820),
+                level: 3
+            };
+            map = new kakao.maps.Map(container, options);
 
-        {
-            name: "온정찬",
-            lat: 37.4770,
-            lng: 126.8840,
-            type: "한식",
-            menu: "오늘의 메뉴를 불러오는 중...",
-            distance: ""
-        },
+            // data/menu.json 불러오기
+            fetch('./data/menu.json')
+                .then(response => response.json())
+                .then(data => {
+                    bounds = new kakao.maps.LatLngBounds();
 
-        {
-            name: "런치투게더",
-            lat: 37.4775,
-            lng: 126.8820,
-            type: "구내식당",
-            menu: "오늘의 메뉴를 불러오는 중...",
-            distance: ""
-        },
+                    data.forEach((item, index) => {
+                        const position = new kakao.maps.LatLng(item.lat, item.lng);
+                        bounds.extend(position);
 
-        {
-            name: "런치타임",
-            lat: 37.4778,
-            lng: 126.8850,
-            type: "구내식당",
-            menu: "오늘의 메뉴를 불러오는 중...",
-            distance: ""
-        },
+                        // 1. 커스텀 마커 생성
+                        const content = document.createElement('div');
+                        content.className = 'custom-marker';
+                        content.innerHTML = `🍚 ${item.name} <span style="color:#e74c3c; font-size:12px;">(${item.walk_min}분)</span>`;
+                        
+                        const customOverlay = new kakao.maps.CustomOverlay({
+                            position: position,
+                            content: content,
+                            yAnchor: 1.5
+                        });
+                        customOverlay.setMap(map);
+                        markers.push(customOverlay);
 
-        {
-            name: "밥심",
-            lat: 37.4785,
-            lng: 126.8810,
-            type: "한식",
-            menu: "오늘의 메뉴를 불러오는 중...",
-            distance: ""
+                        // 2. 식당 상세 팝업 오버레이 생성
+                        const popupContent = document.createElement('div');
+                        popupContent.className = 'wrap';
+                        popupContent.innerHTML = `
+                            <div class="info">
+                                <div class="title">
+                                    <span>🍚 ${item.name}</span>
+                                    <button class="close" onclick="closeOverlay(${index})">&times;</button>
+                                </div>
+                                <div class="body">
+                                    <div class="dist-text">🏢 도보 ${item.walk_min}분 (${item.dist}m)</div>
+                                    <hr style="margin:6px 0; border:0; border-top:1px solid #eee;">
+                                    <div style="width:100%; display:flex; justify-content:center; align-items:center;">
+                                        ${item.html}
+                                    </div>
+                                </div>
+                                <div class="btn-wrap">
+                                    <a href="https://map.kakao.com/link/to/${item.name},${item.lat},${item.lng}" target="_blank" class="nav-btn">📍 길찾기 (카카오내비)</a>
+                                </div>
+                            </div>
+                        `;
+
+                        const detailOverlay = new kakao.maps.CustomOverlay({
+                            position: position,
+                            content: popupContent,
+                            yAnchor: 1.15
+                        });
+                        overlays.push(detailOverlay);
+
+                        // 마커 클릭 시 해당 팝업만 토글/오픈
+                        content.onclick = () => {
+                            closeAllOverlays();
+                            detailOverlay.setMap(map);
+                            map.panTo(position);
+                        };
+
+                        // 3. 대시보드(메뉴 한눈에 보기) 카드 생성
+                        const grid = document.getElementById('dashboardGrid');
+                        const card = document.createElement('div');
+                        card.className = 'menu-card';
+                        card.innerHTML = `
+                            <div>
+                                <h3 style="margin:5px 0; font-size:16px; color:#111; text-align:center; font-weight:bold;">${item.name}</h3>
+                                <p style="margin:0 0 8px 0; font-size:12px; color:#e74c3c; font-weight:bold; text-align:center;">🏢 도보 ${item.walk_min}분 (${item.dist}m)</p>
+                                <hr style="margin:6px 0 10px 0; border:0; border-top:1px solid #ddd;">
+                                <div style="width:100%; text-align:center;">
+                                    ${item.html}
+                                </div>
+                            </div>
+                            <div style="margin-top:10px; text-align:center;">
+                                <a href="https://map.kakao.com/link/to/${item.name},${item.lat},${item.lng}" target="_blank" class="nav-btn" style="display:block; padding:6px; font-size:13px;">📍 길찾기</a>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+
+                    // 모든 식당이 한눈에 보이도록 지도 범위 재조정
+                    map.setBounds(bounds);
+                })
+                .catch(err => {
+                    console.error('menu.json을 불러오는 데 실패했습니다:', err);
+                });
         }
-    ];
 
+        function closeAllOverlays() {
+            overlays.forEach(overlay => overlay.setMap(null));
+        }
 
-    /* =========================================
-       오늘 날짜
-    ========================================= */
+        function closeOverlay(index) {
+            overlays[index].setMap(null);
+        }
 
-    const now = new Date();
+        function resetMapView() {
+            toggleDashboard(false);
+            closeAllOverlays();
+            if (bounds) {
+                map.setBounds(bounds);
+            }
+        }
 
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
+        function toggleDashboard(show) {
+            const modal = document.getElementById('dashboardModal');
+            if (show) {
+                closeAllOverlays();
+                modal.style.display = 'flex';
+            } else {
+                modal.style.display = 'none';
+            }
+        }
 
-    document.getElementById("today").textContent =
-        `${year}.${String(month).padStart(2, "0")}.${String(day).padStart(2, "0")}`;
+        function handleModalClick(e) {
+            if (e.target.id === 'dashboardModal') {
+                toggleDashboard(false);
+            }
+        }
 
+        function panToMyLoc() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const locPosition = new kakao.maps.LatLng(lat, lon);
 
-    /* =========================================
-       카카오맵
-    ========================================= */
+                    map.setCenter(locPosition);
+                    map.setLevel(3);
 
-    const container = document.getElementById("map");
+                    if (!myLocationOverlay) {
+                        const content = document.createElement('div');
+                        content.style.background = '#007aff';
+                        content.style.color = '#fff';
+                        content.style.padding = '4px 8px';
+                        content.style.borderRadius = '12px';
+                        content.style.fontWeight = 'bold';
+                        content.style.fontSize = '12px';
+                        content.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+                        content.innerHTML = '📍 내 위치';
 
-    const options = {
-        center: new kakao.maps.LatLng(
-            37.4776,
-            126.8797
-        ),
-        level: 4
-    };
+                        myLocationOverlay = new kakao.maps.CustomOverlay({
+                            position: locPosition,
+                            content: content,
+                            yAnchor: 1.5
+                        });
+                    } else {
+                        myLocationOverlay.setPosition(locPosition);
+                    }
+                    myLocationOverlay.setMap(map);
+                }, function(error) {
+                    alert('위치 정보를 가져올 수 없습니다.');
+                });
+            } else {
+                alert('이 브라우저에서는 위치 정보를 지원하지 않습니다.');
+            }
+        }
 
-    const map = new kakao.maps.Map(
-        container,
-        options
-    );
-
-
-    /* =========================================
-       회사 위치
-    ========================================= */
-
-    const officePosition =
-        new kakao.maps.LatLng(
-            37.4776,
-            126.8797
-        );
-
-    const officeMarker =
-        new kakao.maps.CustomOverlay({
-
-            position: officePosition,
-
-            content: `
-                <div class="custom-marker office-marker">
-                    🏢 회사
-                </div>
-            `,
-
-            yAnchor: 1
-        });
-
-    officeMarker.setMap(map);
-
-
-    /* =========================================
-       식당 마커
-    ========================================= */
-
-    restaurants.forEach((restaurant, index) => {
-
-        const position =
-            new kakao.maps.LatLng(
-                restaurant.lat,
-                restaurant.lng
-            );
-
-        const overlay =
-            new kakao.maps.CustomOverlay({
-
-                position: position,
-
-                content: `
-                    <div
-                        class="custom-marker"
-                        onclick="selectRestaurant(${index})"
-                    >
-                        ${restaurant.name}
-                    </div>
-                `,
-
-                yAnchor: 1
-            });
-
-        overlay.setMap(map);
-
-        restaurant.overlay = overlay;
-    });
-
-
-    /* =========================================
-       식당 카드
-    ========================================= */
-
-    function renderRestaurantCards() {
-
-        const panel =
-            document.getElementById("restaurantPanel");
-
-        panel.innerHTML = "";
-
-        restaurants.forEach((restaurant, index) => {
-
-            const card =
-                document.createElement("div");
-
-            card.className = "restaurant-card";
-
-            card.innerHTML = `
-                <div class="restaurant-name">
-                    ${restaurant.name}
-                </div>
-
-                <div class="restaurant-type">
-                    ${restaurant.type}
-                </div>
-
-                <div class="menu-preview">
-                    ${restaurant.menu}
-                </div>
-
-                ${
-                    restaurant.distance
-                    ? `
-                        <div class="distance">
-                            🚶 ${restaurant.distance}
-                        </div>
-                    `
-                    : ""
-                }
-            `;
-
-            card.onclick = () =>
-                selectRestaurant(index);
-
-            panel.appendChild(card);
-        });
-    }
-
-
-    /* =========================================
-       식당 선택
-    ========================================= */
-
-    function selectRestaurant(index) {
-
-        const restaurant =
-            restaurants[index];
-
-        const position =
-            new kakao.maps.LatLng(
-                restaurant.lat,
-                restaurant.lng
-            );
-
-        map.setCenter(position);
-
-        map.setLevel(3);
-    }
-
-
-    /* =========================================
-       초기 실행
-    ========================================= */
-
-    renderRestaurantCards();
-
-</script>
-
+        // 카카오맵 스크립트 로드 후 실행
+        window.onload = function() {
+            if (typeof kakao !== 'undefined' && kakao.maps) {
+                kakao.maps.load(initMap);
+            } else {
+                const script = document.createElement('script');
+                script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=YOUR_KAKAO_JAVASCRIPT_KEY";
+                script.onload = function() {
+                    kakao.maps.load(initMap);
+                };
+                document.head.appendChild(script);
+            }
+        };
+    </script>
 </body>
 </html>
