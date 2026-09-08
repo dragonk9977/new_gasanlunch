@@ -33,7 +33,7 @@ ojeong_weekday_index = min(today_weekday_index, 4)
 print(f"\n{'='*60}\n오늘 날짜 : {today_date_str_space} ({today_weekday}요일)\n{'='*60}")
 
 # ==========================================================
-# 3. 오정 메뉴 (요일별 Crop 이미지 유지)
+# 3. 오정 메뉴 (요일별 Crop)
 # ==========================================================
 def crop_ojeong_by_weekday(image_path):
     try:
@@ -48,7 +48,7 @@ def crop_ojeong_by_weekday(image_path):
         crop_left = left_margin + (col_width * ojeong_weekday_index)
         crop_right = crop_left + col_width
         cropped_img = img.crop((crop_left, top_margin, crop_right, bottom_margin))
-        max_height = 320
+        max_height = 280
         if cropped_img.height > max_height:
             ratio = max_height / cropped_img.height
             new_width = int(cropped_img.width * ratio)
@@ -67,10 +67,10 @@ def crop_ojeong_by_weekday(image_path):
 # ==========================================================
 cafeteria_list = [
     { "name": "오정", "address": "서울 금천구 가산디지털2로 30", "type": "ojeong", "url": OJEONG_IMAGE_PATH, "lat_offset": 0.0000, "lng_offset": -0.0003 },
-    { "name": "온정찬", "address": "서울 금천구 가산디지털1로 75-15", "type": "kakao_text", "url": "https://pf.kakao.com/_UIdXn/posts", "lat_offset": 0.0002, "lng_offset": 0.0002 },
-    { "name": "런치투게더", "address": "서울 금천구 가산디지털1로 58", "type": "kakao_text", "url": "https://pf.kakao.com/_swtYxl", "lat_offset": -0.0002, "lng_offset": 0.0003 },
+    { "name": "온정찬", "address": "서울 금천구 가산디지털1로 75-15", "type": "kakao_posts", "url": "https://pf.kakao.com/_UIdXn/posts", "lat_offset": 0.0002, "lng_offset": 0.0002 },
+    { "name": "런치투게더", "address": "서울 금천구 가산디지털1로 58", "type": "kakao_profile", "url": "https://pf.kakao.com/_swtYxl", "lat_offset": -0.0002, "lng_offset": 0.0003 },
     { "name": "런치타임", "address": "서울 금천구 가산디지털2로 24", "type": "threads", "url": "https://www.threads.net/@lunchtime_ypp", "lat_offset": -0.0003, "lng_offset": -0.0002 },
-    { "name": "밥심", "address": "서울 금천구 가산디지털2로 46", "type": "kakao_text", "url": "https://pf.kakao.com/_mHWxjX", "lat_offset": 0.0003, "lng_offset": -0.0001 }
+    { "name": "밥심", "address": "서울 금천구 가산디지털2로 46", "type": "kakao_first", "url": "https://pf.kakao.com/_mHWxjX", "lat_offset": 0.0003, "lng_offset": -0.0001 }
 ]
 
 # ==========================================================
@@ -112,44 +112,96 @@ chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 # ==========================================================
-# 7. 카카오 채널 및 스레드 텍스트 수집 함수
+# 7. 이미지 수집 함수들
 # ==========================================================
-def get_kakao_post_text(driver, url, store_name):
-    print(f" -> [{store_name}] 카카오 텍스트 메뉴 수집 중")
+def get_kakao_posts_image(driver, url):
     try:
         driver.get(url)
         time.sleep(4)
-        body_text = driver.find_element(By.TAG_NAME, "body").text
-        lines = body_text.split("\n")
-        
-        filtered_lines = []
-        capture = False
-        for line in lines:
-            line_clean = line.strip()
-            if not line_clean:
+        posts = driver.find_elements(By.TAG_NAME, "div")
+        for post in posts:
+            try:
+                text = post.text
+                if today_date_str_space in text or today_date_str_nospace in text:
+                    img = post.find_element(By.TAG_NAME, "img")
+                    src = img.get_attribute("src")
+                    if src and "k.kakaocdn.net/dn/" in src:
+                        return src
+            except:
                 continue
-            if today_date_str_space in line_clean or today_date_str_nospace in line_clean or "점심" in line_clean or "메뉴" in line_clean:
-                capture = True
-            if capture:
-                # 불필요한 UI 문구 제외
-                if line_clean in ["채널", "홈", "포스트", "친구", "채널추가", "톡채널", "프로필", "사진", "동영상"]:
-                    continue
-                filtered_lines.append(line_clean)
-                if len(filtered_lines) >= 15:  # 최대 15줄까지만
-                    break
-
-        if not filtered_lines:
-            # 날짜 매칭 실패 시 상위 텍스트 일부 가져오기
-            filtered_lines = [l.strip() for l in lines if l.strip()][:10]
-
-        formatted_text = "<br>".join(filtered_lines)
-        return f'<div style="background:#f9f9f9; border:1px solid #ddd; padding:12px; border-radius:8px; font-size:13px; line-height:1.6; color:#333; text-align:left; max-height:280px; overflow-y:auto;">{formatted_text}</div>'
+        imgs = driver.find_elements(By.TAG_NAME, "img")
+        for img in imgs:
+            src = img.get_attribute("src")
+            if src and "k.kakaocdn.net/dn/" in src:
+                return src
+        return None
     except Exception as e:
-        print(f" -> [{store_name}] 텍스트 수집 오류 : {e}")
-        return f'<div style="padding:10px; color:#e74c3c;">메뉴 텍스트를 불러오지 못했습니다.</div>'
+        print(f" -> [온정찬] 오류 : {e}")
+        return None
+
+def get_kakao_profile_image(driver, url, store_name):
+    try:
+        driver.get(url)
+        time.sleep(4)
+        imgs = driver.find_elements(By.TAG_NAME, "img")
+        kakao_imgs = []
+        for img in imgs:
+            try:
+                src = img.get_attribute("src")
+                if not src or "k.kakaocdn.net/dn/" not in src:
+                    continue
+                size = img.size
+                kakao_imgs.append({"element": img, "src": src, "width": size["width"], "height": size["height"]})
+            except:
+                continue
+        if not kakao_imgs:
+            return None
+        profile_candidates = [item for item in kakao_imgs if 0 < item["width"] <= 250 and item["height"] <= 250]
+        if not profile_candidates:
+            profile_candidates = [kakao_imgs[0]]
+        profile = profile_candidates[0]
+        try:
+            driver.execute_script("arguments[0].click();", profile["element"])
+        except:
+            pass
+        time.sleep(2)
+        modal_imgs = driver.find_elements(By.TAG_NAME, "img")
+        modal_candidates = []
+        for img in modal_imgs:
+            try:
+                src = img.get_attribute("src")
+                if not src or "k.kakaocdn.net/dn/" not in src:
+                    continue
+                size = img.size
+                width, height = size["width"], size["height"]
+                if width < 150 or height < 150:
+                    continue
+                modal_candidates.append({"src": src, "area": width * height})
+            except:
+                continue
+        if modal_candidates:
+            modal_candidates.sort(key=lambda x: x["area"], reverse=True)
+            return modal_candidates[0]["src"]
+        return profile["src"]
+    except Exception as e:
+        print(f" -> [{store_name}] 오류 : {e}")
+        return None
+
+def get_kakao_first_image(driver, url, store_name):
+    try:
+        driver.get(url)
+        time.sleep(3)
+        imgs = driver.find_elements(By.TAG_NAME, "img")
+        for img in imgs:
+            src = img.get_attribute("src")
+            if src and "k.kakaocdn.net/dn/" in src:
+                return src
+        return None
+    except Exception as e:
+        print(f" -> [{store_name}] 오류 : {e}")
+        return None
 
 def get_threads_menu(driver, url):
-    print(f" -> [런치타임] 스레드 메뉴 수집 중")
     try:
         driver.get(url)
         time.sleep(4)
@@ -157,9 +209,9 @@ def get_threads_menu(driver, url):
         lines = body_text.split("\n")
         filtered_lines = [l.strip() for l in lines if l.strip() and not l.strip().startswith("#")]
         formatted_text = "<br>".join(filtered_lines[:15]) if filtered_lines else "오늘의 메뉴 내용 없음"
-        return f'<div style="background:#f9f9f9; border:1px solid #ddd; padding:12px; border-radius:8px; font-size:13px; line-height:1.6; color:#333; text-align:left; max-height:280px; overflow-y:auto;">{formatted_text}</div>'
+        return f'<div style="background:#f9f9f9; border:1px solid #ddd; padding:10px; border-radius:8px; font-size:13px; text-align:left; max-height:280px; overflow-y:auto;">{formatted_text}</div>'
     except Exception as e:
-        return f'<div style="padding:10px; color:#e74c3c;">스레드 메뉴 로드 실패</div>'
+        return f'<div>메뉴 로드 실패</div>'
 
 # ==========================================================
 # 8. 데이터 수집 및 JSON 저장
@@ -177,9 +229,16 @@ for item in cafeteria_list:
     html_content = ""
     if item["type"] == "ojeong":
         src = crop_ojeong_by_weekday(item["url"])
-        html_content = f'<img src="{src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px;">' if src else "<div>이미지 없음</div>"
-    elif item["type"] == "kakao_text":
-        html_content = get_kakao_post_text(driver, item["url"], item["name"])
+        html_content = f'<img src="{src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if src else "<div>이미지 없음</div>"
+    elif item["type"] == "kakao_posts":
+        img_src = get_kakao_posts_image(driver, item["url"])
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+    elif item["type"] == "kakao_profile":
+        img_src = get_kakao_profile_image(driver, item["url"], item["name"])
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+    elif item["type"] == "kakao_first":
+        img_src = get_kakao_first_image(driver, item["url"], item["name"])
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
     elif item["type"] == "threads":
         html_content = get_threads_menu(driver, item["url"])
 
