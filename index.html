@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>가산 점심지도</title>
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script
+    type="text/javascript"
+    src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=42e54a502a4ea6b063acba6bbef6ff42">
+</script>
+
+<script>
+    const container = document.getElementById('map');
+
+    const options = {
+        center: new kakao.maps.LatLng(37.4776, 126.8797),
+        level: 4
+    };
+
+    const map = new kakao.maps.Map(container, options);
+
+    // 회사 위치
+    const officePosition = new kakao.maps.LatLng(
+        37.4776,
+        126.8797
+    );
+
+    const marker = new kakao.maps.Marker({
+        position: officePosition
+    });
+
+    marker.setMap(map);
+</script>
+
+</body>
+</html>
