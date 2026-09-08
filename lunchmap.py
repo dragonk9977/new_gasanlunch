@@ -33,7 +33,7 @@ ojeong_weekday_index = min(today_weekday_index, 4)
 print(f"\n{'='*60}\n오늘 날짜 : {today_date_str_space} ({today_weekday}요일)\n{'='*60}")
 
 # ==========================================================
-# 3. 오정 메뉴 (요일별 Crop)
+# 3. 오정 메뉴 (요일별 Crop - 길이감 있게 수정)
 # ==========================================================
 def crop_ojeong_by_weekday(image_path):
     try:
@@ -48,7 +48,7 @@ def crop_ojeong_by_weekday(image_path):
         crop_left = left_margin + (col_width * ojeong_weekday_index)
         crop_right = crop_left + col_width
         cropped_img = img.crop((crop_left, top_margin, crop_right, bottom_margin))
-        max_height = 280
+        max_height = 420  # 오정 이미지를 더 길게 키움
         if cropped_img.height > max_height:
             ratio = max_height / cropped_img.height
             new_width = int(cropped_img.width * ratio)
@@ -112,9 +112,10 @@ chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 # ==========================================================
-# 7. 이미지 수집 함수들
+# 7. 이미지 및 런치타임 텍스트 수집 함수
 # ==========================================================
 def get_kakao_posts_image(driver, url):
+    print(f" -> [온정찬] 카카오 게시물 이미지 수집 중")
     try:
         driver.get(url)
         time.sleep(4)
@@ -140,6 +141,7 @@ def get_kakao_posts_image(driver, url):
         return None
 
 def get_kakao_profile_image(driver, url, store_name):
+    print(f" -> [{store_name}] 카카오 프로필 이미지 접근")
     try:
         driver.get(url)
         time.sleep(4)
@@ -184,10 +186,11 @@ def get_kakao_profile_image(driver, url, store_name):
             return modal_candidates[0]["src"]
         return profile["src"]
     except Exception as e:
-        print(f" -> [{store_name}] 오류 : {e}")
+        print(f" -> [{store_name}] 카카오 오류 : {e}")
         return None
 
 def get_kakao_first_image(driver, url, store_name):
+    print(f" -> [{store_name}] 카카오 최신 메뉴 이미지 수집")
     try:
         driver.get(url)
         time.sleep(3)
@@ -198,20 +201,55 @@ def get_kakao_first_image(driver, url, store_name):
                 return src
         return None
     except Exception as e:
-        print(f" -> [{store_name}] 오류 : {e}")
+        print(f" -> [{store_name}] 카카오 오류 : {e}")
         return None
 
 def get_threads_menu(driver, url):
+    print(f" -> [런치타임] 스레드 메뉴 수집 중 ({url})")
     try:
         driver.get(url)
         time.sleep(4)
         body_text = driver.find_element(By.TAG_NAME, "body").text
         lines = body_text.split("\n")
-        filtered_lines = [l.strip() for l in lines if l.strip() and not l.strip().startswith("#")]
-        formatted_text = "<br>".join(filtered_lines[:15]) if filtered_lines else "오늘의 메뉴 내용 없음"
-        return f'<div style="background:#f9f9f9; border:1px solid #ddd; padding:10px; border-radius:8px; font-size:13px; text-align:left; max-height:280px; overflow-y:auto;">{formatted_text}</div>'
+        target_date1 = today_date_str_nospace
+        target_date2 = today_date_str_space
+        start_idx = -1
+        for i, line in enumerate(lines):
+            line_clean = line.strip()
+            if target_date1 in line_clean or target_date2 in line_clean:
+                start_idx = i
+                break
+        if start_idx == -1:
+            start_idx = 0
+        for i, line in enumerate(lines):
+            if line.strip() in ["Reposts", "리포스트", "Media", "미디어"]:
+                start_idx = i + 1
+                break
+        filtered_lines = []
+        for line in lines[start_idx:]:
+            line = line.strip().replace('\\', '')
+            if not line:
+                continue
+            if "월" in line and "일" in line and target_date1 not in line and target_date2 not in line:
+                break
+            if line in ["스레드", "답글", "미디어", "리포스트", "팔로우", "언급", "로그인", "가입하기", "lunchtime_ypp", "Home", "Follow", "Mention", "Threads", "Replies", "Media", "Reposts", "Translate"]:
+                continue
+            if "팔로워" in line or "followers" in line or "시간 전" in line or "일 전" in line or line.endswith("h") or line.endswith("d") or line.isdigit():
+                continue
+            filtered_lines.append(line)
+        last_tag_idx = -1
+        for i, l in enumerate(filtered_lines):
+            if l.startswith("#"):
+                last_tag_idx = i
+        if last_tag_idx != -1:
+            filtered_lines = filtered_lines[:last_tag_idx + 1]
+        if not filtered_lines:
+            return "<div>오늘의 메뉴 내용을 찾지 못했습니다.</div>"
+        formatted_text = "<br>".join(filtered_lines)
+        return f'<div style="background-color:#f9f9f9; border:1px solid #ddd; padding:15px; border-radius:8px; text-align:left; font-size:14px; line-height:1.6; color:#333;">{formatted_text}</div>'
     except Exception as e:
-        return f'<div>메뉴 로드 실패</div>'
+        print(f" -> [런치타임] 스레드 오류 : {e}")
+        return "<div>스레드 메뉴를 불러오지 못했습니다.</div>"
 
 # ==========================================================
 # 8. 데이터 수집 및 JSON 저장
@@ -229,16 +267,16 @@ for item in cafeteria_list:
     html_content = ""
     if item["type"] == "ojeong":
         src = crop_ojeong_by_weekday(item["url"])
-        html_content = f'<img src="{src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if src else "<div>이미지 없음</div>"
+        html_content = f'<img src="{src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if src else "<div>이미지 없음</div>"
     elif item["type"] == "kakao_posts":
         img_src = get_kakao_posts_image(driver, item["url"])
-        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
     elif item["type"] == "kakao_profile":
         img_src = get_kakao_profile_image(driver, item["url"], item["name"])
-        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
     elif item["type"] == "kakao_first":
         img_src = get_kakao_first_image(driver, item["url"], item["name"])
-        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:260px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
+        html_content = f'<img src="{img_src}" style="display:block; margin:0 auto; max-width:100%; max-height:380px; border-radius:6px; object-fit:contain;">' if img_src else '<div>이미지 없음</div>'
     elif item["type"] == "threads":
         html_content = get_threads_menu(driver, item["url"])
 
