@@ -1,0 +1,39 @@
+name: Auto Update Lunch Menu
+
+on:
+  schedule:
+    # KST 기준 09:30, 09:50 (UTC 00:30, 00:50)
+    - cron: '30,50 0 * * *'
+    # KST 기준 10:10 ~ 11:50 사이 20분 간격 (UTC 01:10 ~ 02:50)
+    - cron: '10,30,50 1,2 * * *'
+  workflow_dispatch: # 수동 실행 버튼 활성화
+
+jobs:
+  run-python:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run lunchmap script
+        run: python lunchmap.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/menu.json
+          git diff --staged --quiet || git commit -m "Auto-update lunch menu [skip ci]"
+          git push
