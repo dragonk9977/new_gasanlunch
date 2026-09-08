@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>가산 오늘의 점심 🍚</title>
     <!-- 카카오맵 JavaScript SDK -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_JAVASCRIPT_KEY"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=42e54a502a4ea6b063acba6bbef6ff42"></script>
     <style>
         @font-face {
             font-family: 'KakaoBigFont';
@@ -170,9 +170,16 @@
                     if (!response.ok) throw new Error('Network response was not ok');
                     return response.json();
                 })
-                .then(data => {
+                .then(responseObj => {
+                    let data = responseObj;
+                    
+                    // 만약 JSON이 객체 형태로 되어 있다면 그 안에서 배열 데이터를 추출
                     if (!Array.isArray(data)) {
-                        console.error('menu.json 데이터가 올바른 배열 형태가 아닙니다:', data);
+                        data = data.cafeterias || data.restaurants || data.items || Object.values(data).find(val => Array.isArray(val));
+                    }
+
+                    if (!Array.isArray(data)) {
+                        console.error('menu.json에서 식당 목록 배열을 찾을 수 없습니다:', responseObj);
                         return;
                     }
 
