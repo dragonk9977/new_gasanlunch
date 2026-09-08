@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>가산 오늘의 점심 🍚</title>
-    <!-- 카카오맵 JavaScript SDK (YOUR_KAKAO_JAVASCRIPT_KEY 부분을 본인의 JavaScript 키로 변경하세요) -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=42e54a502a4ea6b063acba6bbef6ff42"></script>
-    <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2503@1.0/KakaoBigSans-Regular.woff2" rel="stylesheet">
+    <!-- 카카오맵 JavaScript SDK -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_JAVASCRIPT_KEY"></script>
     <style>
         @font-face {
             font-family: 'KakaoBigFont';
@@ -29,7 +28,6 @@
             width: 100%;
             height: 100%;
         }
-        /* 상단 타이틀바 */
         .top-bar {
             position: fixed;
             top: 15px;
@@ -44,7 +42,6 @@
             font-size: 16px;
             color: #111;
         }
-        /* 우측 플로팅 버튼들 */
         .float-btn-group {
             position: fixed;
             top: 15px;
@@ -65,19 +62,10 @@
             cursor: pointer;
             color: #111;
             text-align: center;
-            transition: background 0.2s;
         }
-        .action-btn:hover {
-            background: #f0f0f0;
-        }
-        .action-btn.dark {
-            background: #111;
-            color: #fff;
-        }
-        .action-btn.dark:hover {
-            background: #333;
-        }
-        /* 지도 위 커스텀 마커 스타일 */
+        .action-btn:hover { background: #f0f0f0; }
+        .action-btn.dark { background: #111; color: #fff; }
+        .action-btn.dark:hover { background: #333; }
         .custom-marker {
             background-color: rgba(255, 255, 255, 0.95);
             border: 2.5px solid #111111;
@@ -91,17 +79,12 @@
             text-align: center;
             cursor: pointer;
         }
-        .custom-marker:hover {
-            background-color: #fffacd;
-        }
-        /* 전체 메뉴 모달 창 */
+        .custom-marker:hover { background-color: #fffacd; }
         #dashboardModal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.65);
             z-index: 9999;
             justify-content: center;
@@ -111,42 +94,26 @@
         .dashboard-container {
             background: #f4f6f8;
             border: 4px solid #111111;
-            width: 96vw;
-            max-width: 1500px;
-            height: 90vh;
+            width: 96vw; max-width: 1500px; height: 90vh;
             border-radius: 16px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            position: relative;
+            display: flex; flex-direction: column;
+            padding: 20px; position: relative;
         }
         .dashboard-grid {
-            display: flex;
-            flex-direction: row;
-            gap: 15px;
-            width: 100%;
-            height: calc(100% - 50px);
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding-bottom: 10px;
-            -webkit-overflow-scrolling: touch;
+            display: flex; flex-direction: row; gap: 15px;
+            width: 100%; height: calc(100% - 50px);
+            overflow-x: auto; overflow-y: hidden;
+            padding-bottom: 10px; -webkit-overflow-scrolling: touch;
         }
         .menu-card {
-            background: #ffffff;
-            border: 2px solid #333333;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: #ffffff; border: 2px solid #333333;
+            border-radius: 12px; padding: 15px;
+            display: flex; flex-direction: column; justify-content: space-between;
             box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-            flex: 0 0 280px;
-            max-height: 100%;
-            overflow-y: auto;
+            flex: 0 0 280px; max-height: 100%; overflow-y: auto;
         }
-        /* 마커 클릭 시 뜨는 상세 팝업(CustomOverlay) 스타일 */
-        .wrap { position: absolute; left: 0; bottom: 40px; width: 280px; text-align: left; overflow: hidden; font-size: 12px; font-family: 'KakaoBigFont', sans-serif; line-height: 1.5; }
+        .wrap { position: absolute; left: 0; bottom: 40px; width: 280px; text-align: left; overflow: hidden; font-size: 12px; line-height: 1.5; }
         .wrap * { padding: 0; margin: 0; }
         .wrap .info { width: 280px; border-radius: 12px; border: 2px solid #333; background: #fff; box-shadow: 0 8px 25px rgba(0,0,0,0.3); position: relative; }
         .info .title { padding: 12px 14px 8px 14px; font-weight: bold; font-size: 16px; border-bottom: 1px solid #ddd; background: #f8f9fa; border-top-left-radius: 10px; border-top-right-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -156,9 +123,6 @@
         .info .btn-wrap { padding: 0 14px 12px 14px; text-align: center; }
         .nav-btn { display: inline-block; width: 100%; padding: 8px; background: #fee500; color: #111; font-weight: bold; text-decoration: none; border-radius: 6px; border: 1px solid #ccb200; text-align: center; }
         .nav-btn:hover { background: #fdd800; }
-        @media (max-width: 900px) {
-            .dashboard-container { width: 98vw; height: 94vh; padding: 12px; }
-        }
     </style>
 </head>
 <body>
@@ -173,16 +137,13 @@
 
     <div id="map"></div>
 
-    <!-- 전체 메뉴 모달 창 -->
     <div id="dashboardModal" onclick="handleModalClick(event)">
         <div class="dashboard-container">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <h2 style="margin:0; font-size:18px; color:#111; font-weight:bold;">📋 오늘 가산 식단 한번에 보기</h2>
                 <button onclick="toggleDashboard(false)" style="background:#e74c3c; color:#fff; border:none; width:32px; height:32px; border-radius:50%; font-size:20px; font-weight:bold; cursor:pointer;">&times;</button>
             </div>
-            <div class="dashboard-grid" id="dashboardGrid">
-                <!-- 동적 렌더링 -->
-            </div>
+            <div class="dashboard-grid" id="dashboardGrid"></div>
         </div>
     </div>
 
@@ -193,7 +154,6 @@
         let bounds;
         let myLocationOverlay = null;
 
-        // 오늘 날짜 표시
         const today = new Date();
         document.getElementById('topTitle').innerText = `🍚 가산 오늘의 점심 (${today.getMonth()+1}월 ${today.getDate()}일)`;
 
@@ -205,17 +165,23 @@
             };
             map = new kakao.maps.Map(container, options);
 
-            // data/menu.json 불러오기
             fetch('data/menu.json')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
                 .then(data => {
+                    if (!Array.isArray(data)) {
+                        console.error('menu.json 데이터가 올바른 배열 형태가 아닙니다:', data);
+                        return;
+                    }
+
                     bounds = new kakao.maps.LatLngBounds();
 
                     data.forEach((item, index) => {
                         const position = new kakao.maps.LatLng(item.lat, item.lng);
                         bounds.extend(position);
 
-                        // 1. 커스텀 마커 생성
                         const content = document.createElement('div');
                         content.className = 'custom-marker';
                         content.innerHTML = `🍚 ${item.name} <span style="color:#e74c3c; font-size:12px;">(${item.walk_min}분)</span>`;
@@ -228,7 +194,6 @@
                         customOverlay.setMap(map);
                         markers.push(customOverlay);
 
-                        // 2. 식당 상세 팝업 오버레이 생성
                         const popupContent = document.createElement('div');
                         popupContent.className = 'wrap';
                         popupContent.innerHTML = `
@@ -257,14 +222,12 @@
                         });
                         overlays.push(detailOverlay);
 
-                        // 마커 클릭 시 해당 팝업만 토글/오픈
                         content.onclick = () => {
                             closeAllOverlays();
                             detailOverlay.setMap(map);
                             map.panTo(position);
                         };
 
-                        // 3. 대시보드(메뉴 한눈에 보기) 카드 생성
                         const grid = document.getElementById('dashboardGrid');
                         const card = document.createElement('div');
                         card.className = 'menu-card';
@@ -284,7 +247,6 @@
                         grid.appendChild(card);
                     });
 
-                    // 모든 식당이 한눈에 보이도록 지도 범위 재조정
                     map.setBounds(bounds);
                 })
                 .catch(err => {
@@ -303,9 +265,7 @@
         function resetMapView() {
             toggleDashboard(false);
             closeAllOverlays();
-            if (bounds) {
-                map.setBounds(bounds);
-            }
+            if (bounds) map.setBounds(bounds);
         }
 
         function toggleDashboard(show) {
@@ -319,9 +279,7 @@
         }
 
         function handleModalClick(e) {
-            if (e.target.id === 'dashboardModal') {
-                toggleDashboard(false);
-            }
+            if (e.target.id === 'dashboardModal') toggleDashboard(false);
         }
 
         function panToMyLoc() {
@@ -362,16 +320,13 @@
             }
         }
 
-        // 카카오맵 스크립트 로드 후 실행
         window.onload = function() {
             if (typeof kakao !== 'undefined' && kakao.maps) {
                 kakao.maps.load(initMap);
             } else {
                 const script = document.createElement('script');
                 script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=YOUR_KAKAO_JAVASCRIPT_KEY";
-                script.onload = function() {
-                    kakao.maps.load(initMap);
-                };
+                script.onload = function() { kakao.maps.load(initMap); };
                 document.head.appendChild(script);
             }
         };
