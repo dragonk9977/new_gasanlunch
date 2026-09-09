@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-09 01:13:58",
+  "updated_at": "2026-09-09 01:32:09",
   "date": "2026-09-09",
   "date_display": "9월 9일",
   "weekday": "수",
@@ -57,7 +57,7 @@
       "dist": 181,
       "walk_min": 3,
       "source": "kakao_first",
-      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/vnWtm/dJMcagtl5SO/0pqOMhSrkdafpNKEQfLm41/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"밥심 오늘의 메뉴\"\n                >\n                "
+      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/lW8cG/dJMcablnxVK/zfKrWOtszLnuIYefW555jK/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"밥심 오늘의 메뉴\"\n                >\n                "
     }
   ]
 }
