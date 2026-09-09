@@ -2,9 +2,11 @@ name: 가산 점심 메뉴 자동 업데이트
 
 on:
   schedule:
-    # 매일 한국시간 오전 7시 30분
-    # GitHub Actions는 UTC 기준이므로 22:30 = 한국시간 07:30
-    - cron: '30 22 * * *'
+    # 한국시간 09:30 ~ 11:45, 15분 간격
+    # GitHub Actions는 UTC 기준
+    - cron: '30,45 0 * * *'
+    - cron: '0,15,30,45 1 * * *'
+    - cron: '0,15,30,45 2 * * *'
 
   workflow_dispatch:
 
