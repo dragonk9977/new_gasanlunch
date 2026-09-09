@@ -1,39 +1,44 @@
-name: Auto Update Lunch Menu
+name: 가산 점심 메뉴 자동 업데이트
 
 on:
   schedule:
-    # KST 기준 09:30, 09:50 (UTC 00:30, 00:50)
-    - cron: '30,50 0 * * *'
-    # KST 기준 10:10 ~ 11:50 사이 20분 간격 (UTC 01:10 ~ 02:50)
-    - cron: '10,30,50 1,2 * * *'
-  workflow_dispatch: # 수동 실행 버튼 활성화
+    # 매일 한국시간 오전 7시 30분
+    # GitHub Actions는 UTC 기준이므로 22:30 = 한국시간 07:30
+    - cron: '30 22 * * *'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  run-python:
+  update-menu:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - name: Checkout repository
+      - name: 저장소 가져오기
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Python 설치
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
-      - name: Install dependencies
+      - name: 필요한 패키지 설치
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run lunchmap script
-        run: python lunchmap.py
-
-      - name: Commit and push changes
+      - name: 메뉴 수집
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          python lunchmap.py
+
+      - name: 변경사항 저장
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add data/menu.json
-          git diff --staged --quiet || git commit -m "Auto-update lunch menu [skip ci]"
+
+          git diff --cached --quiet || git commit -m "자동 메뉴 업데이트"
+
           git push
