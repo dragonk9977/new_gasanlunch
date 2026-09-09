@@ -5,273 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>가산 점심 메뉴 지도</title>
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;height:100%;font-family:Arial,"Noto Sans KR",sans-serif;color:#222;background:#f5f6f8}
-body{overflow:hidden}
-#app{height:100%;display:flex;flex-direction:column}
-header{height:64px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;padding:0 18px;z-index:10}
-.title{font-size:20px;font-weight:800;white-space:nowrap}
-.date{margin-left:12px;color:#777;font-size:13px}
-.actions{margin-left:auto;display:flex;gap:8px}
-button{border:1px solid #ddd;background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:700}
-button:hover{background:#f3f4f6}
-.primary{background:#222;color:#fff;border-color:#222}
-.primary:hover{background:#000}
-#map{flex:1;min-height:0}
-.bottom-panel{background:#fff;border-top:1px solid #ddd;padding:12px 14px 14px;z-index:5}
-.status{font-size:12px;color:#777;margin:0 0 9px}
-.cards{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px}
-.card{flex:0 0 270px;border:1px solid #e5e7eb;border-radius:13px;background:#fff;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);cursor:pointer}
-.card:hover{border-color:#aaa}
-.card-head{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.name{font-size:16px;font-weight:800}
-.walk{font-size:11px;color:#666;white-space:nowrap}
-.address{font-size:11px;color:#888;margin:5px 0 9px}
-.menu{font-size:13px;line-height:1.55}
-.menu-image{display:block;width:100%;max-height:230px;object-fit:contain;border-radius:8px;background:#f7f7f7}
-.text-menu{max-height:190px;overflow:auto;padding-right:3px}
-.menu-line{padding:1px 0}
-.source{margin-top:7px;font-size:10px;color:#999}
-.empty{padding:24px;text-align:center;color:#888;font-size:13px}
-.overlay{background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.16);padding:7px 10px;font-size:12px;font-weight:800;white-space:nowrap}
-.overlay.office{background:#222;color:#fff;border-color:#222}
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center;padding:18px}
-.modal-bg.show{display:flex}
-.modal{width:min(1100px,100%);max-height:90vh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.modal-head{padding:15px 18px;border-bottom:1px solid #eee;display:flex;align-items:center}
-.modal-title{font-size:18px;font-weight:800}
-.close{margin-left:auto;font-size:20px;padding:4px 9px}
-.modal-body{padding:15px;overflow:auto}
-.modal-cards{display:flex;gap:12px;overflow-x:auto}
-.modal-card{flex:0 0 310px;border:1px solid #e5e7eb;border-radius:13px;padding:13px}
-.modal-card .menu{margin-top:8px}
-@media(max-width:700px){
- header{height:58px;padding:0 12px}.title{font-size:17px}.date{font-size:11px}
- .actions button{padding:8px 9px;font-size:11px}.bottom-panel{padding:9px}
- .card{flex-basis:245px}
-}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Arial,"Noto Sans KR",sans-serif;color:#222;background:#f5f6f8}body{overflow:hidden}#app{width:100%;height:100%;position:relative}#map{position:absolute;inset:0}
+.topbar{position:absolute;top:14px;left:14px;right:14px;z-index:20;display:flex;align-items:center;gap:10px;pointer-events:none}.titlebox{pointer-events:auto;background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:14px;padding:11px 14px;box-shadow:0 3px 14px rgba(0,0,0,.12)}.title{font-size:18px;font-weight:800}.date{font-size:11px;color:#777;margin-top:3px}.actions{margin-left:auto;display:flex;gap:7px;pointer-events:auto}button{border:1px solid #ddd;background:rgba(255,255,255,.97);border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.08)}button:hover{background:#f3f4f6}.primary{background:#222;color:#fff;border-color:#222}.primary:hover{background:#000}
+.map-label{background:#fff;border:1px solid #ddd;border-radius:11px;padding:8px 11px;box-shadow:0 3px 12px rgba(0,0,0,.18);font-size:13px;font-weight:800;white-space:nowrap;cursor:pointer}.map-label:hover{transform:translateY(-1px)}.map-label.office{background:#222;color:#fff;border-color:#222}
+.popup{width:min(340px,calc(100vw - 28px));background:#fff;border-radius:15px;border:1px solid #ddd;box-shadow:0 8px 30px rgba(0,0,0,.2);overflow:hidden}.popup-head{display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid #eee}.popup-name{font-size:17px;font-weight:800}.popup-walk{margin-left:auto;font-size:11px;color:#666;white-space:nowrap}.popup-close{margin-left:8px;border:0;box-shadow:none;padding:2px 7px;font-size:20px;line-height:1}.popup-body{padding:12px;max-height:52vh;overflow:auto}.address{font-size:11px;color:#888;margin-bottom:9px}.menu{font-size:13px;line-height:1.55}.menu-image{display:block;width:100%;max-height:360px;object-fit:contain;border-radius:9px;background:#f7f7f7}.text-menu{padding:2px 3px}.menu-line{padding:2px 0}.source{margin-top:9px;font-size:10px;color:#999}
+.notice{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:15;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;border-radius:12px;padding:9px 13px;font-size:12px;color:#777;box-shadow:0 3px 12px rgba(0,0,0,.1);white-space:nowrap}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-bg.show{display:flex}.modal{width:min(1180px,100%);max-height:90vh;background:#fff;border-radius:17px;overflow:hidden;display:flex;flex-direction:column}.modal-head{padding:15px 18px;border-bottom:1px solid #eee;display:flex;align-items:center}.modal-title{font-size:18px;font-weight:800}.modal-close{margin-left:auto;border:0;box-shadow:none;font-size:22px;padding:2px 8px}.modal-body{padding:15px;overflow:auto}.modal-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.modal-card{border:1px solid #e5e7eb;border-radius:13px;padding:12px;min-width:0}.modal-card .card-head{display:flex;align-items:center;gap:6px}.modal-card .name{font-size:15px;font-weight:800}.modal-card .walk{margin-left:auto;font-size:10px;color:#666;white-space:nowrap}.modal-card .address{margin-top:5px}.modal-card .menu{margin-top:8px}.modal-card .menu-image{max-height:400px}
+@media(max-width:900px){.modal-cards{display:flex;overflow-x:auto}.modal-card{flex:0 0 280px}}@media(max-width:600px){.topbar{top:8px;left:8px;right:8px;align-items:flex-start}.titlebox{padding:9px 11px}.title{font-size:16px}.date{font-size:10px}.actions{gap:5px}.actions button{padding:8px 9px;font-size:11px}.notice{bottom:10px;font-size:11px;padding:8px 10px}.popup{width:calc(100vw - 28px)}.popup-body{max-height:54vh}.modal-bg{padding:8px}.modal{max-height:94vh}}
 </style>
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=42e54a502a4ea6b063acba6bbef6ff42"></script>
 </head>
 <body>
-<div id="app">
-<header>
-  <div class="title">🍚 가산 점심 메뉴</div>
-  <div id="date" class="date">메뉴 불러오는 중...</div>
-  <div class="actions">
-    <button id="resetBtn">지도 초기화</button>
-    <button id="allBtn" class="primary">메뉴 한번에 보기</button>
-  </div>
-</header>
-
-<div id="map"></div>
-
-<section class="bottom-panel">
-  <div id="status" class="status">메뉴 데이터를 불러오는 중입니다.</div>
-  <div id="cards" class="cards"><div class="empty">잠시만 기다려 주세요.</div></div>
-</section>
-</div>
-
-<div id="modalBg" class="modal-bg">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title" id="modalTitle">오늘 가산 식단</div>
-      <button class="close" id="closeBtn">×</button>
-    </div>
-    <div class="modal-body">
-      <div id="modalCards" class="modal-cards"></div>
-    </div>
-  </div>
-</div>
-
+<div id="app"><div id="map"></div>
+<div class="topbar"><div class="titlebox"><div class="title">🍚 가산 점심 메뉴</div><div id="date" class="date">메뉴 불러오는 중...</div></div><div class="actions"><button id="resetBtn">지도 초기화</button><button id="allBtn" class="primary">메뉴 한번에 보기</button></div></div>
+<div id="notice" class="notice">5개 식당 위치를 표시합니다. 식당 이름을 눌러 메뉴를 확인하세요.</div></div>
+<div id="error" style="display:none"></div>
+<div id="modalBg" class="modal-bg"><div class="modal"><div class="modal-head"><div class="modal-title" id="modalTitle">오늘 가산 식단</div><button class="modal-close" id="closeBtn">×</button></div><div class="modal-body"><div id="modalCards" class="modal-cards"></div></div></div></div>
 <script>
-const DEFAULT_CENTER = {lat:37.4776, lng:126.8797};
-let map = null;
-let initialLevel = 4;
-let data = null;
-let markers = [];
-let overlays = [];
-
-function esc(v){
-  return String(v ?? '').replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
-
-function menuHtml(r){
-  return r.html || '<div class="empty">메뉴 정보가 없습니다.</div>';
-}
-
-function cardHtml(r){
-  return `
-    <div class="card" data-index="${r._index}">
-      <div class="card-head">
-        <div class="name">${esc(r.name)}</div>
-        <div class="walk">🚶 ${esc(r.walk_min)}분 · ${esc(r.dist)}m</div>
-      </div>
-      <div class="address">${esc(r.address)}</div>
-      <div class="menu">${menuHtml(r)}</div>
-      <div class="source">${esc(r.source || '')}</div>
-    </div>`;
-}
-
-function modalCardHtml(r){
-  return `
-    <div class="modal-card">
-      <div class="card-head">
-        <div class="name">${esc(r.name)}</div>
-        <div class="walk">🚶 ${esc(r.walk_min)}분</div>
-      </div>
-      <div class="address">${esc(r.address)} · ${esc(r.dist)}m</div>
-      <div class="menu">${menuHtml(r)}</div>
-      <div class="source">${esc(r.source || '')}</div>
-    </div>`;
-}
-
-function createMap(){
-  if(!window.kakao || !kakao.maps){
-    document.getElementById('status').textContent =
-      '카카오맵을 불러오지 못했습니다. JavaScript 키와 Web 도메인 설정을 확인해 주세요.';
-    return;
-  }
-
-  const center = new kakao.maps.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng);
-  map = new kakao.maps.Map(document.getElementById('map'), {
-    center:center,
-    level:initialLevel
-  });
-
-  map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
-  map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT);
-
-  kakao.maps.event.addListener(map, 'click', () => {});
-}
-
-function addLabel(lat,lng,text,cls=''){
-  const pos = new kakao.maps.LatLng(lat,lng);
-  const ov = new kakao.maps.CustomOverlay({
-    position:pos,
-    content:`<div class="overlay ${cls}">${esc(text)}</div>`,
-    yAnchor:1.75,
-    zIndex:3
-  });
-  ov.setMap(map);
-  overlays.push(ov);
-}
-
-function clearMapObjects(){
-  markers.forEach(m => m.setMap(null));
-  overlays.forEach(o => o.setMap(null));
-  markers=[]; overlays=[];
-}
-
-function renderMap(){
-  clearMapObjects();
-  if(!data || !data.office || !data.restaurants) return;
-
-  const bounds = new kakao.maps.LatLngBounds();
-  const officePos = new kakao.maps.LatLng(data.office.lat, data.office.lng);
-  bounds.extend(officePos);
-
-  addLabel(data.office.lat, data.office.lng, '회사', 'office');
-
-  data.restaurants.forEach((r,i)=>{
-    r._index=i;
-    const pos = new kakao.maps.LatLng(r.lat,r.lng);
-    bounds.extend(pos);
-
-    const marker = new kakao.maps.Marker({position:pos});
-    marker.setMap(map);
-    markers.push(marker);
-
-    addLabel(r.lat,r.lng,r.name);
-
-    kakao.maps.event.addListener(marker,'click',()=>{
-      map.panTo(pos);
-      const el=document.querySelector(`.card[data-index="${i}"]`);
-      if(el){el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}
-    });
-  });
-
-  if(data.restaurants.length){
-    map.setBounds(bounds, 60, 60, 60, 60);
-    if(map.getLevel() > 5) map.setLevel(5);
-  }
-}
-
-function renderCards(){
-  const cards=document.getElementById('cards');
-  if(!data || !data.restaurants || !data.restaurants.length){
-    cards.innerHTML='<div class="empty">오늘 메뉴 데이터가 없습니다.</div>';
-    return;
-  }
-  cards.innerHTML=data.restaurants.map(cardHtml).join('');
-  cards.querySelectorAll('.card').forEach(el=>{
-    el.addEventListener('click',()=>{
-      const r=data.restaurants[Number(el.dataset.index)];
-      map.panTo(new kakao.maps.LatLng(r.lat,r.lng));
-    });
-  });
-}
-
-function renderModal(){
-  if(!data || !data.restaurants) return;
-  document.getElementById('modalTitle').textContent =
-    `${data.date_display || data.date || '오늘'} 가산 식단`;
-  document.getElementById('modalCards').innerHTML =
-    data.restaurants.map(modalCardHtml).join('');
-}
-
-function render(){
-  const dateText = data?.date_display || data?.date || '';
-  document.getElementById('date').textContent = dateText;
-  document.getElementById('status').textContent =
-    data?.updated_at
-      ? `업데이트 ${data.updated_at} · ${data.restaurants?.length || 0}개 식당`
-      : '오늘 메뉴 데이터';
-  renderMap();
-  renderCards();
-  renderModal();
-}
-
-async function loadData(){
-  try{
-    const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});
-    if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    data=await res.json();
-    render();
-  }catch(e){
-    document.getElementById('date').textContent='';
-    document.getElementById('status').textContent =
-      '오늘 메뉴 데이터가 아직 없습니다. lunchmap.py가 실행되면 자동으로 표시됩니다.';
-    document.getElementById('cards').innerHTML =
-      '<div class="empty">data/menu.json을 찾을 수 없습니다.</div>';
-  }
-}
-
-document.getElementById('resetBtn').addEventListener('click',()=>{
-  if(!map) return;
-  if(data?.office){
-    map.setCenter(new kakao.maps.LatLng(data.office.lat,data.office.lng));
-    map.setLevel(initialLevel);
-  }else{
-    map.setCenter(new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng));
-    map.setLevel(initialLevel);
-  }
-});
-
-document.getElementById('allBtn').addEventListener('click',()=>{
-  document.getElementById('modalBg').classList.add('show');
-});
-document.getElementById('closeBtn').addEventListener('click',()=>{
-  document.getElementById('modalBg').classList.remove('show');
-});
-document.getElementById('modalBg').addEventListener('click',e=>{
-  if(e.target.id==='modalBg') document.getElementById('modalBg').classList.remove('show');
-});
-
-createMap();
-loadData();
+const DEFAULT_CENTER={lat:37.4776,lng:126.8797};let map=null,data=null,markers=[],labels=[],activePopup=null,initialCenter=null,initialLevel=5;
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function menuHtml(r){return r.html||'<div>오늘의 메뉴가 아직 없습니다.</div>'}
+function resetMap(){if(!map||!initialCenter)return;map.setCenter(initialCenter);map.setLevel(initialLevel)}
+function closePopup(){if(activePopup){activePopup.setMap(null);activePopup=null}resetMap()}
+function popupHtml(r){return `<div class="popup"><div class="popup-head"><div class="popup-name">${esc(r.name)}</div><div class="popup-walk">🚶 ${esc(r.walk_min)}분 · ${esc(r.dist)}m</div><button class="popup-close" onclick="closePopup()">×</button></div><div class="popup-body"><div class="address">${esc(r.address)}</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(r.source||'')}</div></div></div>`}
+function openPopup(r){if(activePopup){activePopup.setMap(null)}const pos=new kakao.maps.LatLng(r.lat,r.lng);activePopup=new kakao.maps.CustomOverlay({position:pos,content:popupHtml(r),yAnchor:1.12,zIndex:20,clickable:true});activePopup.setMap(map);map.panTo(pos)}
+function addLabel(lat,lng,text,clickFn,cls=''){const el=document.createElement('div');el.className='map-label '+cls;el.textContent=text;el.addEventListener('click',clickFn);const ov=new kakao.maps.CustomOverlay({position:new kakao.maps.LatLng(lat,lng),content:el,yAnchor:1.45,zIndex:10});ov.setMap(map);labels.push(ov)}
+function clearObjects(){markers.forEach(m=>m.setMap(null));labels.forEach(o=>o.setMap(null));markers=[];labels=[];if(activePopup){activePopup.setMap(null);activePopup=null}}
+function createMap(){if(!window.kakao||!kakao.maps){document.getElementById('notice').textContent='카카오맵을 불러오지 못했습니다. JavaScript 키와 Web 도메인 설정을 확인해 주세요.';return false}map=new kakao.maps.Map(document.getElementById('map'),{center:new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng),level:5});map.addControl(new kakao.maps.ZoomControl(),kakao.maps.ControlPosition.RIGHT);map.addControl(new kakao.maps.MapTypeControl(),kakao.maps.ControlPosition.TOPRIGHT);return true}
+function renderMap(){clearObjects();if(!data?.office||!data?.restaurants?.length)return;const bounds=new kakao.maps.LatLngBounds();bounds.extend(new kakao.maps.LatLng(data.office.lat,data.office.lng));addLabel(data.office.lat,data.office.lng,'회사',resetMap,'office');data.restaurants.forEach(r=>{const pos=new kakao.maps.LatLng(r.lat,r.lng);bounds.extend(pos);const marker=new kakao.maps.Marker({position:pos});marker.setMap(map);markers.push(marker);addLabel(r.lat,r.lng,r.name,()=>openPopup(r));kakao.maps.event.addListener(marker,'click',()=>openPopup(r))});map.setBounds(bounds,90,70,90,70);if(map.getLevel()>5)map.setLevel(5);initialCenter=map.getCenter();initialLevel=map.getLevel()}
+function modalCard(r){return `<div class="modal-card"><div class="card-head"><div class="name">${esc(r.name)}</div><div class="walk">🚶 ${esc(r.walk_min)}분</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(r.source||'')}</div></div>`}
+function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('')}
+async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
+document.getElementById('resetBtn').addEventListener('click',closePopup);document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',()=>{document.getElementById('modalBg').classList.remove('show');resetMap()});document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){e.currentTarget.classList.remove('show');resetMap()}});document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){modal.classList.remove('show');resetMap();return}if(activePopup){activePopup.setMap(null);activePopup=null;resetMap()}});if(createMap())loadData();
 </script>
-</body>
-</html>
+</body></html>
