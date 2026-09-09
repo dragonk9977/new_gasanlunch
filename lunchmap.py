@@ -5,6 +5,7 @@ import json
 import base64
 from io import BytesIO
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from PIL import Image
 from geopy.geocoders import Nominatim
@@ -29,7 +30,7 @@ OFFICE_ADDRESS = "서울 금천구 가산디지털2로 30"
 
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
-today = datetime.now()
+today = datetime.now(ZoneInfo("Asia/Seoul"))
 today_weekday_index = today.weekday()
 today_weekday = weekdays[today_weekday_index]
 
@@ -810,6 +811,21 @@ os.makedirs(
     exist_ok=True
 )
 
+# 이전 실행 결과: 같은 날짜에 이미 정상 수집된 메뉴는
+# 이번 실행에서 일시적으로 사이트 접근이 실패해도 보존합니다.
+previous_data = {}
+if os.path.exists(OUTPUT_JSON):
+    try:
+        with open(OUTPUT_JSON, "r", encoding="utf-8") as f:
+            previous_data = json.load(f)
+    except Exception:
+        previous_data = {}
+
+previous_restaurants = {
+    item.get("name"): item
+    for item in previous_data.get("restaurants", [])
+}
+
 driver = None
 scraped_data = []
 
@@ -1005,6 +1021,33 @@ try:
                 </div>
                 """
 
+        # 메뉴가 아직 올라오지 않았거나 이번 실행에서 일시적으로 실패한 경우,
+        # 같은 날짜의 이전 정상 수집 결과를 유지합니다.
+        previous = previous_restaurants.get(item["name"])
+        menu_status = "today"
+
+        failed_this_run = (
+            not html_content
+            or source == "none"
+            or "찾지 못했습니다" in html_content
+            or "불러오지 못했습니다" in html_content
+        )
+
+        if (
+            failed_this_run
+            and previous
+            and previous_data.get("date") == today.strftime("%Y-%m-%d")
+            and previous.get("html")
+            and previous.get("source") not in ("none", "")
+        ):
+            html_content = previous["html"]
+            source = previous["source"]
+            menu_status = "preserved_from_previous_run"
+            print(f"     → [{item['name']}] 이전 정상 수집 메뉴 유지")
+
+        elif failed_this_run:
+            menu_status = "missing"
+
         scraped_data.append({
             "name": item["name"],
             "address": item["address"],
@@ -1014,6 +1057,8 @@ try:
             "walk_min": walk_min,
             "source": source,
             "html": html_content,
+            "menu_status": menu_status,
+            "menu_date": today.strftime("%Y-%m-%d") if menu_status != "missing" else None,
         })
 
         time.sleep(1.5)
@@ -1031,6 +1076,9 @@ finally:
 result = {
     "updated_at": today.strftime(
         "%Y-%m-%d %H:%M:%S"
+    ),
+    "updated_at_display": today.strftime(
+        "%Y.%m.%d %H:%M"
     ),
     "date": today.strftime(
         "%Y-%m-%d"
