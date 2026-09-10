@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-10 10:13:54",
-  "updated_at_display": "2026.09.10 10:13",
+  "updated_at": "2026-09-10 10:30:17",
+  "updated_at_display": "2026.09.10 10:30",
   "date": "2026-09-10",
   "date_display": "9월 10일",
   "weekday": "목",
@@ -53,10 +53,10 @@
       "lng": 126.88374909999999,
       "dist": 48,
       "walk_min": 1,
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "menu_status": "missing",
-      "menu_date": null
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line\">콩나물국</div>\n<div class=\"menu-line\">바싹불고기</div>\n<div class=\"menu-line\">안심치킨텐더</div>\n<div class=\"menu-line\">일식커리</div>\n<div class=\"menu-line\">소세지야채볶음</div>\n<div class=\"menu-line\">고추지무침</div>\n<div class=\"menu-line\">가든샐러드</div>\n<div class=\"menu-line\">포기김치</div>\n<div class=\"menu-line\">음료/한강라면</div>\n    </div>\n    ",
+      "menu_status": "today",
+      "menu_date": "2026-09-10"
     },
     {
       "name": "밥심",
