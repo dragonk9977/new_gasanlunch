@@ -56,6 +56,8 @@ cafeteria_list = [
         "address": "서울 금천구 가산디지털2로 30",
         "type": "ojeong",
         "url": OJEONG_IMAGE_PATH,
+        # 지도 표시 위치 보정값(도 단위)
+        # 실제 주소 중심점과 지도에서 보이는 식당 위치가 다를 경우 조정합니다.
         "lat_offset": 0.0000,
         "lng_offset": -0.0003,
     },
@@ -65,7 +67,7 @@ cafeteria_list = [
         "type": "kakao_posts",
         "url": "https://pf.kakao.com/_UIdXn/posts",
         "lat_offset": 0.0002,
-        "lng_offset": 0.0002,
+        "lng_offset": 0.0002,  # 필요하면 이 두 값만 조정
     },
     {
         "name": "런치투게더",
@@ -73,7 +75,7 @@ cafeteria_list = [
         "type": "kakao_profile",
         "url": "https://pf.kakao.com/_swtYxl",
         "lat_offset": -0.0002,
-        "lng_offset": 0.0003,
+        "lng_offset": 0.0003,  # 필요하면 이 두 값만 조정
     },
     {
         "name": "런치타임",
@@ -82,7 +84,7 @@ cafeteria_list = [
         "instagram_url": "https://www.instagram.com/lunchtime_ypp/",
         "threads_url": "https://www.threads.net/@lunchtime_ypp",
         "lat_offset": -0.0003,
-        "lng_offset": -0.0002,
+        "lng_offset": -0.0002,  # 필요하면 이 두 값만 조정
     },
     {
         "name": "밥심",
@@ -90,7 +92,7 @@ cafeteria_list = [
         "type": "kakao_first",
         "url": "https://pf.kakao.com/_mHWxjX",
         "lat_offset": 0.0003,
-        "lng_offset": -0.0001,
+        "lng_offset": -0.0001,  # 필요하면 이 두 값만 조정
     },
 ]
 
