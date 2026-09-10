@@ -47,7 +47,7 @@ print("=" * 60)
 
 
 # ==========================================================
-# 2. 식당 정보 (위치 보정 적용 완료)
+# 2. 식당 정보 (오류 방지를 위해 절대 좌표값 exact_lat, exact_lng 도입)
 # ==========================================================
 
 cafeteria_list = [
@@ -56,26 +56,24 @@ cafeteria_list = [
         "address": "서울 금천구 가산디지털2로 30",
         "type": "ojeong",
         "url": OJEONG_IMAGE_PATH,
-        # 지도 표시 위치 보정값(도 단위)
-        # 실제 주소 중심점과 지도에서 보이는 식당 위치가 다를 경우 조정합니다.
-        "lat_offset": 0.0000,
-        "lng_offset": -0.0003,
+        "exact_lat": 37.477813,  # RSM타워
+        "exact_lng": 126.882315,
     },
     {
         "name": "온정찬",
         "address": "서울 금천구 가산디지털1로 75-15",
         "type": "kakao_posts",
         "url": "https://pf.kakao.com/_UIdXn/posts",
-        "lat_offset": 0.0000,
-        "lng_offset": -0.0012,  # 화살표 방향(왼쪽)으로 보정
+        "exact_lat": 37.478275,  # 하우스디 와이즈타워
+        "exact_lng": 126.884351, 
     },
     {
         "name": "런치투게더",
         "address": "서울 금천구 가산디지털1로 58",
         "type": "kakao_profile",
         "url": "https://pf.kakao.com/_swtYxl",
-        "lat_offset": 0.0000,
-        "lng_offset": -0.0014,  # 화살표 방향(왼쪽)으로 보정
+        "exact_lat": 37.476710,  # 에이스한솔타워
+        "exact_lng": 126.884814,
     },
     {
         "name": "런치타임",
@@ -83,16 +81,16 @@ cafeteria_list = [
         "type": "instagram_threads",
         "instagram_url": "https://www.instagram.com/lunchtime_ypp/",
         "threads_url": "https://www.threads.net/@lunchtime_ypp",
-        "lat_offset": 0.0004,   # 화살표 방향(위)으로 보정
-        "lng_offset": -0.0008,  # 화살표 방향(왼쪽)으로 보정
+        "exact_lat": 37.477017,  # 대륭테크노타운 1차
+        "exact_lng": 126.882110,
     },
     {
         "name": "밥심",
         "address": "서울 금천구 가산디지털2로 46",
         "type": "kakao_first",
         "url": "https://pf.kakao.com/_mHWxjX",
-        "lat_offset": 0.0002,   # 약간 위로 보정
-        "lng_offset": 0.0010,   # 화살표 방향(오른쪽)으로 대폭 보정
+        "exact_lat": 37.479155,  # 에이스태세라타워
+        "exact_lng": 126.881335,
     },
 ]
 
@@ -174,7 +172,6 @@ def create_driver():
         "Chrome/140.0.0.0 Safari/537.36"
     )
 
-    # Selenium Manager가 설치된 Chrome에 맞는 드라이버를 자동 관리
     return webdriver.Chrome(options=options)
 
 
@@ -724,46 +721,30 @@ def menu_lines_to_html(menu_lines):
 
 
 # ==========================================================
-# 11. 주소 → 좌표
+# 11. 주소 → 좌표 (정확한 고정 좌표값 사용)
 # ==========================================================
 
-geolocator = Nominatim(
-    user_agent="gasan_lunch_map_new"
-)
-
+geolocator = Nominatim(user_agent="gasan_lunch_map_new")
 geocode_cache = {}
-
 
 def get_coords(address):
     if address in geocode_cache:
         return geocode_cache[address]
-
     try:
-        loc = geolocator.geocode(
-            address,
-            timeout=10
-        )
-
+        loc = geolocator.geocode(address, timeout=10)
         if loc:
-            coords = (
-                float(loc.latitude),
-                float(loc.longitude)
-            )
-
+            coords = (float(loc.latitude), float(loc.longitude))
             geocode_cache[address] = coords
             return coords
-
     except Exception as e:
         print(f"  -> 주소 좌표 변환 실패: {address} / {e}")
-
-    fallback = (37.4775, 126.8820)
+    
+    fallback = (37.477813, 126.882315) # 실패 시 RSM타워
     geocode_cache[address] = fallback
-
     return fallback
 
-
-office_coords = get_coords(OFFICE_ADDRESS)
-
+# 회사 좌표도 변환 오차 방지를 위해 직접 입력(RSM타워)
+office_coords = (37.477813, 126.882315)
 
 def calculate_walking_info(dest_coords):
     try:
@@ -825,22 +806,17 @@ try:
         print()
         print(f"[{item['name']}] 정보 수집 중...")
 
-        base_lat, base_lng = get_coords(
-            item["address"]
-        )
-
-        lat = base_lat + item.get(
-            "lat_offset",
-            0
-        )
-
-        lng = base_lng + item.get(
-            "lng_offset",
-            0
-        )
+        # exact_lat, exact_lng 값이 리스트에 있으면 그 좌표를 무조건 사용
+        if "exact_lat" in item and "exact_lng" in item:
+            lat = item["exact_lat"]
+            lng = item["exact_lng"]
+        else:
+            base_lat, base_lng = get_coords(item["address"])
+            lat = base_lat + item.get("lat_offset", 0)
+            lng = base_lng + item.get("lng_offset", 0)
 
         dist, walk_min = calculate_walking_info(
-            (base_lat, base_lng)
+            (lat, lng)
         )
 
         html_content = ""
