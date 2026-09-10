@@ -1,20 +1,20 @@
 {
-  "updated_at": "2026-09-10 11:57:54",
-  "updated_at_display": "2026.09.10 11:57",
+  "updated_at": "2026-09-10 13:05:14",
+  "updated_at_display": "2026.09.10 13:05",
   "date": "2026-09-10",
   "date_display": "9월 10일",
   "weekday": "목",
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
-    "lat": 37.4712933,
-    "lng": 126.883664
+    "lat": 37.47120020547345,
+    "lng": 126.88352033871539
   },
   "restaurants": [
     {
       "name": "오정",
       "address": "서울 금천구 가산디지털2로 30",
-      "lat": 37.4712933,
-      "lng": 126.883364,
+      "lat": 37.47120020547345,
+      "lng": 126.88352033871539,
       "dist": 0,
       "walk_min": 1,
       "source": "local_image",
@@ -25,9 +25,9 @@
     {
       "name": "온정찬",
       "address": "서울 금천구 가산디지털1로 75-15",
-      "lat": 37.4723409,
-      "lng": 126.8830248,
-      "dist": 126,
+      "lat": 37.47218918507373,
+      "lng": 126.88410160863671,
+      "dist": 121,
       "walk_min": 2,
       "source": "kakao_posts",
       "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/UwFOf/dJMcadJ6N4N/gRZTauFYMqWVxmmIrDwBH1/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"온정찬 오늘의 메뉴\"\n                >\n                ",
@@ -37,9 +37,9 @@
     {
       "name": "런치투게더",
       "address": "서울 금천구 가산디지털1로 58",
-      "lat": 37.471289,
-      "lng": 126.88511559999999,
-      "dist": 252,
+      "lat": 37.471346435440815,
+      "lng": 126.88633772331427,
+      "dist": 249,
       "walk_min": 4,
       "source": "kakao_profile",
       "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/cDSrj6/dJMcaikr9ru/p5zHRgOv7qGdqxT3v1fl7k/img.png\"\n                    class=\"menu-image\"\n                    alt=\"런치투게더 오늘의 메뉴\"\n                >\n                ",
@@ -49,9 +49,9 @@
     {
       "name": "런치타임",
       "address": "서울 금천구 가산디지털2로 24",
-      "lat": 37.4713177,
-      "lng": 126.8831491,
-      "dist": 48,
+      "lat": 37.47089827252637,
+      "lng": 126.88388201555182,
+      "dist": 46,
       "walk_min": 1,
       "source": "threads",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line\">콩나물국</div>\n<div class=\"menu-line\">바싹불고기</div>\n<div class=\"menu-line\">안심치킨텐더</div>\n<div class=\"menu-line\">일식커리</div>\n<div class=\"menu-line\">소세지야채볶음</div>\n<div class=\"menu-line\">고추지무침</div>\n<div class=\"menu-line\">가든샐러드</div>\n<div class=\"menu-line\">포기김치</div>\n<div class=\"menu-line\">음료/한강라면</div>\n    </div>\n    ",
@@ -61,9 +61,9 @@
     {
       "name": "밥심",
       "address": "서울 금천구 가산디지털2로 46",
-      "lat": 37.4729336,
-      "lng": 126.8837014,
-      "dist": 181,
+      "lat": 37.472650897653246,
+      "lng": 126.8826763789836,
+      "dist": 177,
       "walk_min": 3,
       "source": "kakao_first",
       "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/bdDdQY/dJMcaatdWNR/XdivVRjKXCcbTWFZipACy1/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"밥심 오늘의 메뉴\"\n                >\n                ",
