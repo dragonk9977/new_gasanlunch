@@ -739,12 +739,12 @@ def get_coords(address):
     except Exception as e:
         print(f"  -> 주소 좌표 변환 실패: {address} / {e}")
     
-    fallback = (37.47120020547345, 126.88352033871539) # 실패 시 기준좌표(오정)
+    fallback = (37.471364252495015, 126.88404214632791) # 실패 시 기준좌표(회사)
     geocode_cache[address] = fallback
     return fallback
 
-# 회사 위치도 오정 식당과 같은 건물(RSM타워)이므로, 동일한 절대 좌표를 적용하여 도보거리 계산 오차(0m) 방지
-office_coords = (37.47120020547345, 126.88352033871539)
+# 회사 위치 마커 겹침 방지를 위해 요청하신 좌표로 분리
+office_coords = (37.471364252495015, 126.88404214632791)
 
 def calculate_walking_info(dest_coords):
     try:
