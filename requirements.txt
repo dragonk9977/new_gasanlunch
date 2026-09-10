@@ -1,3 +1,4 @@
 Pillow
 geopy
 selenium
+requests
