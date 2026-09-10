@@ -22,7 +22,7 @@
 <div id="error" style="display:none"></div>
 <div id="modalBg" class="modal-bg"><div class="modal"><div class="modal-head"><div class="modal-title" id="modalTitle">오늘 가산 식단</div><button class="modal-close" id="closeBtn">×</button></div><div class="modal-body"><div id="modalCards" class="modal-cards"></div></div></div></div>
 <script>
-const DEFAULT_CENTER={lat:37.4776,lng:126.8797};let map=null,data=null,markers=[],labels=[],activePopup=null,initialCenter=null,initialLevel=5;
+const DEFAULT_CENTER={lat:37.4747,lng:126.8830};const DEFAULT_LEVEL=5;let map=null,data=null,markers=[],labels=[],activePopup=null,initialCenter=null,initialLevel=DEFAULT_LEVEL;
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function menuHtml(r){return r.html||'<div>오늘의 메뉴가 아직 없습니다.</div>'}
 function resetMap(){if(!map||!initialCenter)return;map.setCenter(initialCenter);map.setLevel(initialLevel)}
@@ -31,14 +31,31 @@ function popupHtml(r){return `<div class="popup"><div class="popup-head"><div cl
 function openPopup(r){if(activePopup){activePopup.setMap(null)}const pos=new kakao.maps.LatLng(r.lat,r.lng);activePopup=new kakao.maps.CustomOverlay({position:pos,content:popupHtml(r),yAnchor:1.12,zIndex:20,clickable:true});activePopup.setMap(map);map.panTo(pos)}
 function addLabel(lat,lng,text,clickFn,cls=''){const el=document.createElement('div');el.className='map-label '+cls;el.textContent=text;el.addEventListener('click',clickFn);const ov=new kakao.maps.CustomOverlay({position:new kakao.maps.LatLng(lat,lng),content:el,yAnchor:1.45,zIndex:10});ov.setMap(map);labels.push(ov)}
 function clearObjects(){markers.forEach(m=>m.setMap(null));labels.forEach(o=>o.setMap(null));markers=[];labels=[];if(activePopup){activePopup.setMap(null);activePopup=null}}
-function createMap(){if(!window.kakao||!kakao.maps){document.getElementById('notice').textContent='카카오맵을 불러오지 못했습니다. JavaScript 키와 Web 도메인 설정을 확인해 주세요.';return false}map=new kakao.maps.Map(document.getElementById('map'),{center:new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng),level:5});map.addControl(new kakao.maps.ZoomControl(),kakao.maps.ControlPosition.RIGHT);map.addControl(new kakao.maps.MapTypeControl(),kakao.maps.ControlPosition.TOPRIGHT);return true}
-function renderMap(){clearObjects();if(!data?.office||!data?.restaurants?.length)return;const bounds=new kakao.maps.LatLngBounds();bounds.extend(new kakao.maps.LatLng(data.office.lat,data.office.lng));addLabel(data.office.lat,data.office.lng,'회사',resetMap,'office');data.restaurants.forEach(r=>{const pos=new kakao.maps.LatLng(r.lat,r.lng);bounds.extend(pos);const marker=new kakao.maps.Marker({position:pos});marker.setMap(map);markers.push(marker);addLabel(r.lat,r.lng,r.name,()=>openPopup(r));kakao.maps.event.addListener(marker,'click',()=>openPopup(r))});
-  // 사용자 라벨이 화면 밖으로 잘리지 않도록 충분한 여백을 확보합니다.
-  map.setBounds(bounds,150,150,150,150);
-  // setBounds가 결정한 줌을 강제로 5로 올리지 않습니다.
-  // 기존의 level=5 강제 때문에 외곽 식당 라벨이 화면 밖으로 잘리는 문제가 있었습니다.
-  if(map.getLevel()<5) map.setLevel(5);
-  initialCenter=map.getCenter();initialLevel=map.getLevel()}
+function createMap(){if(!window.kakao||!kakao.maps){document.getElementById('notice').textContent='카카오맵을 불러오지 못했습니다. JavaScript 키와 Web 도메인 설정을 확인해 주세요.';return false}map=new kakao.maps.Map(document.getElementById('map'),{center:new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng),level:DEFAULT_LEVEL});map.addControl(new kakao.maps.ZoomControl(),kakao.maps.ControlPosition.RIGHT);map.addControl(new kakao.maps.MapTypeControl(),kakao.maps.ControlPosition.TOPRIGHT);return true}
+function renderMap(){
+  clearObjects();
+  if(!data?.office||!data?.restaurants?.length)return;
+
+  // 초기 화면은 자동 bounds 계산을 사용하지 않습니다.
+  // bounds가 식당 간 거리를 기준으로 과도하게 축소되어
+  // 첫 화면이 너무 멀리 보이는 문제를 방지합니다.
+  map.setCenter(new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng));
+  map.setLevel(DEFAULT_LEVEL);
+
+  addLabel(data.office.lat,data.office.lng,'회사',resetMap,'office');
+
+  data.restaurants.forEach(r=>{
+    const pos=new kakao.maps.LatLng(r.lat,r.lng);
+    const marker=new kakao.maps.Marker({position:pos});
+    marker.setMap(map);
+    markers.push(marker);
+    addLabel(r.lat,r.lng,r.name,()=>openPopup(r));
+    kakao.maps.event.addListener(marker,'click',()=>openPopup(r));
+  });
+
+  initialCenter=new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng);
+  initialLevel=DEFAULT_LEVEL;
+}
 function modalCard(r){return `<div class="modal-card"><div class="card-head"><div class="name">${esc(r.name)}</div><div class="walk">🚶 ${esc(r.walk_min)}분</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(r.source||'')}</div></div>`}
 function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('')}
 async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
