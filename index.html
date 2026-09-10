@@ -22,29 +22,48 @@
 <div id="error" style="display:none"></div>
 <div id="modalBg" class="modal-bg"><div class="modal"><div class="modal-head"><div class="modal-title" id="modalTitle">오늘 가산 식단</div><button class="modal-close" id="closeBtn">×</button></div><div class="modal-body"><div id="modalCards" class="modal-cards"></div></div></div></div>
 <script>
-const DEFAULT_CENTER={lat:37.4747,lng:126.8830};const DEFAULT_LEVEL=5;let map=null,data=null,markers=[],labels=[],activePopup=null,initialCenter=null,initialLevel=DEFAULT_LEVEL;
+const DEFAULT_CENTER={lat:37.4795,lng:126.8820};
+const DEFAULT_LEVEL=4; // 기본 확대 레벨 (숫자가 작을수록 확대됨)
+let map=null,data=null,markers=[],labels=[],activePopup=null,initialCenter=null,initialLevel=DEFAULT_LEVEL;
+
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function menuHtml(r){return r.html||'<div>오늘의 메뉴가 아직 없습니다.</div>'}
 function resetMap(){if(!map||!initialCenter)return;map.setCenter(initialCenter);map.setLevel(initialLevel)}
 function closePopup(){if(activePopup){activePopup.setMap(null);activePopup=null}resetMap()}
-function popupHtml(r){return `<div class="popup"><div class="popup-head"><div class="popup-name">${esc(r.name)}</div><div class="popup-walk">🚶 ${esc(r.walk_min)}분 · ${esc(r.dist)}m</div><button class="popup-close" onclick="closePopup()">×</button></div><div class="popup-body"><div class="address">${esc(r.address)}</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(r.source||'')}</div></div></div>`}
 
-// 여기가 수정된 팝업 띄우는 함수입니다. (팝업을 우측으로 배치 + 화면 밀어주기 적용)
+function popupHtml(r){
+  return `<div class="popup">
+    <div class="popup-head">
+      <div class="popup-name">${esc(r.name)}</div>
+      <div class="popup-walk">🚶 ${esc(r.walk_min)}분 · ${esc(r.dist)}m</div>
+      <button class="popup-close" onclick="closePopup()">×</button>
+    </div>
+    <div class="popup-body">
+      <div class="address">${esc(r.address)}</div>
+      <div class="menu">${menuHtml(r)}</div>
+      <div class="source">${esc(r.source||'')}</div>
+    </div>
+  </div>`
+}
+
 function openPopup(r){
   if(activePopup){ activePopup.setMap(null); activePopup=null; }
   const pos = new kakao.maps.LatLng(r.lat, r.lng);
+  
+  // 팝업이 위로 짤리지 않도록 마커 기준 우측 옆(가운데 정렬)으로 띄움
   activePopup = new kakao.maps.CustomOverlay({
     position: pos,
     content: popupHtml(r),
-    xAnchor: -0.05, // 마커 기준 우측 옆으로 배치
-    yAnchor: 0.5,   // 상하 중앙에 오도록 배치
+    xAnchor: -0.05, 
+    yAnchor: 0.5,   
     zIndex: 20,
     clickable: true
   });
+  
   activePopup.setMap(map);
   map.panTo(pos);
   
-  // 팝업이 우측으로 생기므로, 전체가 잘 보이게 화면을 120px 정도 왼쪽으로 밀어줍니다.
+  // 팝업이 우측으로 나타나므로 전체가 보이게 화면을 살짝 밀어줌
   setTimeout(() => {
     if(map) map.panBy(120, 0);
   }, 150);
@@ -53,19 +72,16 @@ function openPopup(r){
 function addLabel(lat,lng,text,clickFn,cls=''){const el=document.createElement('div');el.className='map-label '+cls;el.textContent=text;el.addEventListener('click',clickFn);const ov=new kakao.maps.CustomOverlay({position:new kakao.maps.LatLng(lat,lng),content:el,yAnchor:1.45,zIndex:10});ov.setMap(map);labels.push(ov)}
 function clearObjects(){markers.forEach(m=>m.setMap(null));labels.forEach(o=>o.setMap(null));markers=[];labels=[];if(activePopup){activePopup.setMap(null);activePopup=null}}
 function createMap(){if(!window.kakao||!kakao.maps){document.getElementById('notice').textContent='카카오맵을 불러오지 못했습니다. JavaScript 키와 Web 도메인 설정을 확인해 주세요.';return false}map=new kakao.maps.Map(document.getElementById('map'),{center:new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng),level:DEFAULT_LEVEL});map.addControl(new kakao.maps.ZoomControl(),kakao.maps.ControlPosition.RIGHT);map.addControl(new kakao.maps.MapTypeControl(),kakao.maps.ControlPosition.TOPRIGHT);return true}
+
 function renderMap(){
   clearObjects();
   if(!data?.office||!data?.restaurants?.length)return;
 
-  // 초기 화면은 자동 bounds 계산을 사용하지 않습니다.
-  // bounds가 식당 간 거리를 기준으로 과도하게 축소되어
-  // 첫 화면이 너무 멀리 보이는 문제를 방지합니다.
-  map.setCenter(new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng));
-  map.setLevel(DEFAULT_LEVEL);
-
-  addLabel(data.office.lat,data.office.lng,'회사',resetMap,'office');
+  const bounds=new kakao.maps.LatLngBounds();
+  bounds.extend(new kakao.maps.LatLng(data.office.lat,data.office.lng));
 
   data.restaurants.forEach(r=>{
+    bounds.extend(new kakao.maps.LatLng(r.lat,r.lng));
     const pos=new kakao.maps.LatLng(r.lat,r.lng);
     const marker=new kakao.maps.Marker({position:pos});
     marker.setMap(map);
@@ -74,9 +90,22 @@ function renderMap(){
     kakao.maps.event.addListener(marker,'click',()=>openPopup(r));
   });
 
-  initialCenter=new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng);
-  initialLevel=DEFAULT_LEVEL;
+  addLabel(data.office.lat,data.office.lng,'회사',resetMap,'office');
+
+  // 1. 식당과 회사가 한눈에 보이게 영역 자동 설정 (상하좌우 60px 여백 추가)
+  map.setBounds(bounds, 60, 60, 60, 60);
+
+  // 2. 만약 자동 설정된 줌 아웃 레벨이 4보다 크면(너무 멀면) 레벨 4로 강제 줌인
+  setTimeout(() => {
+    if(map.getLevel() > 4) {
+      map.setLevel(4);
+    }
+    // 현재 맞춰진 최적의 중심점과 확대 레벨을 초기값으로 저장 (초기화 버튼 용)
+    initialCenter=map.getCenter();
+    initialLevel=map.getLevel();
+  }, 100);
 }
+
 function modalCard(r){return `<div class="modal-card"><div class="card-head"><div class="name">${esc(r.name)}</div><div class="walk">🚶 ${esc(r.walk_min)}분</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(r.source||'')}</div></div>`}
 function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('')}
 async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
