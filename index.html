@@ -43,7 +43,7 @@
 <script>
 const DEFAULT_CENTER={lat:37.4795,lng:126.8820};
 const DEFAULT_LEVEL=4; // 기본 확대 레벨 (숫자가 작을수록 확대됨)
-let map=null,data=null,markers=[],labels=[],activePopup=null,initialCenter=null,initialLevel=DEFAULT_LEVEL;
+let map=null,data=null,markers=[],labels=[],activePopup=null,activeRoute=null,initialCenter=null,initialLevel=DEFAULT_LEVEL;
 
 // 식당들이 서로 가까이 붙어있어 라벨이 겹치므로, 마커 기준 라벨을 놓을 방향을 식당별로 지정
 // above: 마커 위(기본, 꼬리 아래) / below: 마커 아래(꼬리 위) / left: 마커 왼쪽(꼬리 오른쪽) / right: 마커 오른쪽(꼬리 왼쪽)
@@ -90,7 +90,8 @@ setInterval(updateClock,1000);
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function menuHtml(r){return r.html||'<div>오늘의 메뉴가 아직 없습니다.</div>'}
 function resetMap(){if(!map||!initialCenter)return;map.setCenter(initialCenter);map.setLevel(initialLevel)}
-function closePopup(){if(activePopup){activePopup.setMap(null);activePopup=null}resetMap()}
+function clearRoute(){if(activeRoute){activeRoute.setMap(null);activeRoute=null}}
+function closePopup(){if(activePopup){activePopup.setMap(null);activePopup=null}clearRoute();resetMap()}
 
 function popupHtml(r){
   return `<div class="popup">
@@ -107,9 +108,25 @@ function popupHtml(r){
   </div>`
 }
 
+function drawRoute(r){
+  clearRoute();
+  if(!r.route || !r.route.length) return;
+  const path=r.route.map(p=>new kakao.maps.LatLng(p.lat,p.lng));
+  activeRoute=new kakao.maps.Polyline({
+    path,
+    strokeWeight:5,
+    strokeColor:'#2563eb',
+    strokeOpacity:.85,
+    strokeStyle:'solid'
+  });
+  activeRoute.setMap(map);
+}
+
 function openPopup(r){
   if(activePopup){ activePopup.setMap(null); activePopup=null; }
   const pos = new kakao.maps.LatLng(r.lat, r.lng);
+
+  drawRoute(r);
 
   // 메뉴(이미지/텍스트) 부분을 눌러도 팝업이 닫히도록, 문자열 대신 DOM 엘리먼트로 생성
   const wrapper=document.createElement('div');
@@ -146,7 +163,7 @@ function addLabel(lat,lng,text,clickFn,cls='',pos='above'){
   ov.setMap(map);
   labels.push(ov);
 }
-function clearObjects(){markers.forEach(m=>m.setMap(null));labels.forEach(o=>o.setMap(null));markers=[];labels=[];if(activePopup){activePopup.setMap(null);activePopup=null}}
+function clearObjects(){markers.forEach(m=>m.setMap(null));labels.forEach(o=>o.setMap(null));markers=[];labels=[];if(activePopup){activePopup.setMap(null);activePopup=null}clearRoute()}
 function createMap(){if(!window.kakao||!kakao.maps){document.getElementById('notice').textContent='카카오맵을 불러오지 못했습니다. JavaScript 키와 Web 도메인 설정을 확인해 주세요.';return false}map=new kakao.maps.Map(document.getElementById('map'),{center:new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng),level:DEFAULT_LEVEL});map.addControl(new kakao.maps.ZoomControl(),kakao.maps.ControlPosition.RIGHT);map.addControl(new kakao.maps.MapTypeControl(),kakao.maps.ControlPosition.TOPRIGHT);return true}
 
 function renderMap(){
@@ -186,6 +203,6 @@ function modalCard(r){return `<div class="modal-card"><div class="card-head"><di
 function closeModal(){document.getElementById('modalBg').classList.remove('show');resetMap()}
 function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('');document.querySelectorAll('#modalCards .menu').forEach(el=>el.addEventListener('click',closeModal))}
 async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
-document.getElementById('resetBtn').addEventListener('click',closePopup);document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',closeModal);document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){closeModal()}});document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){closeModal();return}if(activePopup){activePopup.setMap(null);activePopup=null;resetMap()}});if(createMap())loadData();
+document.getElementById('resetBtn').addEventListener('click',closePopup);document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}clearRoute();document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',closeModal);document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){closeModal()}});document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){closeModal();return}if(activePopup){activePopup.setMap(null);activePopup=null;resetMap()}});if(createMap())loadData();
 </script>
 </body></html>
