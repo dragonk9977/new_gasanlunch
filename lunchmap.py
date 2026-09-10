@@ -47,7 +47,7 @@ print("=" * 60)
 
 
 # ==========================================================
-# 2. 식당 정보 (오류 방지를 위해 절대 좌표값 exact_lat, exact_lng 도입)
+# 2. 식당 정보 (전달해주신 정확한 위경도 좌표 적용)
 # ==========================================================
 
 cafeteria_list = [
@@ -56,24 +56,24 @@ cafeteria_list = [
         "address": "서울 금천구 가산디지털2로 30",
         "type": "ojeong",
         "url": OJEONG_IMAGE_PATH,
-        "exact_lat": 37.477813,  # RSM타워
-        "exact_lng": 126.882315,
+        "exact_lat": 37.47120020547345,
+        "exact_lng": 126.88352033871539,
     },
     {
         "name": "온정찬",
         "address": "서울 금천구 가산디지털1로 75-15",
         "type": "kakao_posts",
         "url": "https://pf.kakao.com/_UIdXn/posts",
-        "exact_lat": 37.478275,  # 하우스디 와이즈타워
-        "exact_lng": 126.884351, 
+        "exact_lat": 37.47218918507373,
+        "exact_lng": 126.88410160863671,
     },
     {
         "name": "런치투게더",
         "address": "서울 금천구 가산디지털1로 58",
         "type": "kakao_profile",
         "url": "https://pf.kakao.com/_swtYxl",
-        "exact_lat": 37.476710,  # 에이스한솔타워
-        "exact_lng": 126.884814,
+        "exact_lat": 37.471346435440815,
+        "exact_lng": 126.88633772331427,
     },
     {
         "name": "런치타임",
@@ -81,16 +81,16 @@ cafeteria_list = [
         "type": "instagram_threads",
         "instagram_url": "https://www.instagram.com/lunchtime_ypp/",
         "threads_url": "https://www.threads.net/@lunchtime_ypp",
-        "exact_lat": 37.477017,  # 대륭테크노타운 1차
-        "exact_lng": 126.882110,
+        "exact_lat": 37.47089827252637,
+        "exact_lng": 126.88388201555182,
     },
     {
         "name": "밥심",
         "address": "서울 금천구 가산디지털2로 46",
         "type": "kakao_first",
         "url": "https://pf.kakao.com/_mHWxjX",
-        "exact_lat": 37.479155,  # 에이스태세라타워
-        "exact_lng": 126.881335,
+        "exact_lat": 37.472650897653246,
+        "exact_lng": 126.8826763789836,
     },
 ]
 
@@ -739,12 +739,12 @@ def get_coords(address):
     except Exception as e:
         print(f"  -> 주소 좌표 변환 실패: {address} / {e}")
     
-    fallback = (37.477813, 126.882315) # 실패 시 RSM타워
+    fallback = (37.47120020547345, 126.88352033871539) # 실패 시 기준좌표(오정)
     geocode_cache[address] = fallback
     return fallback
 
-# 회사 좌표도 변환 오차 방지를 위해 직접 입력(RSM타워)
-office_coords = (37.477813, 126.882315)
+# 회사 위치도 오정 식당과 같은 건물(RSM타워)이므로, 동일한 절대 좌표를 적용하여 도보거리 계산 오차(0m) 방지
+office_coords = (37.47120020547345, 126.88352033871539)
 
 def calculate_walking_info(dest_coords):
     try:
