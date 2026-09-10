@@ -47,7 +47,7 @@ print("=" * 60)
 
 
 # ==========================================================
-# 2. 식당 정보
+# 2. 식당 정보 (위치 보정 적용 완료)
 # ==========================================================
 
 cafeteria_list = [
@@ -67,7 +67,7 @@ cafeteria_list = [
         "type": "kakao_posts",
         "url": "https://pf.kakao.com/_UIdXn/posts",
         "lat_offset": 0.0000,
-        "lng_offset": 0.0008,  # 지도 표시용: 오른쪽(+), 왼쪽(-)
+        "lng_offset": -0.0012,  # 화살표 방향(왼쪽)으로 보정
     },
     {
         "name": "런치투게더",
@@ -75,7 +75,7 @@ cafeteria_list = [
         "type": "kakao_profile",
         "url": "https://pf.kakao.com/_swtYxl",
         "lat_offset": 0.0000,
-        "lng_offset": 0.0008,  # 지도 표시용: 오른쪽(+), 왼쪽(-)
+        "lng_offset": -0.0014,  # 화살표 방향(왼쪽)으로 보정
     },
     {
         "name": "런치타임",
@@ -83,16 +83,16 @@ cafeteria_list = [
         "type": "instagram_threads",
         "instagram_url": "https://www.instagram.com/lunchtime_ypp/",
         "threads_url": "https://www.threads.net/@lunchtime_ypp",
-        "lat_offset": -0.0003,
-        "lng_offset": -0.0002,  # 필요하면 이 두 값만 조정
+        "lat_offset": 0.0004,   # 화살표 방향(위)으로 보정
+        "lng_offset": -0.0008,  # 화살표 방향(왼쪽)으로 보정
     },
     {
         "name": "밥심",
         "address": "서울 금천구 가산디지털2로 46",
         "type": "kakao_first",
         "url": "https://pf.kakao.com/_mHWxjX",
-        "lat_offset": 0.0000,
-        "lng_offset": -0.0006,  # 지도 표시용: 왼쪽(-)
+        "lat_offset": 0.0002,   # 약간 위로 보정
+        "lng_offset": 0.0010,   # 화살표 방향(오른쪽)으로 대폭 보정
     },
 ]
 
@@ -395,10 +395,6 @@ def get_kakao_first_image(driver, url, store_name):
 
 # ==========================================================
 # 8. Instagram - 런치타임
-#
-# 핵심:
-#   이미지 OCR을 사용하지 않고
-#   실제 Instagram 게시글 본문에서 메뉴를 가져온다.
 # ==========================================================
 
 def find_instagram_post_links(driver, profile_url):
@@ -427,7 +423,6 @@ def find_instagram_post_links(driver, profile_url):
 
 
 def parse_instagram_post_date(body_text):
-    # 예: 9월8일 / 9월 8일
     pattern = re.compile(r"(\d{1,2})월\s*(\d{1,2})일")
 
     for line in body_text.splitlines():
@@ -436,7 +431,6 @@ def parse_instagram_post_date(body_text):
         if match:
             return int(match.group(1)), int(match.group(2))
 
-    # 본문 중간에 날짜가 붙는 경우
     match = pattern.search(body_text)
 
     if match:
@@ -453,7 +447,6 @@ def extract_instagram_menu_from_post(body_text):
 
     lines = [line for line in lines if line]
 
-    # 실제 게시글 날짜 위치 찾기
     date_index = -1
 
     date_pattern = re.compile(
@@ -498,21 +491,18 @@ def extract_instagram_menu_from_post(body_text):
         if not line:
             continue
 
-        # 해시태그가 시작되면 메뉴 영역 종료
         if line.startswith("#"):
             break
 
         if line in ignored:
             continue
 
-        # 사용자명/팔로워/UI 정보 제거
         if line == "lunchtime_ypp":
             continue
 
         if "팔로워" in line or "followers" in line:
             continue
 
-        # 시간 표시 제거
         if re.fullmatch(r"\d+\s*(초|분|시간|일|주|개월|년)\s*전", line):
             continue
 
@@ -527,7 +517,6 @@ def extract_instagram_menu_from_post(body_text):
     if not menu_lines:
         return None
 
-    # 게시글 본문이 실제 메뉴인지 확인
     return menu_lines
 
 
@@ -542,8 +531,6 @@ def get_instagram_menu(driver, profile_url):
 
         print(f"     Instagram 게시글 링크 {len(links)}개 발견")
 
-        # 최신 게시물이 앞에 있다는 보장을 완전히 믿지 않고
-        # 최대 10개 정도 확인
         for post_url in links[:10]:
 
             try:
@@ -689,7 +676,6 @@ def get_threads_menu(driver, url):
         if not filtered_lines:
             return None
 
-        # 해시태그 이후는 제외
         for i, line in enumerate(filtered_lines):
             if line.startswith("#"):
                 filtered_lines = filtered_lines[:i]
@@ -720,7 +706,6 @@ def menu_lines_to_html(menu_lines):
     safe_lines = []
 
     for line in menu_lines:
-        # 기본적인 HTML 문자 이스케이프
         line = (
             line.replace("&", "&amp;")
                 .replace("<", "&lt;")
@@ -771,7 +756,6 @@ def get_coords(address):
     except Exception as e:
         print(f"  -> 주소 좌표 변환 실패: {address} / {e}")
 
-    # 실패 시 가산디지털단지 중심 부근
     fallback = (37.4775, 126.8820)
     geocode_cache[address] = fallback
 
@@ -788,7 +772,6 @@ def calculate_walking_info(dest_coords):
             dest_coords
         ).meters
 
-        # 기존 프로젝트와 동일하게 약 70m/min 적용
         walk_minutes = round(
             dist_meters / 70
         )
@@ -813,8 +796,6 @@ os.makedirs(
     exist_ok=True
 )
 
-# 이전 실행 결과: 같은 날짜에 이미 정상 수집된 메뉴는
-# 이번 실행에서 일시적으로 사이트 접근이 실패해도 보존합니다.
 previous_data = {}
 if os.path.exists(OUTPUT_JSON):
     try:
@@ -848,8 +829,6 @@ try:
             item["address"]
         )
 
-        # 도보거리 계산은 실제 주소 좌표(base_lat/base_lng)를 사용하고,
-        # 지도에 표시하는 마커/라벨만 보정 좌표를 사용합니다.
         lat = base_lat + item.get(
             "lat_offset",
             0
@@ -866,10 +845,6 @@ try:
 
         html_content = ""
         source = ""
-
-        # ----------------------------------------------
-        # 오정
-        # ----------------------------------------------
 
         if item["type"] == "ojeong":
 
@@ -892,10 +867,6 @@ try:
                     오정 메뉴를 불러오지 못했습니다.
                 </div>
                 """
-
-        # ----------------------------------------------
-        # 온정찬
-        # ----------------------------------------------
 
         elif item["type"] == "kakao_posts":
 
@@ -920,10 +891,6 @@ try:
                 </div>
                 """
 
-        # ----------------------------------------------
-        # 런치투게더
-        # ----------------------------------------------
-
         elif item["type"] == "kakao_profile":
 
             img_src = get_kakao_profile_image(
@@ -947,11 +914,6 @@ try:
                     카카오 메뉴 이미지를 찾지 못했습니다.
                 </div>
                 """
-
-        # ----------------------------------------------
-        # 런치타임
-        # Instagram → Threads fallback
-        # ----------------------------------------------
 
         elif item["type"] == "instagram_threads":
 
@@ -997,10 +959,6 @@ try:
 
                     source = "none"
 
-        # ----------------------------------------------
-        # 밥심
-        # ----------------------------------------------
-
         elif item["type"] == "kakao_first":
 
             img_src = get_kakao_first_image(
@@ -1025,8 +983,6 @@ try:
                 </div>
                 """
 
-        # 메뉴가 아직 올라오지 않았거나 이번 실행에서 일시적으로 실패한 경우,
-        # 같은 날짜의 이전 정상 수집 결과를 유지합니다.
         previous = previous_restaurants.get(item["name"])
         menu_status = "today"
 
