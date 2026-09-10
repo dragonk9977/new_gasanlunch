@@ -3,6 +3,7 @@ import re
 import time
 import json
 import base64
+import requests
 from io import BytesIO
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -25,8 +26,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OJEONG_IMAGE_PATH = os.path.join(BASE_DIR, "오정메뉴.jpg")
 OUTPUT_DIR = os.path.join(BASE_DIR, "data")
 OUTPUT_JSON = os.path.join(OUTPUT_DIR, "menu.json")
+ROUTES_CACHE_JSON = os.path.join(OUTPUT_DIR, "routes_cache.json")
 
 OFFICE_ADDRESS = "서울 금천구 가산디지털2로 30"
+KAKAO_REST_KEY = os.environ.get("KAKAO_REST_KEY", "")
 
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
@@ -769,6 +772,73 @@ def calculate_walking_info(dest_coords):
 
 
 # ==========================================================
+# 11-2. 카카오 도보 경로 조회 (회사 ↔ 각 식당, 결과는 캐시해서 재사용)
+# ==========================================================
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+routes_cache = {}
+if os.path.exists(ROUTES_CACHE_JSON):
+    try:
+        with open(ROUTES_CACHE_JSON, "r", encoding="utf-8") as f:
+            routes_cache = json.load(f)
+    except Exception:
+        routes_cache = {}
+
+
+def get_walking_route(dest_coords, cache_key):
+    """
+    회사(office_coords) -> dest_coords 도보 경로를 카카오 도보 경로 조회 API로 가져온다.
+    같은 식당 좌표는 항상 같은 경로이므로, 한 번 성공하면 routes_cache.json에 저장해두고
+    다음부터는 API를 다시 호출하지 않는다 (무료 쿼터 절약).
+    """
+    cached = routes_cache.get(cache_key)
+    if cached and cached.get("points"):
+        return cached
+
+    if not KAKAO_REST_KEY:
+        return None
+
+    try:
+        res = requests.get(
+            "https://dapi.kakao.com/v2/routing/walk",
+            headers={"Authorization": f"KakaoAK {KAKAO_REST_KEY}"},
+            params={
+                "start_x": office_coords[1],
+                "start_y": office_coords[0],
+                "end_x": dest_coords[1],
+                "end_y": dest_coords[0],
+            },
+            timeout=10,
+        )
+        data = res.json()
+
+        if data.get("status") != "OK":
+            print(f"     → [{cache_key}] 도보 경로 조회 실패: {data.get('status')}")
+            return None
+
+        route = data["route"]
+        points = []
+        for leg in route.get("legs", []):
+            for step in leg.get("steps", []):
+                for x, y in step.get("path", {}).get("points", []):
+                    points.append({"lat": y, "lng": x})
+
+        result = {
+            "points": points,
+            "distance": route["properties"].get("totalDistance"),
+            "time_sec": route["properties"].get("totalTime"),
+        }
+        routes_cache[cache_key] = result
+        print(f"     → [{cache_key}] 도보 경로 {len(points)}개 좌표 수신")
+        return result
+
+    except Exception as e:
+        print(f"     → [{cache_key}] 도보 경로 조회 오류: {e}")
+        return None
+
+
+# ==========================================================
 # 12. 실제 데이터 수집
 # ==========================================================
 
@@ -818,6 +888,15 @@ try:
         dist, walk_min = calculate_walking_info(
             (lat, lng)
         )
+
+        # 카카오 도보 경로 API로 실제 걷는 경로(선)와, 가능하면 더 정확한 거리/시간을 받아온다
+        route_info = get_walking_route((lat, lng), item["name"])
+        route_points = route_info["points"] if route_info else []
+
+        if route_info and route_info.get("distance"):
+            dist = route_info["distance"]
+        if route_info and route_info.get("time_sec"):
+            walk_min = max(1, round(route_info["time_sec"] / 60))
 
         html_content = ""
         source = ""
@@ -991,6 +1070,7 @@ try:
             "lng": lng,
             "dist": dist,
             "walk_min": walk_min,
+            "route": route_points,
             "source": source,
             "html": html_content,
             "menu_status": menu_status,
@@ -1041,6 +1121,10 @@ with open(
         ensure_ascii=False,
         indent=2
     )
+
+# 도보 경로 캐시 저장 (다음 실행부터는 API를 다시 호출하지 않고 재사용)
+with open(ROUTES_CACHE_JSON, "w", encoding="utf-8") as f:
+    json.dump(routes_cache, f, ensure_ascii=False, indent=2)
 
 
 print()
