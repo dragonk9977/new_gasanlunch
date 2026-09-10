@@ -66,16 +66,16 @@ cafeteria_list = [
         "address": "서울 금천구 가산디지털1로 75-15",
         "type": "kakao_posts",
         "url": "https://pf.kakao.com/_UIdXn/posts",
-        "lat_offset": 0.0002,
-        "lng_offset": 0.0002,  # 필요하면 이 두 값만 조정
+        "lat_offset": 0.0000,
+        "lng_offset": 0.0008,  # 지도 표시용: 오른쪽(+), 왼쪽(-)
     },
     {
         "name": "런치투게더",
         "address": "서울 금천구 가산디지털1로 58",
         "type": "kakao_profile",
         "url": "https://pf.kakao.com/_swtYxl",
-        "lat_offset": -0.0002,
-        "lng_offset": 0.0003,  # 필요하면 이 두 값만 조정
+        "lat_offset": 0.0000,
+        "lng_offset": 0.0008,  # 지도 표시용: 오른쪽(+), 왼쪽(-)
     },
     {
         "name": "런치타임",
@@ -91,8 +91,8 @@ cafeteria_list = [
         "address": "서울 금천구 가산디지털2로 46",
         "type": "kakao_first",
         "url": "https://pf.kakao.com/_mHWxjX",
-        "lat_offset": 0.0003,
-        "lng_offset": -0.0001,  # 필요하면 이 두 값만 조정
+        "lat_offset": 0.0000,
+        "lng_offset": -0.0006,  # 지도 표시용: 왼쪽(-)
     },
 ]
 
@@ -848,6 +848,8 @@ try:
             item["address"]
         )
 
+        # 도보거리 계산은 실제 주소 좌표(base_lat/base_lng)를 사용하고,
+        # 지도에 표시하는 마커/라벨만 보정 좌표를 사용합니다.
         lat = base_lat + item.get(
             "lat_offset",
             0
