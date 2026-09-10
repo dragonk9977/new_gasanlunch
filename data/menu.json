@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-10 10:55:07",
-  "updated_at_display": "2026.09.10 10:55",
+  "updated_at": "2026-09-10 11:10:55",
+  "updated_at_display": "2026.09.10 11:10",
   "date": "2026-09-10",
   "date_display": "9월 10일",
   "weekday": "목",
@@ -42,7 +42,7 @@
       "dist": 252,
       "walk_min": 4,
       "source": "kakao_profile",
-      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/Zf7z7/dJMcahFL7J1/q18CU9VDtk4twBaKEnheKk/img.png\"\n                    class=\"menu-image\"\n                    alt=\"런치투게더 오늘의 메뉴\"\n                >\n                ",
+      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/cDSrj6/dJMcaikr9ru/p5zHRgOv7qGdqxT3v1fl7k/img.png\"\n                    class=\"menu-image\"\n                    alt=\"런치투게더 오늘의 메뉴\"\n                >\n                ",
       "menu_status": "today",
       "menu_date": "2026-09-10"
     },
