@@ -6,7 +6,7 @@
 <title>가산 점심 메뉴 지도</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Arial,"Noto Sans KR",sans-serif;color:#222;background:#f5f6f8}body{overflow:hidden}#app{width:100%;height:100%;position:relative}#map{position:absolute;inset:0}
-.topbar{position:absolute;top:14px;left:14px;right:14px;z-index:20;display:flex;align-items:center;gap:10px;pointer-events:none}.titlebox{pointer-events:auto;background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:14px;padding:11px 14px;box-shadow:0 3px 14px rgba(0,0,0,.12)}.title{font-size:18px;font-weight:800;white-space:nowrap}.date{font-size:11px;color:#777;margin-top:3px;white-space:nowrap}.actions{margin-left:auto;display:flex;gap:7px;pointer-events:auto;flex-shrink:0}button{border:1px solid #ddd;background:rgba(255,255,255,.97);border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}button:hover{background:#f3f4f6}.primary{background:#222;color:#fff;border-color:#222}.primary:hover{background:#000}button .short{display:none}
+.topbar{position:absolute;top:14px;left:14px;right:14px;z-index:20;display:flex;align-items:center;gap:10px;pointer-events:none}.titlebox{pointer-events:auto;background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:14px;padding:11px 14px;box-shadow:0 3px 14px rgba(0,0,0,.12)}.title{font-size:18px;font-weight:800;white-space:nowrap}.date{font-size:11px;color:#777;margin-top:3px;white-space:nowrap}.clockbox{pointer-events:auto;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:14px;padding:8px 12px;box-shadow:0 3px 14px rgba(0,0,0,.12);min-width:0}.clock-date{font-size:11px;color:#777;white-space:nowrap}.clock-time{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.5px;white-space:nowrap}.clock-countdown{font-size:11px;font-weight:700;color:#e74c3c;margin-top:2px;white-space:nowrap}.actions{margin-left:auto;display:flex;gap:7px;pointer-events:auto;flex-shrink:0}button{border:1px solid #ddd;background:rgba(255,255,255,.97);border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}button:hover{background:#f3f4f6}.primary{background:#222;color:#fff;border-color:#222}.primary:hover{background:#000}button .short{display:none}
 .map-label{position:relative;background:#fff;border:2px solid #ff6b35;border-radius:11px;padding:9px 14px;box-shadow:0 3px 12px rgba(0,0,0,.18);font-size:15px;font-weight:800;color:#c1440e;white-space:nowrap;cursor:pointer;animation:labelPulse 2.4s ease-in-out infinite}.map-label:hover{transform:translateY(-1px)}.map-label.office{background:#222;color:#fff;border-color:#222;animation:none}
 @keyframes labelPulse{0%,100%{box-shadow:0 3px 12px rgba(0,0,0,.18),0 0 0 0 rgba(255,107,53,.5)}50%{box-shadow:0 3px 12px rgba(0,0,0,.18),0 0 0 7px rgba(255,107,53,0)}}
 .map-label::after,.map-label::before{content:'';position:absolute;width:0;height:0;border:7px solid transparent}
@@ -26,17 +26,17 @@
 .map-label.office.tail-right::before{border-left-color:#222}
 .map-label.tail-right::after{top:50%;left:100%;margin-top:-7px;margin-left:-1px;border-left-color:#fff}
 .map-label.office.tail-right::after{border-left-color:#222}
-.popup{width:min(340px,calc(100vw - 28px));background:#fff;border-radius:15px;border:1px solid #ddd;box-shadow:0 8px 30px rgba(0,0,0,.2);overflow:hidden}.popup-head{display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid #eee}.popup-name{font-size:17px;font-weight:800}.popup-walk{margin-left:auto;font-size:11px;color:#666;white-space:nowrap}.popup-close{margin-left:8px;border:0;box-shadow:none;padding:2px 7px;font-size:20px;line-height:1;cursor:pointer}.popup-body{padding:12px;max-height:52vh;overflow:auto}.address{font-size:11px;color:#888;margin-bottom:9px}.menu{font-size:13px;line-height:1.55}.menu-image{display:block;width:100%;max-height:360px;object-fit:contain;border-radius:9px;background:#f7f7f7}.text-menu{padding:2px 3px}.menu-line{padding:2px 0}.source{margin-top:9px;font-size:10px;color:#999}
+.popup{width:min(340px,calc(100vw - 28px));background:#fff;border-radius:15px;border:1px solid #ddd;box-shadow:0 8px 30px rgba(0,0,0,.2);overflow:hidden}.popup-head{display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid #eee}.popup-name{font-size:17px;font-weight:800}.popup-walk{margin-left:auto;font-size:11px;color:#666;white-space:nowrap}.popup-close{margin-left:8px;border:0;box-shadow:none;padding:2px 7px;font-size:20px;line-height:1;cursor:pointer}.popup-body{padding:12px;max-height:52vh;overflow:auto}.address{font-size:11px;color:#888;margin-bottom:9px}.menu{font-size:13px;line-height:1.55;cursor:pointer}.menu-image{display:block;width:100%;max-height:360px;object-fit:contain;border-radius:9px;background:#f7f7f7}.text-menu{padding:2px 3px}.menu-line{padding:2px 0}.source{margin-top:9px;font-size:10px;color:#999}
 .notice{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:15;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;border-radius:12px;padding:9px 13px;font-size:12px;color:#777;box-shadow:0 3px 12px rgba(0,0,0,.1);white-space:nowrap}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-bg.show{display:flex}.modal{width:min(1180px,100%);max-height:90vh;background:#fff;border-radius:17px;overflow:hidden;display:flex;flex-direction:column}.modal-head{padding:15px 18px;border-bottom:1px solid #eee;display:flex;align-items:center}.modal-title{font-size:18px;font-weight:800}.modal-close{margin-left:auto;border:0;box-shadow:none;font-size:22px;padding:2px 8px;cursor:pointer}.modal-body{padding:15px;overflow:auto}.modal-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.modal-card{border:1px solid #e5e7eb;border-radius:13px;padding:12px;min-width:0}.modal-card .card-head{display:flex;align-items:center;gap:6px}.modal-card .name{font-size:15px;font-weight:800}.modal-card .walk{margin-left:auto;font-size:10px;color:#666;white-space:nowrap}.modal-card .address{margin-top:5px}.modal-card .menu{margin-top:8px}.modal-card .menu-image{max-height:400px}
-@media(max-width:900px){.modal-cards{display:flex;overflow-x:auto}.modal-card{flex:0 0 280px}}@media(max-width:600px){.topbar{top:8px;left:8px;right:8px;flex-direction:column;align-items:stretch;gap:6px}.titlebox{padding:9px 11px}.title{font-size:16px}.date{font-size:10px}.actions{margin-left:0;justify-content:flex-end;gap:5px}.actions button{padding:8px 10px;font-size:11px}.notice{bottom:10px;font-size:11px;padding:8px 10px}.popup{width:calc(100vw - 28px)}.popup-body{max-height:54vh}.modal-bg{padding:8px}.modal{max-height:94vh}}
+@media(max-width:900px){.modal-cards{display:flex;overflow-x:auto}.modal-card{flex:0 0 280px}}@media(max-width:600px){.topbar{top:8px;left:8px;right:8px;flex-direction:column;align-items:stretch;gap:6px}.titlebox{padding:9px 11px}.title{font-size:16px}.date{font-size:10px}.clockbox{padding:6px 10px}.clock-time{font-size:17px}.clock-date{font-size:10px}.clock-countdown{font-size:10px}.actions{margin-left:0;justify-content:flex-end;gap:5px}.actions button{padding:8px 10px;font-size:11px}.notice{bottom:10px;font-size:11px;padding:8px 10px}.popup{width:calc(100vw - 28px)}.popup-body{max-height:54vh}.modal-bg{padding:8px}.modal{max-height:94vh}}
 @media(max-width:420px){button .full{display:none}button .short{display:inline}}
 </style>
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=42e54a502a4ea6b063acba6bbef6ff42"></script>
 </head>
 <body>
 <div id="app"><div id="map"></div>
-<div class="topbar"><div class="titlebox"><div class="title">🍚 가산 점심 메뉴</div><div id="date" class="date">메뉴 불러오는 중...</div></div><div class="actions"><button id="resetBtn"><span class="full">지도 초기화</span><span class="short">초기화</span></button><button id="allBtn" class="primary"><span class="full">메뉴 한번에 보기</span><span class="short">전체보기</span></button></div></div>
+<div class="topbar"><div class="titlebox"><div class="title">🍚 가산 점심 메뉴</div><div id="date" class="date">메뉴 불러오는 중...</div></div><div id="clockBox" class="clockbox"><div id="clockDate" class="clock-date"></div><div id="clockTime" class="clock-time"></div><div id="clockCountdown" class="clock-countdown"></div></div><div class="actions"><button id="resetBtn"><span class="full">지도 초기화</span><span class="short">초기화</span></button><button id="allBtn" class="primary"><span class="full">메뉴 한번에 보기</span><span class="short">전체보기</span></button></div></div>
 <div id="notice" class="notice">5개 식당 위치를 표시합니다. 식당 이름을 눌러 메뉴를 확인하세요.</div></div>
 <div id="error" style="display:none"></div>
 <div id="modalBg" class="modal-bg"><div class="modal"><div class="modal-head"><div class="modal-title" id="modalTitle">오늘 가산 식단</div><button class="modal-close" id="closeBtn">×</button></div><div class="modal-body"><div id="modalCards" class="modal-cards"></div></div></div></div>
@@ -61,6 +61,32 @@ const LABEL_ANCHOR={
   right:{xAnchor:-.15,yAnchor:.5,tail:'tail-left'}
 };
 
+// 점심시간 기준 (필요하면 이 두 줄만 바꾸면 됩니다)
+const LUNCH_START={h:12,m:0};
+const LUNCH_END={h:13,m:0};
+
+function pad(n){return String(n).padStart(2,'0')}
+function updateClock(){
+  const now=new Date();
+  const wd=['일','월','화','수','목','금','토'][now.getDay()];
+  document.getElementById('clockDate').textContent=`${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} (${wd})`;
+  document.getElementById('clockTime').textContent=`${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+  const start=new Date(now); start.setHours(LUNCH_START.h,LUNCH_START.m,0,0);
+  const end=new Date(now); end.setHours(LUNCH_END.h,LUNCH_END.m,0,0);
+
+  let label,diffMs;
+  if(now<start){ label='점심시간까지'; diffMs=start-now; }
+  else if(now<end){ label='점심시간 종료까지'; diffMs=end-now; }
+  else{ const next=new Date(start); next.setDate(next.getDate()+1); label='내일 점심시간까지'; diffMs=next-now; }
+
+  const totalSec=Math.max(0,Math.floor(diffMs/1000));
+  const h=Math.floor(totalSec/3600),m=Math.floor((totalSec%3600)/60),s=totalSec%60;
+  document.getElementById('clockCountdown').textContent=`${label} ${h}시간 ${pad(m)}분 ${pad(s)}초`;
+}
+updateClock();
+setInterval(updateClock,1000);
+
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function menuHtml(r){return r.html||'<div>오늘의 메뉴가 아직 없습니다.</div>'}
 function resetMap(){if(!map||!initialCenter)return;map.setCenter(initialCenter);map.setLevel(initialLevel)}
@@ -84,11 +110,17 @@ function popupHtml(r){
 function openPopup(r){
   if(activePopup){ activePopup.setMap(null); activePopup=null; }
   const pos = new kakao.maps.LatLng(r.lat, r.lng);
-  
+
+  // 메뉴(이미지/텍스트) 부분을 눌러도 팝업이 닫히도록, 문자열 대신 DOM 엘리먼트로 생성
+  const wrapper=document.createElement('div');
+  wrapper.innerHTML=popupHtml(r);
+  const menuEl=wrapper.querySelector('.menu');
+  if(menuEl) menuEl.addEventListener('click',closePopup);
+
   // 팝업이 위로 짤리지 않도록 마커 기준 우측 옆(가운데 정렬)으로 띄움
   activePopup = new kakao.maps.CustomOverlay({
     position: pos,
-    content: popupHtml(r),
+    content: wrapper,
     xAnchor: -0.05, 
     yAnchor: 0.5,   
     zIndex: 20,
@@ -151,8 +183,9 @@ function renderMap(){
 }
 
 function modalCard(r){return `<div class="modal-card"><div class="card-head"><div class="name">${esc(r.name)}</div><div class="walk">🚶 ${esc(r.walk_min)}분</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(r.source||'')}</div></div>`}
-function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('')}
+function closeModal(){document.getElementById('modalBg').classList.remove('show');resetMap()}
+function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('');document.querySelectorAll('#modalCards .menu').forEach(el=>el.addEventListener('click',closeModal))}
 async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
-document.getElementById('resetBtn').addEventListener('click',closePopup);document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',()=>{document.getElementById('modalBg').classList.remove('show');resetMap()});document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){e.currentTarget.classList.remove('show');resetMap()}});document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){modal.classList.remove('show');resetMap();return}if(activePopup){activePopup.setMap(null);activePopup=null;resetMap()}});if(createMap())loadData();
+document.getElementById('resetBtn').addEventListener('click',closePopup);document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',closeModal);document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){closeModal()}});document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){closeModal();return}if(activePopup){activePopup.setMap(null);activePopup=null;resetMap()}});if(createMap())loadData();
 </script>
 </body></html>
