@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-18 13:07:01",
-  "updated_at_display": "2026.09.18 13:07",
+  "updated_at": "2026-09-18 16:20:46",
+  "updated_at_display": "2026.09.18 16:20",
   "date": "2026-09-18",
   "date_display": "9월 18일",
   "weekday": "금",
@@ -70,7 +70,7 @@
         }
       ],
       "source": "kakao_posts",
-      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/bkgaPf/dJMcagNVVmd/zlCE1rFELanFaiql4en4pK/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"온정찬 오늘의 메뉴\"\n                >\n                ",
+      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"온정찬 오늘의 메뉴\"\n                >\n                ",
       "menu_status": "today",
       "menu_date": "2026-09-18"
     },
