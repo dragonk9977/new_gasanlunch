@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-21 09:06:05",
-  "updated_at_display": "2026.09.21 09:06",
+  "updated_at": "2026-09-21 13:12:17",
+  "updated_at_display": "2026.09.21 13:12",
   "date": "2026-09-21",
   "date_display": "9월 21일",
   "weekday": "월",
@@ -153,10 +153,10 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "menu_status": "missing",
-      "menu_date": null
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line\">수제비</div>\n<div class=\"menu-line\">파채제육볶음</div>\n<div class=\"menu-line\">등심돈가스&amp;경양식s</div>\n<div class=\"menu-line\">토마토스파게티</div>\n<div class=\"menu-line\">멸치꽈리고추무침&amp;무우말랭이</div>\n<div class=\"menu-line\">사과치커리무침</div>\n<div class=\"menu-line\">가든샐러드</div>\n<div class=\"menu-line\">포기김치</div>\n<div class=\"menu-line\">음료/한강라면</div>\n    </div>\n    ",
+      "menu_status": "today",
+      "menu_date": "2026-09-21"
     },
     {
       "name": "밥심",
@@ -244,7 +244,7 @@
         }
       ],
       "source": "kakao_first",
-      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/bom3Gl/dJMcadKgt6K/Tkw0eLfDVuWY9pkGi7MKbk/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"밥심 오늘의 메뉴\"\n                >\n                ",
+      "html": "\n                <img\n                    src=\"https://k.kakaocdn.net/dn/cGo1xO/dJMcadwD1HI/geDdOEuechPcRXqv20MlHk/img_xl.jpg\"\n                    class=\"menu-image\"\n                    alt=\"밥심 오늘의 메뉴\"\n                >\n                ",
       "menu_status": "today",
       "menu_date": "2026-09-21"
     }
