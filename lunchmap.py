@@ -3,6 +3,7 @@ import re
 import time
 import json
 import base64
+import hashlib
 import requests
 from io import BytesIO
 from datetime import datetime
@@ -27,6 +28,7 @@ OJEONG_IMAGE_PATH = os.path.join(BASE_DIR, "오정메뉴.jpg")
 OUTPUT_DIR = os.path.join(BASE_DIR, "data")
 OUTPUT_JSON = os.path.join(OUTPUT_DIR, "menu.json")
 ROUTES_CACHE_JSON = os.path.join(OUTPUT_DIR, "routes_cache.json")
+GEMINI_ATTEMPTS_JSON = os.path.join(OUTPUT_DIR, "gemini_attempts.json")
 
 OFFICE_ADDRESS = "서울 금천구 가산디지털2로 30"
 KAKAO_REST_KEY = os.environ.get("KAKAO_REST_KEY", "")
@@ -977,6 +979,49 @@ if os.path.exists(ROUTES_CACHE_JSON):
     except Exception:
         routes_cache = {}
 
+gemini_attempts = {}
+if os.path.exists(GEMINI_ATTEMPTS_JSON):
+    try:
+        with open(GEMINI_ATTEMPTS_JSON, "r", encoding="utf-8") as f:
+            gemini_attempts = json.load(f)
+    except Exception:
+        gemini_attempts = {}
+
+
+def content_hash(data):
+    """이미지 bytes 또는 텍스트를 짧은 지문으로 바꾼다 (내용이 바뀌었는지 비교용)."""
+    if isinstance(data, str):
+        data = data.encode("utf-8")
+    return hashlib.sha256(data).hexdigest()[:16]
+
+
+def should_call_gemini(restaurant_name, current_hash):
+    """
+    오늘 이미 이 정확한 내용(해시)으로 Gemini를 불렀다가 실패했다면,
+    새 게시물이 올라오기 전까지는 다시 불러도 결과가 같으므로 호출을 건너뛴다.
+    """
+    entry = gemini_attempts.get(restaurant_name)
+    today_str = today.strftime("%Y-%m-%d")
+
+    if (
+        entry
+        and entry.get("date") == today_str
+        and entry.get("hash") == current_hash
+        and not entry.get("succeeded")
+    ):
+        print(f"     → [{restaurant_name}] 지난번과 같은 내용, Gemini 재호출 생략")
+        return False
+
+    return True
+
+
+def record_gemini_attempt(restaurant_name, current_hash, succeeded):
+    gemini_attempts[restaurant_name] = {
+        "date": today.strftime("%Y-%m-%d"),
+        "hash": current_hash,
+        "succeeded": succeeded,
+    }
+
 
 def get_walking_route(dest_coords, cache_key):
     """
@@ -1117,9 +1162,12 @@ try:
 
             if src:
                 img_bytes = base64.b64decode(src.split(",", 1)[1])
-                menu_lines = extract_menu_via_gemini(
-                    img_bytes, "image/jpeg", item["name"]
+                h = content_hash(img_bytes)
+                menu_lines = (
+                    extract_menu_via_gemini(img_bytes, "image/jpeg", item["name"])
+                    if should_call_gemini(item["name"], h) else None
                 )
+                record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
@@ -1149,10 +1197,13 @@ try:
 
             if img_src:
                 img_bytes, img_mime = download_image_bytes(img_src)
+                h = content_hash(img_bytes) if img_bytes else None
                 menu_lines = (
                     extract_menu_via_gemini(img_bytes, img_mime, item["name"])
-                    if img_bytes else None
+                    if img_bytes and should_call_gemini(item["name"], h) else None
                 )
+                if img_bytes:
+                    record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
@@ -1183,10 +1234,13 @@ try:
 
             if img_src:
                 img_bytes, img_mime = download_image_bytes(img_src)
+                h = content_hash(img_bytes) if img_bytes else None
                 menu_lines = (
                     extract_menu_via_gemini(img_bytes, img_mime, item["name"])
-                    if img_bytes else None
+                    if img_bytes and should_call_gemini(item["name"], h) else None
                 )
+                if img_bytes:
+                    record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
@@ -1216,9 +1270,12 @@ try:
 
             if result:
 
-                menu_items = classify_menu_lines_via_gemini(
-                    result["menu_lines"], item["name"]
+                h = content_hash("\n".join(result["menu_lines"]))
+                menu_items = (
+                    classify_menu_lines_via_gemini(result["menu_lines"], item["name"])
+                    if should_call_gemini(item["name"], h) else None
                 )
+                record_gemini_attempt(item["name"], h, bool(menu_items))
 
                 if menu_items:
                     html_content = menu_items_to_html(menu_items)
@@ -1242,9 +1299,12 @@ try:
 
                 if result:
 
-                    menu_items = classify_menu_lines_via_gemini(
-                        result["menu_lines"], item["name"]
+                    h = content_hash("\n".join(result["menu_lines"]))
+                    menu_items = (
+                        classify_menu_lines_via_gemini(result["menu_lines"], item["name"])
+                        if should_call_gemini(item["name"], h) else None
                     )
+                    record_gemini_attempt(item["name"], h, bool(menu_items))
 
                     if menu_items:
                         html_content = menu_items_to_html(menu_items)
@@ -1275,10 +1335,13 @@ try:
 
             if img_src:
                 img_bytes, img_mime = download_image_bytes(img_src)
+                h = content_hash(img_bytes) if img_bytes else None
                 menu_lines = (
                     extract_menu_via_gemini(img_bytes, img_mime, item["name"])
-                    if img_bytes else None
+                    if img_bytes and should_call_gemini(item["name"], h) else None
                 )
+                if img_bytes:
+                    record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
@@ -1386,6 +1449,10 @@ with open(
 # 도보 경로 캐시 저장 (다음 실행부터는 API를 다시 호출하지 않고 재사용)
 with open(ROUTES_CACHE_JSON, "w", encoding="utf-8") as f:
     json.dump(routes_cache, f, ensure_ascii=False, indent=2)
+
+# Gemini 시도 기록 저장 (내용이 안 바뀌었으면 다음 실행에서 API 재호출을 건너뛴다)
+with open(GEMINI_ATTEMPTS_JSON, "w", encoding="utf-8") as f:
+    json.dump(gemini_attempts, f, ensure_ascii=False, indent=2)
 
 
 print()
