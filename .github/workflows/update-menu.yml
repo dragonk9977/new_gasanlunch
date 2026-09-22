@@ -1,12 +1,7 @@
 name: Update Lunch Menu
 
 on:
-  schedule:
-    # 남들이 잘 안 쓰는 3분 단위로 비틀기 (KST 기준 09:03, 09:13, 09:23 ...)
-    - cron: '3,13,23,33,43,53 0-1 * * 1-5'
-    # KST 기준 11:03, 11:13, 11:23, 11:33, 11:43
-    - cron: '3,13,23,33,43 2 * * 1-5'
-  workflow_dispatch: # 수동 실행 버튼 활성화
+  workflow_dispatch: # 외부 스케줄러(cron-job.org)가 이 이벤트를 호출해서 실행시킵니다
 
 jobs:
   update-menu:
@@ -31,6 +26,7 @@ jobs:
       - name: Run lunchmap script
         env:
           KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python lunchmap.py
 
       - name: Commit and push changes
