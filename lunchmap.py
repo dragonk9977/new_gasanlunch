@@ -31,7 +31,7 @@ ROUTES_CACHE_JSON = os.path.join(OUTPUT_DIR, "routes_cache.json")
 OFFICE_ADDRESS = "서울 금천구 가산디지털2로 30"
 KAKAO_REST_KEY = os.environ.get("KAKAO_REST_KEY", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-3.6-flash"
 
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
