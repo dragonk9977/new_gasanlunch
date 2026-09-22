@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-22 13:15:32",
-  "updated_at_display": "2026.09.22 13:15",
+  "updated_at": "2026-09-22 13:33:48",
+  "updated_at_display": "2026.09.22 13:33",
   "date": "2026-09-22",
   "date_display": "9월 22일",
   "weekday": "화",
@@ -123,8 +123,8 @@
           "lng": 126.8860495
         }
       ],
-      "source": "kakao_profile",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/cLPzi7/dJMcagtxNwd/xwlhu6ONDxM1ShCNzmfpk0/img.png\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">중식고추잡채</div>\n<div class=\"menu-line cat-main\">통안심치킨텐더</div>\n<div class=\"menu-line cat-main\">참치마요또띠아롤</div>\n<div class=\"menu-line cat-main\">킬바사소세지야채볶음</div>\n<div class=\"menu-line cat-main\">셀프라면</div>\n<div class=\"menu-line cat-soup\">소고기김치찌개</div>\n<div class=\"menu-line cat-side\">물만두</div>\n<div class=\"menu-line cat-side\">근대나물된장무침</div>\n<div class=\"menu-line cat-side\">그린샐러드&amp;드레싱</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-snack\">라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-drink\">잡곡밥 &amp; 흰밥</div>\n<div class=\"menu-line cat-drink\">누룽지 숭늉</div>\n    </div>\n    ",
       "menu_status": "today",
       "menu_date": "2026-09-22"
     },
