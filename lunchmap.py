@@ -861,9 +861,83 @@ def menu_items_to_html(menu_items):
     """ % "\n".join(safe_lines)
 
 
-# ==========================================================
-# 11. 주소 → 좌표 (정확한 고정 좌표값 사용)
-# ==========================================================
+def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
+    """
+    이미 텍스트로 확보된 메뉴 줄(예: Threads/Instagram 캡션)을
+    Gemini에게 다시 보내서 카테고리만 분류받는다. 이미지가 없으므로
+    텍스트 프롬프트만 보내고, 실패하면 None을 반환한다.
+    """
+    if not GEMINI_API_KEY or not menu_lines:
+        return None
+
+    prompt = (
+        f"다음은 한국 '{restaurant_name}' 식당의 오늘 점심 메뉴를 줄 단위로 나열한 것입니다. "
+        "각 줄을 아래 카테고리 중 하나로 분류하고, 순서는 원래 순서를 최대한 유지해주세요. "
+        "카테고리: main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
+        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥/라면). "
+        "메뉴가 아닌 광고 문구나 해시태그, 이모지만 있는 줄은 제외하세요. "
+        "다른 설명 없이 JSON 배열만 답변하세요. "
+        '형식: [{"name":"콩나물국","category":"soup"}, {"name":"바싹불고기","category":"main"}]\n\n'
+        "메뉴 목록:\n" + "\n".join(menu_lines)
+    )
+
+    for attempt in range(3):
+        try:
+            res = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
+                json={
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {
+                        "temperature": 0,
+                        "response_mime_type": "application/json",
+                    },
+                },
+                timeout=30,
+            )
+
+            data = res.json()
+
+            if "candidates" not in data:
+                error_status = data.get("error", {}).get("status")
+
+                if error_status == "UNAVAILABLE" and attempt < 2:
+                    print(f"     → [{restaurant_name}] Gemini 분류 일시 과부하, 5초 후 재시도")
+                    time.sleep(5)
+                    continue
+
+                print(f"     → [{restaurant_name}] Gemini 분류 실패 (HTTP {res.status_code}): {data}")
+                return None
+
+            text = data["candidates"][0]["content"]["parts"][0]["text"]
+            items = json.loads(text)
+
+            if not isinstance(items, list) or not items:
+                return None
+
+            valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
+            menu_items = []
+
+            for entry in items:
+                if isinstance(entry, dict) and str(entry.get("name", "")).strip():
+                    category = entry.get("category")
+                    category = category if category in valid_categories else "side"
+                    menu_items.append({
+                        "name": str(entry["name"]).strip(),
+                        "category": category,
+                    })
+
+            if not menu_items:
+                return None
+
+            print(f"     → [{restaurant_name}] Gemini 텍스트 분류 성공 ({len(menu_items)}개 항목)")
+            return menu_items
+
+        except Exception as e:
+            print(f"     → [{restaurant_name}] Gemini 분류 오류: {e}")
+            return None
+
+    return None
 
 geolocator = Nominatim(user_agent="gasan_lunch_map_new")
 geocode_cache = {}
@@ -1146,9 +1220,16 @@ try:
 
             if result:
 
-                html_content = menu_lines_to_html(
-                    result["menu_lines"]
+                menu_items = classify_menu_lines_via_gemini(
+                    result["menu_lines"], item["name"]
                 )
+
+                if menu_items:
+                    html_content = menu_items_to_html(menu_items)
+                else:
+                    html_content = menu_lines_to_html(
+                        result["menu_lines"]
+                    )
 
                 source = result["source"]
 
@@ -1165,9 +1246,16 @@ try:
 
                 if result:
 
-                    html_content = menu_lines_to_html(
-                        result["menu_lines"]
+                    menu_items = classify_menu_lines_via_gemini(
+                        result["menu_lines"], item["name"]
                     )
+
+                    if menu_items:
+                        html_content = menu_items_to_html(menu_items)
+                    else:
+                        html_content = menu_lines_to_html(
+                            result["menu_lines"]
+                        )
 
                     source = result["source"]
 
