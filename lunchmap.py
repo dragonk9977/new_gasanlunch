@@ -747,8 +747,8 @@ def download_image_bytes(url):
 
 def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
     """
-    메뉴판 사진을 Gemini에게 보내서, 오늘 날짜에 해당하는 메뉴만
-    사람이 읽기 좋은 순서의 텍스트 목록(JSON 배열)으로 뽑아온다.
+    메뉴판 사진을 Gemini에게 보내서, 오늘 날짜에 해당하는 메뉴를
+    {"name": 메뉴명, "category": 분류} 목록으로 뽑아온다.
     실패하면 None을 반환하고, 호출하는 쪽에서 원본 이미지로 폴백한다.
     """
     if not GEMINI_API_KEY or not image_bytes:
@@ -759,54 +759,106 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
         f"오늘은 {today.year}년 {today_date_str_space} {today_weekday}요일입니다. "
         "이미지 안에 여러 날짜/요일의 메뉴가 같이 있다면, 오늘 날짜(요일)에 해당하는 "
         "메뉴만 골라주세요. 날짜 구분이 없고 하나의 메뉴만 있다면 그걸 사용하세요. "
-        "메인 메뉴/특선을 가장 먼저, 그다음 국/찌개, 반찬류, 김치/장아찌, "
-        "후식/음료 순서로 정렬해서 항목별로 나눠주세요. "
-        "다른 설명 없이 메뉴 항목 문자열이 담긴 JSON 배열만 답변하세요. "
-        '예시: ["오징어김치볶음밥", "팽이미소국", "제철나물", "깍두기"]. '
+        "각 메뉴 항목마다 category를 다음 중 하나로 분류하세요: "
+        "main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
+        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥). "
+        "정렬 순서도 main → soup → side → kimchi → snack → drink 순으로 해주세요. "
+        "다른 설명 없이 JSON 배열만 답변하세요. "
+        '형식: [{"name":"오징어김치볶음밥","category":"main"}, {"name":"팽이미소국","category":"soup"}]. '
         "메뉴를 읽을 수 없으면 빈 배열 []을 반환하세요."
     )
 
-    try:
-        b64 = base64.b64encode(image_bytes).decode("utf-8")
+    b64 = base64.b64encode(image_bytes).decode("utf-8")
 
-        res = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
-            json={
-                "contents": [{
-                    "parts": [
-                        {"text": prompt},
-                        {"inline_data": {"mime_type": mime_type, "data": b64}},
-                    ]
-                }],
-                "generationConfig": {
-                    "temperature": 0,
-                    "response_mime_type": "application/json",
+    for attempt in range(3):
+        try:
+            res = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
+                json={
+                    "contents": [{
+                        "parts": [
+                            {"text": prompt},
+                            {"inline_data": {"mime_type": mime_type, "data": b64}},
+                        ]
+                    }],
+                    "generationConfig": {
+                        "temperature": 0,
+                        "response_mime_type": "application/json",
+                    },
                 },
-            },
-            timeout=30,
-        )
+                timeout=30,
+            )
 
-        data = res.json()
+            data = res.json()
 
-        if "candidates" not in data:
-            print(f"     → [{restaurant_name}] Gemini 응답 이상 (HTTP {res.status_code}): {data}")
+            if "candidates" not in data:
+                error_status = data.get("error", {}).get("status")
+
+                if error_status == "UNAVAILABLE" and attempt < 2:
+                    print(f"     → [{restaurant_name}] Gemini 일시적 과부하, 5초 후 재시도 ({attempt + 1}/3)")
+                    time.sleep(5)
+                    continue
+
+                print(f"     → [{restaurant_name}] Gemini 응답 이상 (HTTP {res.status_code}): {data}")
+                return None
+
+            text = data["candidates"][0]["content"]["parts"][0]["text"]
+            items = json.loads(text)
+
+            if not isinstance(items, list) or not items:
+                print(f"     → [{restaurant_name}] Gemini가 메뉴를 못 읽음 (빈 결과)")
+                return None
+
+            valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
+            menu_items = []
+
+            for entry in items:
+                if isinstance(entry, dict) and str(entry.get("name", "")).strip():
+                    name = str(entry["name"]).strip()
+                    category = entry.get("category")
+                    category = category if category in valid_categories else "side"
+                    menu_items.append({"name": name, "category": category})
+                elif isinstance(entry, str) and entry.strip():
+                    menu_items.append({"name": entry.strip(), "category": "side"})
+
+            if not menu_items:
+                return None
+
+            print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_items)}개 항목)")
+            return menu_items
+
+        except Exception as e:
+            print(f"     → [{restaurant_name}] Gemini 추출 실패: {e}")
             return None
 
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-        menu_lines = json.loads(text)
+    return None
 
-        if isinstance(menu_lines, list) and menu_lines:
-            menu_lines = [str(x).strip() for x in menu_lines if str(x).strip()]
-            print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_lines)}개 항목)")
-            return menu_lines
 
-        print(f"     → [{restaurant_name}] Gemini가 메뉴를 못 읽음 (빈 결과)")
-        return None
+def menu_items_to_html(menu_items):
+    """카테고리별로 색을 입혀서 메뉴 목록 HTML을 만든다."""
+    if not menu_items:
+        return "<div>오늘의 메뉴를 찾지 못했습니다.</div>"
 
-    except Exception as e:
-        print(f"     → [{restaurant_name}] Gemini 추출 실패: {e}")
-        return None
+    safe_lines = []
+
+    for item in menu_items:
+        name = (
+            item["name"].replace("&", "&amp;")
+                        .replace("<", "&lt;")
+                        .replace(">", "&gt;")
+        )
+        category = item.get("category", "side")
+
+        safe_lines.append(
+            f'<div class="menu-line cat-{category}">{name}</div>'
+        )
+
+    return """
+    <div class="text-menu">
+        %s
+    </div>
+    """ % "\n".join(safe_lines)
 
 
 # ==========================================================
@@ -1000,7 +1052,7 @@ try:
                 )
 
                 if menu_lines:
-                    html_content = menu_lines_to_html(menu_lines)
+                    html_content = menu_items_to_html(menu_lines)
                     source = "gemini_ocr"
                 else:
                     html_content = f"""
@@ -1033,7 +1085,7 @@ try:
                 )
 
                 if menu_lines:
-                    html_content = menu_lines_to_html(menu_lines)
+                    html_content = menu_items_to_html(menu_lines)
                     source = "gemini_ocr"
                 else:
                     html_content = f"""
@@ -1067,7 +1119,7 @@ try:
                 )
 
                 if menu_lines:
-                    html_content = menu_lines_to_html(menu_lines)
+                    html_content = menu_items_to_html(menu_lines)
                     source = "gemini_ocr"
                 else:
                     html_content = f"""
@@ -1145,7 +1197,7 @@ try:
                 )
 
                 if menu_lines:
-                    html_content = menu_lines_to_html(menu_lines)
+                    html_content = menu_items_to_html(menu_lines)
                     source = "gemini_ocr"
                 else:
                     html_content = f"""
