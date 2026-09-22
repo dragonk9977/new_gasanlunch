@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-22 14:33:12",
-  "updated_at_display": "2026.09.22 14:33",
+  "updated_at": "2026-09-22 14:42:56",
+  "updated_at_display": "2026.09.22 14:42",
   "date": "2026-09-22",
   "date_display": "9월 22일",
   "weekday": "화",
@@ -38,7 +38,8 @@
       "source": "gemini_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">통살등심돈까스&amp;브라운소스</div>\n<div class=\"menu-line cat-main\">꼬들 콩나물비빔라면</div>\n<div class=\"menu-line cat-soup\">유부미소장국</div>\n<div class=\"menu-line cat-side\">구멍어묵간장볶음</div>\n<div class=\"menu-line cat-side\">제철나물</div>\n<div class=\"menu-line cat-side\">양배추콜슬로</div>\n<div class=\"menu-line cat-kimchi\">깍뚝비트무피클</div>\n<div class=\"menu-line cat-kimchi\">배추김치</div>\n<div class=\"menu-line cat-snack\">♡개나리콘♡</div>\n<div class=\"menu-line cat-drink\">따끈누룽지숭늉/냉차</div>\n<div class=\"menu-line cat-drink\">백미/흑미</div>\n    </div>\n    ",
       "menu_status": "today",
-      "menu_date": "2026-09-22"
+      "menu_date": "2026-09-22",
+      "checked_at": "14:42"
     },
     {
       "name": "온정찬",
@@ -72,7 +73,8 @@
       "source": "gemini_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">단호박갈비찜</div>\n<div class=\"menu-line cat-main\">닭봉&amp;윙후라이드&amp;소스</div>\n<div class=\"menu-line cat-main\">튀김국물떡볶이</div>\n<div class=\"menu-line cat-main\">비빔칼국수</div>\n<div class=\"menu-line cat-main\">셀프한강라면</div>\n<div class=\"menu-line cat-soup\">순두부고추장찌개</div>\n<div class=\"menu-line cat-side\">크래미마요</div>\n<div class=\"menu-line cat-side\">고추지무침</div>\n<div class=\"menu-line cat-side\">가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
       "menu_status": "today",
-      "menu_date": "2026-09-22"
+      "menu_date": "2026-09-22",
+      "checked_at": "14:42"
     },
     {
       "name": "런치투게더",
@@ -126,7 +128,8 @@
       "source": "gemini_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">중식고추잡채</div>\n<div class=\"menu-line cat-main\">통안심치킨텐더</div>\n<div class=\"menu-line cat-main\">참치마요또띠아롤</div>\n<div class=\"menu-line cat-main\">킬바사소세지야채볶음</div>\n<div class=\"menu-line cat-main\">셀프라면</div>\n<div class=\"menu-line cat-soup\">소고기김치찌개</div>\n<div class=\"menu-line cat-side\">물만두</div>\n<div class=\"menu-line cat-side\">근대나물된장무침</div>\n<div class=\"menu-line cat-side\">그린샐러드&amp;드레싱</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-snack\">라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-drink\">잡곡밥 &amp; 흰밥</div>\n<div class=\"menu-line cat-drink\">누룽지 숭늉</div>\n    </div>\n    ",
       "menu_status": "today",
-      "menu_date": "2026-09-22"
+      "menu_date": "2026-09-22",
+      "checked_at": "14:42"
     },
     {
       "name": "런치타임",
@@ -154,9 +157,10 @@
         }
       ],
       "source": "threads",
-      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">한돈김치찌개</div>\n<div class=\"menu-line cat-main\">후라이드치킨</div>\n<div class=\"menu-line cat-snack\">모둠튀김</div>\n<div class=\"menu-line cat-main\">새콤달콤쫄면</div>\n<div class=\"menu-line cat-side\">새우무조림</div>\n<div class=\"menu-line cat-kimchi\">계절야채겉절이</div>\n<div class=\"menu-line cat-side\">가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-drink\">한강라면/음료</div>\n    </div>\n    ",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">한돈김치찌개</div>\n<div class=\"menu-line cat-main\">후라이드치킨</div>\n<div class=\"menu-line cat-main\">모둠튀김</div>\n<div class=\"menu-line cat-main\">새콤달콤쫄면</div>\n<div class=\"menu-line cat-main\">새우무조림</div>\n<div class=\"menu-line cat-kimchi\">계절야채겉절이</div>\n<div class=\"menu-line cat-side\">가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-drink\">한강라면/음료</div>\n    </div>\n    ",
       "menu_status": "today",
-      "menu_date": "2026-09-22"
+      "menu_date": "2026-09-22",
+      "checked_at": "14:42"
     },
     {
       "name": "밥심",
@@ -246,7 +250,8 @@
       "source": "openrouter_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">돼지고기김치찜</div>\n<div class=\"menu-line cat-main\">후라이드치킨&amp;양념소스</div>\n<div class=\"menu-line cat-main\">양배추쌈&amp;바지락강된장</div>\n<div class=\"menu-line cat-main\">한강라면</div>\n<div class=\"menu-line cat-soup\">사골우거지국</div>\n<div class=\"menu-line cat-side\">오색전</div>\n<div class=\"menu-line cat-side\">전통한식잡채</div>\n<div class=\"menu-line cat-side\">도토리묵야채무침</div>\n<div class=\"menu-line cat-side\">고추알마늘무침</div>\n<div class=\"menu-line cat-side\">사과사라다</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-snack\">바람떡&amp;꿀떡</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
       "menu_status": "today",
-      "menu_date": "2026-09-22"
+      "menu_date": "2026-09-22",
+      "checked_at": "14:42"
     }
   ]
 }
