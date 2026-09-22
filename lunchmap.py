@@ -30,6 +30,8 @@ ROUTES_CACHE_JSON = os.path.join(OUTPUT_DIR, "routes_cache.json")
 
 OFFICE_ADDRESS = "서울 금천구 가산디지털2로 30"
 KAKAO_REST_KEY = os.environ.get("KAKAO_REST_KEY", "")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL = "gemini-2.5-flash"
 
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
@@ -724,6 +726,85 @@ def menu_lines_to_html(menu_lines):
 
 
 # ==========================================================
+# 10-2. Gemini Vision - 메뉴판 이미지에서 텍스트만 추출
+# ==========================================================
+
+def download_image_bytes(url):
+    """카카오 CDN 등에 올라온 이미지를 다운로드해서 (bytes, mime_type)으로 반환"""
+    try:
+        res = requests.get(
+            url,
+            timeout=15,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        if res.status_code == 200 and res.content:
+            mime_type = res.headers.get("Content-Type", "image/jpeg").split(";")[0]
+            return res.content, mime_type
+    except Exception as e:
+        print(f"     이미지 다운로드 실패: {e}")
+    return None, None
+
+
+def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
+    """
+    메뉴판 사진을 Gemini에게 보내서, 오늘 날짜에 해당하는 메뉴만
+    사람이 읽기 좋은 순서의 텍스트 목록(JSON 배열)으로 뽑아온다.
+    실패하면 None을 반환하고, 호출하는 쪽에서 원본 이미지로 폴백한다.
+    """
+    if not GEMINI_API_KEY or not image_bytes:
+        return None
+
+    prompt = (
+        f"이 이미지는 한국 '{restaurant_name}' 식당의 점심 메뉴판입니다. "
+        f"오늘은 {today.year}년 {today_date_str_space} {today_weekday}요일입니다. "
+        "이미지 안에 여러 날짜/요일의 메뉴가 같이 있다면, 오늘 날짜(요일)에 해당하는 "
+        "메뉴만 골라주세요. 날짜 구분이 없고 하나의 메뉴만 있다면 그걸 사용하세요. "
+        "메인 메뉴/특선을 가장 먼저, 그다음 국/찌개, 반찬류, 김치/장아찌, "
+        "후식/음료 순서로 정렬해서 항목별로 나눠주세요. "
+        "다른 설명 없이 메뉴 항목 문자열이 담긴 JSON 배열만 답변하세요. "
+        '예시: ["오징어김치볶음밥", "팽이미소국", "제철나물", "깍두기"]. '
+        "메뉴를 읽을 수 없으면 빈 배열 []을 반환하세요."
+    )
+
+    try:
+        b64 = base64.b64encode(image_bytes).decode("utf-8")
+
+        res = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
+            json={
+                "contents": [{
+                    "parts": [
+                        {"text": prompt},
+                        {"inline_data": {"mime_type": mime_type, "data": b64}},
+                    ]
+                }],
+                "generationConfig": {
+                    "temperature": 0,
+                    "response_mime_type": "application/json",
+                },
+            },
+            timeout=30,
+        )
+
+        data = res.json()
+        text = data["candidates"][0]["content"]["parts"][0]["text"]
+        menu_lines = json.loads(text)
+
+        if isinstance(menu_lines, list) and menu_lines:
+            menu_lines = [str(x).strip() for x in menu_lines if str(x).strip()]
+            print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_lines)}개 항목)")
+            return menu_lines
+
+        print(f"     → [{restaurant_name}] Gemini가 메뉴를 못 읽음 (빈 결과)")
+        return None
+
+    except Exception as e:
+        print(f"     → [{restaurant_name}] Gemini 추출 실패: {e}")
+        return None
+
+
+# ==========================================================
 # 11. 주소 → 좌표 (정확한 고정 좌표값 사용)
 # ==========================================================
 
@@ -908,14 +989,23 @@ try:
             )
 
             if src:
-                html_content = f"""
-                <img
-                    src="{src}"
-                    class="menu-image"
-                    alt="오정 오늘의 메뉴"
-                >
-                """
-                source = "local_image"
+                img_bytes = base64.b64decode(src.split(",", 1)[1])
+                menu_lines = extract_menu_via_gemini(
+                    img_bytes, "image/jpeg", item["name"]
+                )
+
+                if menu_lines:
+                    html_content = menu_lines_to_html(menu_lines)
+                    source = "gemini_ocr"
+                else:
+                    html_content = f"""
+                    <img
+                        src="{src}"
+                        class="menu-image"
+                        alt="오정 오늘의 메뉴"
+                    >
+                    """
+                    source = "local_image"
             else:
                 html_content = """
                 <div class="error-menu">
@@ -931,14 +1021,24 @@ try:
             )
 
             if img_src:
-                html_content = f"""
-                <img
-                    src="{img_src}"
-                    class="menu-image"
-                    alt="온정찬 오늘의 메뉴"
-                >
-                """
-                source = "kakao_posts"
+                img_bytes, img_mime = download_image_bytes(img_src)
+                menu_lines = (
+                    extract_menu_via_gemini(img_bytes, img_mime, item["name"])
+                    if img_bytes else None
+                )
+
+                if menu_lines:
+                    html_content = menu_lines_to_html(menu_lines)
+                    source = "gemini_ocr"
+                else:
+                    html_content = f"""
+                    <img
+                        src="{img_src}"
+                        class="menu-image"
+                        alt="온정찬 오늘의 메뉴"
+                    >
+                    """
+                    source = "kakao_posts"
             else:
                 html_content = """
                 <div class="error-menu">
@@ -955,14 +1055,24 @@ try:
             )
 
             if img_src:
-                html_content = f"""
-                <img
-                    src="{img_src}"
-                    class="menu-image"
-                    alt="런치투게더 오늘의 메뉴"
-                >
-                """
-                source = "kakao_profile"
+                img_bytes, img_mime = download_image_bytes(img_src)
+                menu_lines = (
+                    extract_menu_via_gemini(img_bytes, img_mime, item["name"])
+                    if img_bytes else None
+                )
+
+                if menu_lines:
+                    html_content = menu_lines_to_html(menu_lines)
+                    source = "gemini_ocr"
+                else:
+                    html_content = f"""
+                    <img
+                        src="{img_src}"
+                        class="menu-image"
+                        alt="런치투게더 오늘의 메뉴"
+                    >
+                    """
+                    source = "kakao_profile"
             else:
                 html_content = """
                 <div class="error-menu">
@@ -1023,14 +1133,24 @@ try:
             )
 
             if img_src:
-                html_content = f"""
-                <img
-                    src="{img_src}"
-                    class="menu-image"
-                    alt="밥심 오늘의 메뉴"
-                >
-                """
-                source = "kakao_first"
+                img_bytes, img_mime = download_image_bytes(img_src)
+                menu_lines = (
+                    extract_menu_via_gemini(img_bytes, img_mime, item["name"])
+                    if img_bytes else None
+                )
+
+                if menu_lines:
+                    html_content = menu_lines_to_html(menu_lines)
+                    source = "gemini_ocr"
+                else:
+                    html_content = f"""
+                    <img
+                        src="{img_src}"
+                        class="menu-image"
+                        alt="밥심 오늘의 메뉴"
+                    >
+                    """
+                    source = "kakao_first"
             else:
                 html_content = """
                 <div class="error-menu">
