@@ -1331,14 +1331,17 @@ try:
         cache_hit = bool(
             cached_previous
             and cached_previous.get("menu_date") == today_str
-            and cached_previous.get("source") == "gemini_ocr"
+            and cached_previous.get("source") in ("gemini_ocr", "openrouter_ocr")
             and cached_previous.get("html")
         )
 
+        checked_at = None
+
         if cache_hit:
-            print(f"     → [{item['name']}] 오늘 이미 Gemini 추출 성공, 재사용 (API 호출 생략)")
+            print(f"     → [{item['name']}] 오늘 이미 {cached_previous['source']} 추출 성공, 재사용 (API 호출 생략)")
             html_content = cached_previous["html"]
             source = cached_previous["source"]
+            checked_at = cached_previous.get("checked_at")
 
         elif item["type"] == "ojeong":
 
@@ -1546,10 +1549,16 @@ try:
             html_content = previous["html"]
             source = previous["source"]
             menu_status = "preserved_from_previous_run"
+            checked_at = previous.get("checked_at")
             print(f"     → [{item['name']}] 이전 정상 수집 메뉴 유지")
 
         elif failed_this_run:
             menu_status = "missing"
+            checked_at = None
+
+        elif checked_at is None:
+            # 이번 실행에서 새로 확인된 정상 메뉴
+            checked_at = today.strftime("%H:%M")
 
         scraped_data.append({
             "name": item["name"],
@@ -1563,6 +1572,7 @@ try:
             "html": html_content,
             "menu_status": menu_status,
             "menu_date": today.strftime("%Y-%m-%d") if menu_status != "missing" else None,
+            "checked_at": checked_at,
         })
 
         time.sleep(1.5)
