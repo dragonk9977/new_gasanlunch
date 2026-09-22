@@ -35,6 +35,11 @@ KAKAO_REST_KEY = os.environ.get("KAKAO_REST_KEY", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 GEMINI_MODEL = "gemini-3.6-flash"
 
+# Gemini가 실패(특히 할당량 초과)했을 때의 보험용 폴백
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+# openrouter/free는 이미지 인식이 되는 무료 모델 중 하나를 자동으로 골라주는 라우터
+OPENROUTER_MODEL = "openrouter/free"
+
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
 today = datetime.now(ZoneInfo("Asia/Seoul"))
@@ -827,6 +832,120 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
         return None
 
 
+def _parse_ai_json_list(text):
+    """LLM 응답에서 JSON 배열만 뽑아 파싱한다 (```json 코드펜스가 섞여 와도 처리)."""
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.strip("`")
+        if text.startswith("json"):
+            text = text[4:]
+    return json.loads(text.strip())
+
+
+def _normalize_menu_items(items):
+    valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
+    menu_items = []
+
+    for entry in items:
+        if isinstance(entry, dict) and str(entry.get("name", "")).strip():
+            category = entry.get("category")
+            category = category if category in valid_categories else "side"
+            menu_items.append({
+                "name": str(entry["name"]).strip(),
+                "category": category,
+            })
+        elif isinstance(entry, str) and entry.strip():
+            menu_items.append({"name": entry.strip(), "category": "side"})
+
+    return menu_items
+
+
+def extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name):
+    """Gemini가 실패했을 때의 보험용 폴백. OpenRouter의 무료 비전 모델로 재시도한다."""
+    if not OPENROUTER_API_KEY or not image_bytes:
+        return None
+
+    prompt = (
+        f"이 이미지는 한국 '{restaurant_name}' 식당의 점심 메뉴판입니다. "
+        f"오늘은 {today.year}년 {today_date_str_space} {today_weekday}요일입니다. "
+        "이미지 안에 여러 날짜/요일의 메뉴가 같이 있다면 오늘 날짜(요일)에 해당하는 "
+        "메뉴만 골라주세요. 각 항목마다 category를 main/soup/side/kimchi/snack/drink 중 "
+        "하나로 분류하고, main→soup→side→kimchi→snack→drink 순서로 정렬해주세요. "
+        "다른 설명 없이 JSON 배열만 답변하세요. "
+        '형식: [{"name":"오징어김치볶음밥","category":"main"}]. '
+        "메뉴를 읽을 수 없으면 빈 배열 []을 반환하세요."
+    )
+
+    try:
+        b64 = base64.b64encode(image_bytes).decode("utf-8")
+
+        res = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": OPENROUTER_MODEL,
+                "messages": [{
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url", "image_url": {
+                            "url": f"data:{mime_type};base64,{b64}"
+                        }},
+                    ],
+                }],
+            },
+            timeout=30,
+        )
+
+        data = res.json()
+
+        if "choices" not in data:
+            print(f"     → [{restaurant_name}] OpenRouter 응답 이상 (HTTP {res.status_code}): {data}")
+            return None
+
+        text = data["choices"][0]["message"]["content"]
+        items = _parse_ai_json_list(text)
+        menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
+
+        if not menu_items:
+            print(f"     → [{restaurant_name}] OpenRouter가 메뉴를 못 읽음")
+            return None
+
+        print(f"     → [{restaurant_name}] OpenRouter 메뉴 추출 성공 ({len(menu_items)}개 항목)")
+        return menu_items
+
+    except Exception as e:
+        print(f"     → [{restaurant_name}] OpenRouter 추출 실패: {e}")
+        return None
+
+
+def extract_menu_via_ai(image_bytes, mime_type, restaurant_name):
+    """
+    이미지에서 메뉴를 뽑는 통합 진입점.
+    Gemini 우선(할당량/내용 중복 체크 포함) → 실패하면 OpenRouter 무료 모델로 보험 시도.
+    반환: (menu_items 또는 None, 성공한 소스 이름 또는 None)
+    """
+    if not image_bytes:
+        return None, None
+
+    h = content_hash(image_bytes)
+
+    if should_call_gemini(restaurant_name, h):
+        items = extract_menu_via_gemini(image_bytes, mime_type, restaurant_name)
+        record_gemini_attempt(restaurant_name, h, bool(items))
+        if items:
+            return items, "gemini_ocr"
+
+    items = extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name)
+    if items:
+        return items, "openrouter_ocr"
+
+    return None, None
+
+
 def menu_items_to_html(menu_items):
     """카테고리별로 색을 입혀서 메뉴 목록 HTML을 만든다."""
     if not menu_items:
@@ -920,6 +1039,73 @@ def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
     except Exception as e:
         print(f"     → [{restaurant_name}] Gemini 분류 오류: {e}")
         return None
+
+
+def classify_menu_lines_via_openrouter(menu_lines, restaurant_name):
+    """Gemini 텍스트 분류가 실패했을 때의 보험용 폴백."""
+    if not OPENROUTER_API_KEY or not menu_lines:
+        return None
+
+    prompt = (
+        f"다음은 한국 '{restaurant_name}' 식당의 오늘 점심 메뉴를 줄 단위로 나열한 것입니다. "
+        "각 줄을 main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
+        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥/라면) "
+        "중 하나로 분류하고, 원래 순서를 최대한 유지해주세요. 메뉴가 아닌 광고 문구, "
+        "해시태그, 이모지만 있는 줄은 제외하세요. 다른 설명 없이 JSON 배열만 답변하세요. "
+        '형식: [{"name":"콩나물국","category":"soup"}]\n\n'
+        "메뉴 목록:\n" + "\n".join(menu_lines)
+    )
+
+    try:
+        res = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": OPENROUTER_MODEL,
+                "messages": [{"role": "user", "content": prompt}],
+            },
+            timeout=30,
+        )
+
+        data = res.json()
+
+        if "choices" not in data:
+            print(f"     → [{restaurant_name}] OpenRouter 분류 실패 (HTTP {res.status_code}): {data}")
+            return None
+
+        text = data["choices"][0]["message"]["content"]
+        items = _parse_ai_json_list(text)
+        menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
+
+        if not menu_items:
+            return None
+
+        print(f"     → [{restaurant_name}] OpenRouter 텍스트 분류 성공 ({len(menu_items)}개 항목)")
+        return menu_items
+
+    except Exception as e:
+        print(f"     → [{restaurant_name}] OpenRouter 분류 오류: {e}")
+        return None
+
+
+def classify_menu_lines_via_ai(menu_lines, restaurant_name):
+    """텍스트 분류 통합 진입점. Gemini 우선 → 실패하면 OpenRouter 보험 시도."""
+    if not menu_lines:
+        return None
+
+    h = content_hash("\n".join(menu_lines))
+
+    if should_call_gemini(restaurant_name, h):
+        items = classify_menu_lines_via_gemini(menu_lines, restaurant_name)
+        record_gemini_attempt(restaurant_name, h, bool(items))
+        if items:
+            return items
+
+    return classify_menu_lines_via_openrouter(menu_lines, restaurant_name)
+
 
 geolocator = Nominatim(user_agent="gasan_lunch_map_new")
 geocode_cache = {}
@@ -1162,16 +1348,13 @@ try:
 
             if src:
                 img_bytes = base64.b64decode(src.split(",", 1)[1])
-                h = content_hash(img_bytes)
-                menu_lines = (
-                    extract_menu_via_gemini(img_bytes, "image/jpeg", item["name"])
-                    if should_call_gemini(item["name"], h) else None
+                menu_lines, ocr_source = extract_menu_via_ai(
+                    img_bytes, "image/jpeg", item["name"]
                 )
-                record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
-                    source = "gemini_ocr"
+                    source = ocr_source
                 else:
                     html_content = f"""
                     <img
@@ -1197,17 +1380,14 @@ try:
 
             if img_src:
                 img_bytes, img_mime = download_image_bytes(img_src)
-                h = content_hash(img_bytes) if img_bytes else None
-                menu_lines = (
-                    extract_menu_via_gemini(img_bytes, img_mime, item["name"])
-                    if img_bytes and should_call_gemini(item["name"], h) else None
+                menu_lines, ocr_source = (
+                    extract_menu_via_ai(img_bytes, img_mime, item["name"])
+                    if img_bytes else (None, None)
                 )
-                if img_bytes:
-                    record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
-                    source = "gemini_ocr"
+                    source = ocr_source
                 else:
                     html_content = f"""
                     <img
@@ -1234,17 +1414,14 @@ try:
 
             if img_src:
                 img_bytes, img_mime = download_image_bytes(img_src)
-                h = content_hash(img_bytes) if img_bytes else None
-                menu_lines = (
-                    extract_menu_via_gemini(img_bytes, img_mime, item["name"])
-                    if img_bytes and should_call_gemini(item["name"], h) else None
+                menu_lines, ocr_source = (
+                    extract_menu_via_ai(img_bytes, img_mime, item["name"])
+                    if img_bytes else (None, None)
                 )
-                if img_bytes:
-                    record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
-                    source = "gemini_ocr"
+                    source = ocr_source
                 else:
                     html_content = f"""
                     <img
@@ -1270,12 +1447,7 @@ try:
 
             if result:
 
-                h = content_hash("\n".join(result["menu_lines"]))
-                menu_items = (
-                    classify_menu_lines_via_gemini(result["menu_lines"], item["name"])
-                    if should_call_gemini(item["name"], h) else None
-                )
-                record_gemini_attempt(item["name"], h, bool(menu_items))
+                menu_items = classify_menu_lines_via_ai(result["menu_lines"], item["name"])
 
                 if menu_items:
                     html_content = menu_items_to_html(menu_items)
@@ -1299,12 +1471,7 @@ try:
 
                 if result:
 
-                    h = content_hash("\n".join(result["menu_lines"]))
-                    menu_items = (
-                        classify_menu_lines_via_gemini(result["menu_lines"], item["name"])
-                        if should_call_gemini(item["name"], h) else None
-                    )
-                    record_gemini_attempt(item["name"], h, bool(menu_items))
+                    menu_items = classify_menu_lines_via_ai(result["menu_lines"], item["name"])
 
                     if menu_items:
                         html_content = menu_items_to_html(menu_items)
@@ -1335,17 +1502,14 @@ try:
 
             if img_src:
                 img_bytes, img_mime = download_image_bytes(img_src)
-                h = content_hash(img_bytes) if img_bytes else None
-                menu_lines = (
-                    extract_menu_via_gemini(img_bytes, img_mime, item["name"])
-                    if img_bytes and should_call_gemini(item["name"], h) else None
+                menu_lines, ocr_source = (
+                    extract_menu_via_ai(img_bytes, img_mime, item["name"])
+                    if img_bytes else (None, None)
                 )
-                if img_bytes:
-                    record_gemini_attempt(item["name"], h, bool(menu_lines))
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
-                    source = "gemini_ocr"
+                    source = ocr_source
                 else:
                     html_content = f"""
                     <img
