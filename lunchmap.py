@@ -770,69 +770,59 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
 
     b64 = base64.b64encode(image_bytes).decode("utf-8")
 
-    for attempt in range(3):
-        try:
-            res = requests.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
-                json={
-                    "contents": [{
-                        "parts": [
-                            {"text": prompt},
-                            {"inline_data": {"mime_type": mime_type, "data": b64}},
-                        ]
-                    }],
-                    "generationConfig": {
-                        "temperature": 0,
-                        "response_mime_type": "application/json",
-                    },
+    try:
+        res = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
+            json={
+                "contents": [{
+                    "parts": [
+                        {"text": prompt},
+                        {"inline_data": {"mime_type": mime_type, "data": b64}},
+                    ]
+                }],
+                "generationConfig": {
+                    "temperature": 0,
+                    "response_mime_type": "application/json",
                 },
-                timeout=30,
-            )
+            },
+            timeout=30,
+        )
 
-            data = res.json()
+        data = res.json()
 
-            if "candidates" not in data:
-                error_status = data.get("error", {}).get("status")
-
-                if error_status == "UNAVAILABLE" and attempt < 2:
-                    print(f"     → [{restaurant_name}] Gemini 일시적 과부하, 5초 후 재시도 ({attempt + 1}/3)")
-                    time.sleep(5)
-                    continue
-
-                print(f"     → [{restaurant_name}] Gemini 응답 이상 (HTTP {res.status_code}): {data}")
-                return None
-
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-            items = json.loads(text)
-
-            if not isinstance(items, list) or not items:
-                print(f"     → [{restaurant_name}] Gemini가 메뉴를 못 읽음 (빈 결과)")
-                return None
-
-            valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
-            menu_items = []
-
-            for entry in items:
-                if isinstance(entry, dict) and str(entry.get("name", "")).strip():
-                    name = str(entry["name"]).strip()
-                    category = entry.get("category")
-                    category = category if category in valid_categories else "side"
-                    menu_items.append({"name": name, "category": category})
-                elif isinstance(entry, str) and entry.strip():
-                    menu_items.append({"name": entry.strip(), "category": "side"})
-
-            if not menu_items:
-                return None
-
-            print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_items)}개 항목)")
-            return menu_items
-
-        except Exception as e:
-            print(f"     → [{restaurant_name}] Gemini 추출 실패: {e}")
+        if "candidates" not in data:
+            print(f"     → [{restaurant_name}] Gemini 응답 이상 (HTTP {res.status_code}): {data}")
             return None
 
-    return None
+        text = data["candidates"][0]["content"]["parts"][0]["text"]
+        items = json.loads(text)
+
+        if not isinstance(items, list) or not items:
+            print(f"     → [{restaurant_name}] Gemini가 메뉴를 못 읽음 (빈 결과)")
+            return None
+
+        valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
+        menu_items = []
+
+        for entry in items:
+            if isinstance(entry, dict) and str(entry.get("name", "")).strip():
+                name = str(entry["name"]).strip()
+                category = entry.get("category")
+                category = category if category in valid_categories else "side"
+                menu_items.append({"name": name, "category": category})
+            elif isinstance(entry, str) and entry.strip():
+                menu_items.append({"name": entry.strip(), "category": "side"})
+
+        if not menu_items:
+            return None
+
+        print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_items)}개 항목)")
+        return menu_items
+
+    except Exception as e:
+        print(f"     → [{restaurant_name}] Gemini 추출 실패: {e}")
+        return None
 
 
 def menu_items_to_html(menu_items):
@@ -881,63 +871,53 @@ def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
         "메뉴 목록:\n" + "\n".join(menu_lines)
     )
 
-    for attempt in range(3):
-        try:
-            res = requests.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
-                json={
-                    "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {
-                        "temperature": 0,
-                        "response_mime_type": "application/json",
-                    },
+    try:
+        res = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
+            json={
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {
+                    "temperature": 0,
+                    "response_mime_type": "application/json",
                 },
-                timeout=30,
-            )
+            },
+            timeout=30,
+        )
 
-            data = res.json()
+        data = res.json()
 
-            if "candidates" not in data:
-                error_status = data.get("error", {}).get("status")
-
-                if error_status == "UNAVAILABLE" and attempt < 2:
-                    print(f"     → [{restaurant_name}] Gemini 분류 일시 과부하, 5초 후 재시도")
-                    time.sleep(5)
-                    continue
-
-                print(f"     → [{restaurant_name}] Gemini 분류 실패 (HTTP {res.status_code}): {data}")
-                return None
-
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-            items = json.loads(text)
-
-            if not isinstance(items, list) or not items:
-                return None
-
-            valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
-            menu_items = []
-
-            for entry in items:
-                if isinstance(entry, dict) and str(entry.get("name", "")).strip():
-                    category = entry.get("category")
-                    category = category if category in valid_categories else "side"
-                    menu_items.append({
-                        "name": str(entry["name"]).strip(),
-                        "category": category,
-                    })
-
-            if not menu_items:
-                return None
-
-            print(f"     → [{restaurant_name}] Gemini 텍스트 분류 성공 ({len(menu_items)}개 항목)")
-            return menu_items
-
-        except Exception as e:
-            print(f"     → [{restaurant_name}] Gemini 분류 오류: {e}")
+        if "candidates" not in data:
+            print(f"     → [{restaurant_name}] Gemini 분류 실패 (HTTP {res.status_code}): {data}")
             return None
 
-    return None
+        text = data["candidates"][0]["content"]["parts"][0]["text"]
+        items = json.loads(text)
+
+        if not isinstance(items, list) or not items:
+            return None
+
+        valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
+        menu_items = []
+
+        for entry in items:
+            if isinstance(entry, dict) and str(entry.get("name", "")).strip():
+                category = entry.get("category")
+                category = category if category in valid_categories else "side"
+                menu_items.append({
+                    "name": str(entry["name"]).strip(),
+                    "category": category,
+                })
+
+        if not menu_items:
+            return None
+
+        print(f"     → [{restaurant_name}] Gemini 텍스트 분류 성공 ({len(menu_items)}개 항목)")
+        return menu_items
+
+    except Exception as e:
+        print(f"     → [{restaurant_name}] Gemini 분류 오류: {e}")
+        return None
 
 geolocator = Nominatim(user_agent="gasan_lunch_map_new")
 geocode_cache = {}
@@ -1113,7 +1093,23 @@ try:
         html_content = ""
         source = ""
 
-        if item["type"] == "ojeong":
+        # 오늘 이미 Gemini로 성공 추출한 식당은 다시 이미지/API 호출 없이 그대로 재사용
+        # (무료 할당량이 하루 20회로 빠듯해서, 성공한 건 그날 하루 캐시해서 아낀다)
+        today_str = today.strftime("%Y-%m-%d")
+        cached_previous = previous_restaurants.get(item["name"])
+        cache_hit = bool(
+            cached_previous
+            and cached_previous.get("menu_date") == today_str
+            and cached_previous.get("source") == "gemini_ocr"
+            and cached_previous.get("html")
+        )
+
+        if cache_hit:
+            print(f"     → [{item['name']}] 오늘 이미 Gemini 추출 성공, 재사용 (API 호출 생략)")
+            html_content = cached_previous["html"]
+            source = cached_previous["source"]
+
+        elif item["type"] == "ojeong":
 
             src = crop_ojeong_by_weekday(
                 item["url"]
