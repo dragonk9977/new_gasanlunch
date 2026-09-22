@@ -163,11 +163,14 @@ function openPopup(r){
   const bodyEl=wrapper.querySelector('.popup-body');
   if(bodyEl) bodyEl.addEventListener('wheel', e => e.stopPropagation());
 
-  // 팝업이 위로 짤리지 않도록 마커 기준 우측으로 좀 더 멀찍이 띄움 (경로 선이 안 가리도록)
+  // 화면이 좁으면(모바일) 팝업이 어차피 거의 꽉 차게 뜨므로, 마커를 오른쪽으로 멀리 안 밀어도 됨.
+  // 넓은 화면(데스크톱)에서만 마커 기준 오른쪽으로 멀찍이 띄워서 경로 선이 안 가리게 함
+  const isNarrow = window.innerWidth <= 600;
+
   activePopup = new kakao.maps.CustomOverlay({
     position: pos,
     content: wrapper,
-    xAnchor: -0.35, 
+    xAnchor: isNarrow ? -0.05 : -0.35,
     yAnchor: 0.5,   
     zIndex: 20,
     clickable: true
@@ -177,10 +180,12 @@ function openPopup(r){
   map.panTo(pos);
   if(map.relayout) map.relayout();
   
-  // 팝업이 우측으로 더 멀리 나타나므로, 화면도 그만큼 더 밀어줌
-  setTimeout(() => {
-    if(map) map.panBy(200, 0);
-  }, 150);
+  if(!isNarrow){
+    // 팝업이 우측으로 더 멀리 나타나므로, 화면도 그만큼 더 밀어줌 (좁은 화면에선 생략 — 마커가 화면 밖으로 밀려남)
+    setTimeout(() => {
+      if(map) map.panBy(200, 0);
+    }, 150);
+  }
 }
 
 function addLabel(lat,lng,text,clickFn,cls='',pos='above'){
