@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-22 11:32:51",
-  "updated_at_display": "2026.09.22 11:32",
+  "updated_at": "2026-09-22 11:36:21",
+  "updated_at_display": "2026.09.22 11:36",
   "date": "2026-09-22",
   "date_display": "9월 22일",
   "weekday": "화",
@@ -69,8 +69,8 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/1jWar/dJMcafBp9vS/DCoCuUnd8WdMJ4U0s4Z3f0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line\">단호박갈비찜</div>\n<div class=\"menu-line\">닭봉&amp;윙후라이드&amp;소스</div>\n<div class=\"menu-line\">튀김국물떡볶이</div>\n<div class=\"menu-line\">크래미마요</div>\n<div class=\"menu-line\">비빔칼국수</div>\n<div class=\"menu-line\">순두부고추장찌개</div>\n<div class=\"menu-line\">가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line\">셀프한강라면</div>\n<div class=\"menu-line\">고추지무침</div>\n<div class=\"menu-line\">깍두기</div>\n<div class=\"menu-line\">포기김치</div>\n<div class=\"menu-line\">숭늉</div>\n<div class=\"menu-line\">매실차</div>\n<div class=\"menu-line\">ICE옥수수차</div>\n    </div>\n    ",
       "menu_status": "today",
       "menu_date": "2026-09-22"
     },
@@ -243,8 +243,8 @@
           "lng": 126.88241839
         }
       ],
-      "source": "kakao_first",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/755ru/dJMcab6RXw4/e5NQ3aBqXO6KBBAiu8gKH1/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"밥심 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line\">돼지고기김치찜</div>\n<div class=\"menu-line\">후라이드치킨&amp;양념소스</div>\n<div class=\"menu-line\">오색전</div>\n<div class=\"menu-line\">사골우거지국</div>\n<div class=\"menu-line\">전통한식잡채</div>\n<div class=\"menu-line\">도토리묵야채무침</div>\n<div class=\"menu-line\">양배추쌈&amp;바지락강된장</div>\n<div class=\"menu-line\">고추알마늘무침</div>\n<div class=\"menu-line\">사과사라다</div>\n<div class=\"menu-line\">깍두기</div>\n<div class=\"menu-line\">바람떡&amp;꿀떡</div>\n<div class=\"menu-line\">아이스커피</div>\n<div class=\"menu-line\">한강라면</div>\n    </div>\n    ",
       "menu_status": "today",
       "menu_date": "2026-09-22"
     }
