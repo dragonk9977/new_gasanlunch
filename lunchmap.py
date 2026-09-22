@@ -788,6 +788,11 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
         )
 
         data = res.json()
+
+        if "candidates" not in data:
+            print(f"     → [{restaurant_name}] Gemini 응답 이상 (HTTP {res.status_code}): {data}")
+            return None
+
         text = data["candidates"][0]["content"]["parts"][0]["text"]
         menu_lines = json.loads(text)
 
