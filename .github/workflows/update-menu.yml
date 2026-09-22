@@ -27,6 +27,7 @@ jobs:
         env:
           KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: python lunchmap.py
 
       - name: Commit and push changes
