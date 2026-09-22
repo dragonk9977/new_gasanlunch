@@ -175,6 +175,7 @@ function openPopup(r){
   
   activePopup.setMap(map);
   map.panTo(pos);
+  if(map.relayout) map.relayout();
   
   // 팝업이 우측으로 더 멀리 나타나므로, 화면도 그만큼 더 밀어줌
   setTimeout(() => {
@@ -188,7 +189,7 @@ function addLabel(lat,lng,text,clickFn,cls='',pos='above'){
   el.className=`map-label ${a.tail} ${cls}`.trim();
   el.textContent=text;
   el.addEventListener('click',clickFn);
-  const ov=new kakao.maps.CustomOverlay({position:new kakao.maps.LatLng(lat,lng),content:el,xAnchor:a.xAnchor,yAnchor:a.yAnchor,zIndex:10});
+  const ov=new kakao.maps.CustomOverlay({position:new kakao.maps.LatLng(lat,lng),content:el,xAnchor:a.xAnchor,yAnchor:a.yAnchor,zIndex:10,clickable:true});
   ov.setMap(map);
   labels.push(ov);
 }
