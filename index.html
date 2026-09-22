@@ -134,11 +134,11 @@ function openPopup(r){
   const menuEl=wrapper.querySelector('.menu');
   if(menuEl) menuEl.addEventListener('click',closePopup);
 
-  // 팝업이 위로 짤리지 않도록 마커 기준 우측 옆(가운데 정렬)으로 띄움
+  // 팝업이 위로 짤리지 않도록 마커 기준 우측으로 좀 더 멀찍이 띄움 (경로 선이 안 가리도록)
   activePopup = new kakao.maps.CustomOverlay({
     position: pos,
     content: wrapper,
-    xAnchor: -0.05, 
+    xAnchor: -0.35, 
     yAnchor: 0.5,   
     zIndex: 20,
     clickable: true
@@ -147,9 +147,9 @@ function openPopup(r){
   activePopup.setMap(map);
   map.panTo(pos);
   
-  // 팝업이 우측으로 나타나므로 전체가 보이게 화면을 살짝 밀어줌
+  // 팝업이 우측으로 더 멀리 나타나므로, 화면도 그만큼 더 밀어줌
   setTimeout(() => {
-    if(map) map.panBy(120, 0);
+    if(map) map.panBy(200, 0);
   }, 150);
 }
 
