@@ -801,7 +801,53 @@ def parse_ai_extraction_response(text, restaurant_name, provider_label):
         print(f"     → [{restaurant_name}] {provider_label}가 메뉴를 못 읽음 (빈 결과)")
         return None
 
+    garbled = [it["name"] for it in menu_items if _looks_garbled(it["name"])]
+    if garbled:
+        print(f"     → [{restaurant_name}] {provider_label} 결과에 깨진 글자 감지, 거부: {garbled}")
+        return None
+
     return menu_items
+
+
+GEMINI_MODEL = "gemini-3.6-flash"  # 항상 최우선으로 시도할 기본 모델
+
+_gemini_model_list_cache = None
+
+
+def list_gemini_models():
+    """
+    이 API 키로 지금 실제 쓸 수 있는 flash 계열(이미지 입력 가능) 모델 목록을 가져온다.
+    무료 할당량은 모델별로 따로 매겨지므로, 여러 모델을 순서대로 시도하면
+    OpenRouter로 넘어가기 전에 Gemini만으로 쓸 수 있는 총량이 늘어난다.
+    실행당 한 번만 조회해서 캐시해둔다.
+    """
+    global _gemini_model_list_cache
+    if _gemini_model_list_cache is not None:
+        return _gemini_model_list_cache
+
+    candidates = [GEMINI_MODEL]
+
+    if GEMINI_API_KEY:
+        try:
+            res = requests.get(
+                f"https://generativelanguage.googleapis.com/v1beta/models?key={GEMINI_API_KEY}",
+                timeout=15,
+            )
+            for m in res.json().get("models", []):
+                name = m.get("name", "").replace("models/", "")
+                methods = m.get("supportedGenerationMethods", [])
+                if "generateContent" not in methods:
+                    continue
+                if "flash" not in name.lower():
+                    continue
+                if name not in candidates:
+                    candidates.append(name)
+        except Exception as e:
+            print(f"     (Gemini 모델 목록 조회 실패, 기본 모델만 사용: {e})")
+
+    _gemini_model_list_cache = candidates[:5]  # 무한정 시도하지 않도록 상한
+    print(f"     Gemini 시도 순서: {_gemini_model_list_cache}")
+    return _gemini_model_list_cache
 
 
 def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
@@ -809,7 +855,8 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
     메뉴판 사진을 Gemini에게 보내서, 오늘 날짜에 해당하는 메뉴를
     {"name": 메뉴명, "category": 분류} 목록으로 뽑아온다.
     이미지 자체가 오늘 게시물이 아니라고 판단되면 None을 반환한다.
-    실패하면 None을 반환하고, 호출하는 쪽에서 원본 이미지로 폴백한다.
+    여러 Gemini 모델을 순서대로 시도해보고, 전부 실패하면 None을 반환한다
+    (호출하는 쪽에서 OpenRouter나 원본 이미지로 폴백한다).
     """
     if not GEMINI_API_KEY or not image_bytes:
         return None
@@ -817,42 +864,43 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
     prompt = build_image_extraction_prompt(restaurant_name)
     b64 = base64.b64encode(image_bytes).decode("utf-8")
 
-    try:
-        res = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
-            json={
-                "contents": [{
-                    "parts": [
-                        {"text": prompt},
-                        {"inline_data": {"mime_type": mime_type, "data": b64}},
-                    ]
-                }],
-                "generationConfig": {
-                    "temperature": 0,
-                    "response_mime_type": "application/json",
+    for model_name in list_gemini_models():
+        try:
+            res = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{model_name}:generateContent?key={GEMINI_API_KEY}",
+                json={
+                    "contents": [{
+                        "parts": [
+                            {"text": prompt},
+                            {"inline_data": {"mime_type": mime_type, "data": b64}},
+                        ]
+                    }],
+                    "generationConfig": {
+                        "temperature": 0,
+                        "response_mime_type": "application/json",
+                    },
                 },
-            },
-            timeout=30,
-        )
+                timeout=30,
+            )
 
-        data = res.json()
+            data = res.json()
 
-        if "candidates" not in data:
-            print(f"     → [{restaurant_name}] Gemini 응답 이상 (HTTP {res.status_code}): {data}")
-            return None
+            if "candidates" not in data:
+                print(f"     → [{restaurant_name}] Gemini({model_name}) 응답 이상 (HTTP {res.status_code}): {data}")
+                continue
 
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-        menu_items = parse_ai_extraction_response(text, restaurant_name, "Gemini")
+            text = data["candidates"][0]["content"]["parts"][0]["text"]
+            menu_items = parse_ai_extraction_response(text, restaurant_name, f"Gemini({model_name})")
 
-        if menu_items:
-            print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_items)}개 항목)")
+            if menu_items:
+                print(f"     → [{restaurant_name}] Gemini({model_name}) 메뉴 추출 성공 ({len(menu_items)}개 항목)")
+                return menu_items
 
-        return menu_items
+        except Exception as e:
+            print(f"     → [{restaurant_name}] Gemini({model_name}) 추출 실패: {e}")
 
-    except Exception as e:
-        print(f"     → [{restaurant_name}] Gemini 추출 실패: {e}")
-        return None
+    return None
 
 
 def _parse_ai_json(text):
@@ -863,6 +911,23 @@ def _parse_ai_json(text):
         if text.startswith("json"):
             text = text[4:]
     return json.loads(text.strip())
+
+
+def _looks_garbled(name):
+    """
+    한글 사이/옆에 소문자 영어가 바로 붙어 나오면 OCR이 깨졌을 가능성이 높다고 본다.
+    (BBQ, ICE처럼 대문자 약어는 정상적인 메뉴 표기라 걸러내지 않음)
+    """
+    for m in re.finditer(r"[A-Za-z]+", name):
+        run = m.group()
+        if sum(1 for c in run if c.islower()) < 1:
+            continue
+        start, end = m.span()
+        before = name[start - 1] if start > 0 else ""
+        after = name[end] if end < len(name) else ""
+        if re.match(r"[가-힣]", before) or re.match(r"[가-힣]", after):
+            return True
+    return False
 
 
 def _normalize_menu_items(items):
@@ -987,7 +1052,7 @@ def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
     """
     이미 텍스트로 확보된 메뉴 줄(예: Threads/Instagram 캡션)을
     Gemini에게 다시 보내서 카테고리만 분류받는다. 이미지가 없으므로
-    텍스트 프롬프트만 보내고, 실패하면 None을 반환한다.
+    텍스트 프롬프트만 보내고, 여러 모델을 순서대로 시도한다.
     """
     if not GEMINI_API_KEY or not menu_lines:
         return None
@@ -1003,53 +1068,46 @@ def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
         "메뉴 목록:\n" + "\n".join(menu_lines)
     )
 
-    try:
-        res = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}",
-            json={
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {
-                    "temperature": 0,
-                    "response_mime_type": "application/json",
+    for model_name in list_gemini_models():
+        try:
+            res = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{model_name}:generateContent?key={GEMINI_API_KEY}",
+                json={
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {
+                        "temperature": 0,
+                        "response_mime_type": "application/json",
+                    },
                 },
-            },
-            timeout=30,
-        )
+                timeout=30,
+            )
 
-        data = res.json()
+            data = res.json()
 
-        if "candidates" not in data:
-            print(f"     → [{restaurant_name}] Gemini 분류 실패 (HTTP {res.status_code}): {data}")
-            return None
+            if "candidates" not in data:
+                print(f"     → [{restaurant_name}] Gemini({model_name}) 분류 실패 (HTTP {res.status_code}): {data}")
+                continue
 
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-        items = json.loads(text)
+            text = data["candidates"][0]["content"]["parts"][0]["text"]
+            items = json.loads(text)
+            menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
 
-        if not isinstance(items, list) or not items:
-            return None
+            if not menu_items:
+                continue
 
-        valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
-        menu_items = []
+            garbled = [it["name"] for it in menu_items if _looks_garbled(it["name"])]
+            if garbled:
+                print(f"     → [{restaurant_name}] Gemini({model_name}) 분류 결과에 깨진 글자 감지, 거부: {garbled}")
+                continue
 
-        for entry in items:
-            if isinstance(entry, dict) and str(entry.get("name", "")).strip():
-                category = entry.get("category")
-                category = category if category in valid_categories else "side"
-                menu_items.append({
-                    "name": str(entry["name"]).strip(),
-                    "category": category,
-                })
+            print(f"     → [{restaurant_name}] Gemini({model_name}) 텍스트 분류 성공 ({len(menu_items)}개 항목)")
+            return menu_items
 
-        if not menu_items:
-            return None
+        except Exception as e:
+            print(f"     → [{restaurant_name}] Gemini({model_name}) 분류 오류: {e}")
 
-        print(f"     → [{restaurant_name}] Gemini 텍스트 분류 성공 ({len(menu_items)}개 항목)")
-        return menu_items
-
-    except Exception as e:
-        print(f"     → [{restaurant_name}] Gemini 분류 오류: {e}")
-        return None
+    return None
 
 
 def classify_menu_lines_via_openrouter(menu_lines, restaurant_name):
