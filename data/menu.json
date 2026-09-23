@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-23 13:13:45",
-  "updated_at_display": "2026.09.23 13:13",
+  "updated_at": "2026-09-23 13:38:06",
+  "updated_at_display": "2026.09.23 13:38",
   "date": "2026-09-23",
   "date_display": "9월 23일",
   "weekday": "수",
@@ -131,7 +131,7 @@
       "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/czhQYB/dJMcadDo0NF/Ca8dvpsxJ2mdLWJZXkhook/img.png\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "13:13",
+      "checked_at": "13:38",
       "pipeline_version": 2
     },
     {
@@ -163,7 +163,7 @@
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">유부장국</div>\n<div class=\"menu-line cat-side\">돼지갈비찜</div>\n<div class=\"menu-line cat-side\">해물동그랑땡전/어두부전</div>\n<div class=\"menu-line cat-side\">콩나물무침/고사리나물</div>\n<div class=\"menu-line cat-side\">도토리묵무침</div>\n<div class=\"menu-line cat-side\">꿀떡</div>\n<div class=\"menu-line cat-side\">가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">음료/한강라면</div>\n    </div>\n    ",
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "13:13",
+      "checked_at": "13:38",
       "pipeline_version": 2
     },
     {
@@ -251,11 +251,11 @@
           "lng": 126.88241839
         }
       ],
-      "source": "kakao_first",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/bV5Xsx/dJMcaamr1gL/xL7n5oQEcNdlp69AzRbiDK/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"밥심 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "openrouter_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">매콤제육볶음</div>\n<div class=\"menu-line cat-main\">포장마차잔치국수</div>\n<div class=\"menu-line cat-main\">한강라면</div>\n<div class=\"menu-line cat-side\">김말이튀김</div>\n<div class=\"menu-line cat-side\">멸치마늘쫑볶음</div>\n<div class=\"menu-line cat-side\">무말랭이오징어젓갈무침</div>\n<div class=\"menu-line cat-side\">어묵볶음</div>\n<div class=\"menu-line cat-side\">청경채찜</div>\n<div class=\"menu-line cat-side\">야채샐러드(with블루베리드레싱)</div>\n<div class=\"menu-line cat-kimchi\">겉절이김치</div>\n<div class=\"menu-line cat-snack\">소떡소떡</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "13:13",
+      "checked_at": "13:38",
       "pipeline_version": 2
     }
   ]
