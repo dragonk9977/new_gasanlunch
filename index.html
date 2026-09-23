@@ -233,7 +233,9 @@ function drawRoute(r){
 }
 
 // r 위치에 wrapper(팝업 DOM)를 띄우고, 상단바/하단 안내문구에 안 가리게
-// 실제 남는 화면 공간 안에 최대한 가운데로 오도록 지도를 이동시킨다.
+// 실제 남는 화면 공간 안에 정확히 가운데로 오도록 지도를 이동시킨다.
+// (애니메이션이 있는 panTo/panBy 대신 setCenter로 즉시 이동시켜서, 스크린샷 찍는 타이밍에 따라
+//  위치가 다르게 보이는 문제를 없앤다.)
 function showPopupOverlay(r, wrapper){
   const isNarrow = window.innerWidth <= 600;
   const pos = new kakao.maps.LatLng(r.lat, r.lng);
@@ -248,14 +250,12 @@ function showPopupOverlay(r, wrapper){
   });
 
   activePopup.setMap(map);
-  map.panTo(pos);
+  map.setCenter(pos); // 애니메이션 없이 즉시 마커를 중앙으로
   if(map.relayout) map.relayout();
 
-  setTimeout(() => {
-    if(!map) return;
-
+  requestAnimationFrame(() => {
     const mapEl = document.getElementById('map');
-    if(!mapEl) return;
+    if(!mapEl || !map) return;
     const mapRect = mapEl.getBoundingClientRect();
     const topbarEl = document.querySelector('.topbar');
     const noticeEl = document.getElementById('notice');
@@ -276,11 +276,62 @@ function showPopupOverlay(r, wrapper){
 
     const popupHeight = Math.min(wrapper.offsetHeight || availableHeight, availableHeight);
     const desiredCenterY = safeTop + popupHeight / 2;
-    const currentMarkerY = mapRect.height / 2; // panTo 직후 마커는 지도 세로 중앙
-    const shiftY = currentMarkerY - desiredCenterY;
+    const currentMarkerY = mapRect.height / 2; // setCenter 직후 마커는 지도 세로 정중앙
+    const shiftY = currentMarkerY - desiredCenterY; // 마커를 화면에서 이만큼 위(+)/아래(-)로 옮기고 싶음
+    const shiftX = isNarrow ? 0 : 200;
 
-    map.panBy(isNarrow ? 0 : 200, shiftY);
-  }, 160);
+    const proj = map.getProjection();
+    if(proj){
+      const markerPoint = proj.pointFromCoords(pos);
+      const targetPoint = new kakao.maps.Point(markerPoint.x + shiftX, markerPoint.y + shiftY);
+      const targetLatLng = proj.coordsFromPoint(targetPoint);
+      map.setCenter(targetLatLng);
+    }
+
+    makeDraggable(headEl, wrapper);
+  });
+}
+
+// 팝업 헤더를 잡고 끌면 화면 안에서 자유롭게 옮길 수 있게 함 (자동 배치가 마음에 안 들 때 수동 조정용)
+function makeDraggable(headEl, wrapperEl){
+  if(!headEl || !wrapperEl) return;
+  let startX=0, startY=0, offX=0, offY=0, dragging=false;
+
+  const getPoint=e=>e.touches?e.touches[0]:e;
+
+  const onMove=e=>{
+    if(!dragging) return;
+    if(e.cancelable) e.preventDefault();
+    const p=getPoint(e);
+    wrapperEl.style.transform=`translate(${offX+(p.clientX-startX)}px, ${offY+(p.clientY-startY)}px)`;
+  };
+  const onUp=e=>{
+    if(!dragging) return;
+    dragging=false;
+    headEl.style.cursor='grab';
+    const p=(e.changedTouches?e.changedTouches[0]:e);
+    offX += p.clientX-startX;
+    offY += p.clientY-startY;
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    document.removeEventListener('touchend',onUp);
+  };
+  const onDown=e=>{
+    if(e.target.closest('.popup-close')||e.target.closest('.popup-name')) return;
+    dragging=true;
+    const p=getPoint(e);
+    startX=p.clientX; startY=p.clientY;
+    headEl.style.cursor='grabbing';
+    document.addEventListener('mousemove',onMove);
+    document.addEventListener('touchmove',onMove,{passive:false});
+    document.addEventListener('mouseup',onUp);
+    document.addEventListener('touchend',onUp);
+  };
+
+  headEl.style.cursor='grab';
+  headEl.addEventListener('mousedown',onDown);
+  headEl.addEventListener('touchstart',onDown,{passive:true});
 }
 
 function openPopup(r){
