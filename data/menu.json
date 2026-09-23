@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-23 19:28:04",
-  "updated_at_display": "2026.09.23 19:28",
+  "updated_at": "2026-09-23 19:36:12",
+  "updated_at_display": "2026.09.23 19:36",
   "date": "2026-09-23",
   "date_display": "9월 23일",
   "weekday": "수",
   "weather": {
-    "temp": 20.8,
+    "temp": 20.7,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -44,6 +44,8 @@
       "source": "gemini_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">곤드레무나물밥&amp;양념장</div>\n<div class=\"menu-line cat-main\">온두부&amp;볶음김치</div>\n<div class=\"menu-line cat-soup\">우거지 닭개장</div>\n<div class=\"menu-line cat-side\">나비쥐포강정</div>\n<div class=\"menu-line cat-side\">간장마늘쫑</div>\n<div class=\"menu-line cat-side\">구이김</div>\n<div class=\"menu-line cat-side\">그린샐러드</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-snack\">카라멜팝콘</div>\n<div class=\"menu-line cat-drink\">따끈누룽지숭늉/식혜</div>\n<div class=\"menu-line cat-drink\">백미/흑미</div>\n    </div>\n    ",
       "raw_ref": null,
+      "badges": [],
+      "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-23",
       "checked_at": "13:13",
@@ -81,6 +83,8 @@
       "source": "gemini_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">도톰목살김치찜</div>\n<div class=\"menu-line cat-main\">등심돈까스&amp;소스</div>\n<div class=\"menu-line cat-main\">동그랑땡달걀부침</div>\n<div class=\"menu-line cat-main\">바질냉파스타</div>\n<div class=\"menu-line cat-soup\">얼큰콩나물국</div>\n<div class=\"menu-line cat-side\">모듬야채무침</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-snack\">단호박죽&amp;꿀떡</div>\n<div class=\"menu-line cat-snack\">가든샐러드&amp;드레싱2중</div>\n<div class=\"menu-line cat-snack\">셀프한강라면</div>\n<div class=\"menu-line cat-drink\">숭늉,매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
       "raw_ref": null,
+      "badges": [],
+      "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-23",
       "checked_at": "13:13",
@@ -141,9 +145,11 @@
         "type": "image",
         "url": "https://k.kakaocdn.net/dn/cdNtle/dJMcajcIr0D/cbf7Od0SkkWneaFNhN9761/img_xl.jpg"
       },
+      "badges": [],
+      "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "19:28",
+      "checked_at": "19:36",
       "pipeline_version": 2
     },
     {
@@ -177,9 +183,53 @@
         "type": "link",
         "url": "https://www.threads.net/@lunchtime_ypp"
       },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        }
+      ],
+      "items": [
+        {
+          "name": "유부장국",
+          "category": "soup"
+        },
+        {
+          "name": "돼지갈비찜",
+          "category": "side"
+        },
+        {
+          "name": "해물동그랑땡전/어두부전",
+          "category": "side"
+        },
+        {
+          "name": "콩나물무침/고사리나물",
+          "category": "side"
+        },
+        {
+          "name": "도토리묵무침",
+          "category": "side"
+        },
+        {
+          "name": "꿀떡",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "19:28",
+      "checked_at": "19:36",
       "pipeline_version": 2
     },
     {
@@ -270,6 +320,8 @@
       "source": "openrouter_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">매콤제육볶음</div>\n<div class=\"menu-line cat-main\">포장마차잔치국수</div>\n<div class=\"menu-line cat-main\">한강라면</div>\n<div class=\"menu-line cat-side\">김말이튀김</div>\n<div class=\"menu-line cat-side\">멸치마늘쫑볶음</div>\n<div class=\"menu-line cat-side\">무말랭이오징어젓갈무침</div>\n<div class=\"menu-line cat-side\">어묵볶음</div>\n<div class=\"menu-line cat-side\">청경채찜</div>\n<div class=\"menu-line cat-side\">야채샐러드(with블루베리드레싱)</div>\n<div class=\"menu-line cat-kimchi\">겉절이김치</div>\n<div class=\"menu-line cat-snack\">소떡소떡</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
       "raw_ref": null,
+      "badges": [],
+      "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-23",
       "checked_at": "13:38",
