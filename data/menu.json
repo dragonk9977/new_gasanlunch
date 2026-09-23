@@ -70,10 +70,10 @@
           "lng": 126.88397958
         }
       ],
-      "source": "openrouter_ocr",
+      "source": "none",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">단호박갈비찌임</div>\n<div class=\"menu-line cat-main\">닭봉&amp;윙후라이드&amp;소스</div>\n<div class=\"menu-line cat-main\">뒤김국물떡볶이</div>\n<div class=\"menu-line cat-main\">크래미마요</div>\n<div class=\"menu-line cat-soup\">비밀칼국수</div>\n<div class=\"menu-line cat-soup\">순두부고추장찌개</div>\n<div class=\"menu-line cat-side\">고추지무침</div>\n<div class=\"menu-line cat-side\">가든셀러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">까두기</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-snack\">셀프한강라면</div>\n<div class=\"menu-line cat-drink\">숙ogn, 매실차, ICE옥수수차</div>\n    </div>\n    ",
       "menu_status": "today",
-      "menu_date": "2026-09-23",
+      "menu_date": "",
       "checked_at": "09:30"
     },
     {
