@@ -1423,6 +1423,7 @@ try:
 
         html_content = ""
         source = ""
+        raw_ref = None  # OCR 돌리기 전 원본(이미지 데이터/URL 또는 원본 게시물 링크)
 
         # 오늘 이미 Gemini로 성공 추출한 식당은 다시 이미지/API 호출 없이 그대로 재사용
         # (무료 할당량이 하루 20회로 빠듯해서, 성공한 건 그날 하루 캐시해서 아낀다)
@@ -1442,6 +1443,7 @@ try:
             print(f"     → [{item['name']}] 오늘 이미 {cached_previous['source']} 추출 성공, 재사용 (API 호출 생략)")
             html_content = cached_previous["html"]
             source = cached_previous["source"]
+            raw_ref = cached_previous.get("raw_ref")
             checked_at = cached_previous.get("checked_at")
 
         elif item["type"] == "ojeong":
@@ -1451,6 +1453,8 @@ try:
             )
 
             if src:
+                raw_ref = {"type": "image", "url": src}
+
                 menu_lines, ocr_source = extract_menu_via_ai(
                     ocr_bytes, "image/jpeg", item["name"]
                 )
@@ -1482,6 +1486,7 @@ try:
             )
 
             if img_src:
+                raw_ref = {"type": "image", "url": img_src}
                 img_bytes, img_mime = download_image_bytes(img_src)
                 menu_lines, ocr_source = (
                     extract_menu_via_ai(img_bytes, img_mime, item["name"])
@@ -1516,6 +1521,7 @@ try:
             )
 
             if img_src:
+                raw_ref = {"type": "image", "url": img_src}
                 img_bytes, img_mime = download_image_bytes(img_src)
                 menu_lines, ocr_source = (
                     extract_menu_via_ai(img_bytes, img_mime, item["name"])
@@ -1550,6 +1556,7 @@ try:
 
             if result:
 
+                raw_ref = {"type": "link", "url": result.get("source_url")}
                 menu_items = classify_menu_lines_locally(result["menu_lines"])
 
                 if menu_items:
@@ -1574,6 +1581,7 @@ try:
 
                 if result:
 
+                    raw_ref = {"type": "link", "url": result.get("source_url")}
                     menu_items = classify_menu_lines_locally(result["menu_lines"])
 
                     if menu_items:
@@ -1604,6 +1612,7 @@ try:
             )
 
             if img_src:
+                raw_ref = {"type": "image", "url": img_src}
                 img_bytes, img_mime = download_image_bytes(img_src)
                 menu_lines, ocr_source = (
                     extract_menu_via_ai(img_bytes, img_mime, item["name"])
@@ -1648,6 +1657,7 @@ try:
         ):
             html_content = previous["html"]
             source = previous["source"]
+            raw_ref = previous.get("raw_ref")
             menu_status = "preserved_from_previous_run"
             checked_at = previous.get("checked_at")
             print(f"     → [{item['name']}] 이전 정상 수집 메뉴 유지")
@@ -1670,6 +1680,7 @@ try:
             "route": route_points,
             "source": source,
             "html": html_content,
+            "raw_ref": raw_ref,
             "menu_status": menu_status,
             "menu_date": today.strftime("%Y-%m-%d") if menu_status != "missing" else None,
             "checked_at": checked_at,
