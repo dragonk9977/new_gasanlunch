@@ -1025,6 +1025,31 @@ def extract_menu_via_ai(image_bytes, mime_type, restaurant_name):
     return None, None
 
 
+# 메뉴 키워드로 붙이는 "최애 메뉴" 뱃지. 항목 중 하나라도 키워드에 걸리면 그 뱃지가 붙는다
+# (하나의 메뉴가 여러 뱃지에 동시에 걸릴 수 있음 — 예: 제육은 인기이자 고기)
+BADGE_GROUPS = [
+    ("인기", "🔥", ["제육", "돈까스", "돈가스", "치킨"]),
+    ("고기", "🥩", ["삼겹살", "목살", "제육", "불고기", "갈비"]),
+    ("계란", "🍳", ["계란", "달걀"]),
+]
+
+
+def compute_badges(menu_items):
+    if not menu_items:
+        return []
+
+    names = " ".join(
+        it.get("name", "") for it in menu_items if isinstance(it, dict)
+    )
+
+    badges = []
+    for label, emoji, keywords in BADGE_GROUPS:
+        if any(k in names for k in keywords):
+            badges.append({"label": label, "emoji": emoji})
+
+    return badges
+
+
 def menu_items_to_html(menu_items):
     """카테고리별로 색을 입혀서 메뉴 목록 HTML을 만든다."""
     if not menu_items:
@@ -1489,6 +1514,8 @@ try:
         html_content = ""
         source = ""
         raw_ref = None  # OCR 돌리기 전 원본(이미지 데이터/URL 또는 원본 게시물 링크)
+        badges = []  # 최애 메뉴 뱃지 (제육/고기/계란 등)
+        items_data = []  # 구조화된 메뉴 항목 (메뉴 복사 기능용)
 
         # 오늘 이미 Gemini로 성공 추출한 식당은 다시 이미지/API 호출 없이 그대로 재사용
         # (무료 할당량이 하루 20회로 빠듯해서, 성공한 건 그날 하루 캐시해서 아낀다)
@@ -1509,6 +1536,8 @@ try:
             html_content = cached_previous["html"]
             source = cached_previous["source"]
             raw_ref = cached_previous.get("raw_ref")
+            badges = cached_previous.get("badges", [])
+            items_data = cached_previous.get("items", [])
             checked_at = cached_previous.get("checked_at")
 
         elif item["type"] == "ojeong":
@@ -1526,6 +1555,8 @@ try:
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
+                    badges = compute_badges(menu_lines)
+                    items_data = menu_lines
                     source = ocr_source
                 else:
                     html_content = f"""
@@ -1560,6 +1591,8 @@ try:
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
+                    badges = compute_badges(menu_lines)
+                    items_data = menu_lines
                     source = ocr_source
                 else:
                     html_content = f"""
@@ -1595,6 +1628,8 @@ try:
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
+                    badges = compute_badges(menu_lines)
+                    items_data = menu_lines
                     source = ocr_source
                 else:
                     html_content = f"""
@@ -1626,6 +1661,8 @@ try:
 
                 if menu_items:
                     html_content = menu_items_to_html(menu_items)
+                    badges = compute_badges(menu_items)
+                    items_data = menu_items
                 else:
                     html_content = menu_lines_to_html(
                         result["menu_lines"]
@@ -1651,6 +1688,8 @@ try:
 
                     if menu_items:
                         html_content = menu_items_to_html(menu_items)
+                        badges = compute_badges(menu_items)
+                        items_data = menu_items
                     else:
                         html_content = menu_lines_to_html(
                             result["menu_lines"]
@@ -1686,6 +1725,8 @@ try:
 
                 if menu_lines:
                     html_content = menu_items_to_html(menu_lines)
+                    badges = compute_badges(menu_lines)
+                    items_data = menu_lines
                     source = ocr_source
                 else:
                     html_content = f"""
@@ -1723,6 +1764,8 @@ try:
             html_content = previous["html"]
             source = previous["source"]
             raw_ref = previous.get("raw_ref")
+            badges = previous.get("badges", [])
+            items_data = previous.get("items", [])
             menu_status = "preserved_from_previous_run"
             checked_at = previous.get("checked_at")
             print(f"     → [{item['name']}] 이전 정상 수집 메뉴 유지")
@@ -1746,6 +1789,8 @@ try:
             "source": source,
             "html": html_content,
             "raw_ref": raw_ref,
+            "badges": badges,
+            "items": items_data,
             "menu_status": menu_status,
             "menu_date": today.strftime("%Y-%m-%d") if menu_status != "missing" else None,
             "checked_at": checked_at,
