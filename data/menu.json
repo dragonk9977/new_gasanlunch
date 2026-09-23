@@ -1,1 +1,257 @@
-   {}
+{
+  "updated_at": "2026-09-23 11:35:12",
+  "updated_at_display": "2026.09.23 11:35",
+  "date": "2026-09-23",
+  "date_display": "9월 23일",
+  "weekday": "수",
+  "office": {
+    "address": "서울 금천구 가산디지털2로 30",
+    "lat": 37.471364252495015,
+    "lng": 126.88404214632791
+  },
+  "restaurants": [
+    {
+      "name": "오정",
+      "address": "서울 금천구 가산디지털2로 30",
+      "lat": 37.47120020547345,
+      "lng": 126.88352033871539,
+      "dist": 116,
+      "walk_min": 2,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47130062,
+          "lng": 126.88426329
+        },
+        {
+          "lat": 37.47123528,
+          "lng": 126.88424926
+        },
+        {
+          "lat": 37.47105304,
+          "lng": 126.88358378
+        }
+      ],
+      "source": "openrouter_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">곤드레나물밥 &amp; 영양김</div>\n<div class=\"menu-line cat-main\">은두부&amp;볶음김치</div>\n<div class=\"menu-line cat-soup\">우거지 더해장</div>\n<div class=\"menu-line cat-side\">간장마늘종</div>\n<div class=\"menu-line cat-side\">그린샐러드</div>\n<div class=\"menu-line cat-side\">따판누들즈냉채/석채</div>\n<div class=\"menu-line cat-kimchi\">나비똥꾸방</div>\n<div class=\"menu-line cat-kimchi\">구이김</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-kimchi\">백김/혹미</div>\n<div class=\"menu-line cat-snack\">카레캘럼파뿌</div>\n    </div>\n    ",
+      "menu_status": "today",
+      "menu_date": "2026-09-23",
+      "checked_at": "11:35"
+    },
+    {
+      "name": "온정찬",
+      "address": "서울 금천구 가산디지털1로 75-15",
+      "lat": 37.47218918507373,
+      "lng": 126.88410160863671,
+      "dist": 234,
+      "walk_min": 4,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47197731,
+          "lng": 126.88394386
+        },
+        {
+          "lat": 37.47257659,
+          "lng": 126.88368111
+        },
+        {
+          "lat": 37.47257659,
+          "lng": 126.88368111
+        },
+        {
+          "lat": 37.47265805,
+          "lng": 126.88397958
+        }
+      ],
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">도톰목살김치찜</div>\n<div class=\"menu-line cat-main\">등심돈까스&amp;소스</div>\n<div class=\"menu-line cat-main\">동그랑땡달걀부침</div>\n<div class=\"menu-line cat-main\">바질냉파스타</div>\n<div class=\"menu-line cat-main\">셀프한강라면</div>\n<div class=\"menu-line cat-soup\">단호박죽&amp;꿀떡</div>\n<div class=\"menu-line cat-soup\">얼큰콩나물국</div>\n<div class=\"menu-line cat-side\">모듬야채무침</div>\n<div class=\"menu-line cat-side\">가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-drink\">숭늉,매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
+      "menu_status": "today",
+      "menu_date": "2026-09-23",
+      "checked_at": "11:35"
+    },
+    {
+      "name": "런치투게더",
+      "address": "서울 금천구 가산디지털1로 58",
+      "lat": 37.471346435440815,
+      "lng": 126.88633772331427,
+      "dist": 342,
+      "walk_min": 6,
+      "route": [
+        {
+          "lat": 37.47140824,
+          "lng": 126.88421754
+        },
+        {
+          "lat": 37.47172571,
+          "lng": 126.88530234
+        },
+        {
+          "lat": 37.47172571,
+          "lng": 126.88530234
+        },
+        {
+          "lat": 37.47179012,
+          "lng": 126.88552416
+        },
+        {
+          "lat": 37.47179012,
+          "lng": 126.88552416
+        },
+        {
+          "lat": 37.47085344,
+          "lng": 126.88594936
+        },
+        {
+          "lat": 37.47085344,
+          "lng": 126.88594936
+        },
+        {
+          "lat": 37.47092577,
+          "lng": 126.88621146
+        },
+        {
+          "lat": 37.47092577,
+          "lng": 126.88621146
+        },
+        {
+          "lat": 37.47125687,
+          "lng": 126.8860495
+        }
+      ],
+      "source": "kakao_profile",
+      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/czhQYB/dJMcadDo0NF/Ca8dvpsxJ2mdLWJZXkhook/img.png\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
+      "menu_status": "today",
+      "menu_date": "2026-09-23",
+      "checked_at": "11:35"
+    },
+    {
+      "name": "런치타임",
+      "address": "서울 금천구 가산디지털2로 24",
+      "lat": 37.47089827252637,
+      "lng": 126.88388201555182,
+      "dist": 104,
+      "walk_min": 2,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47130062,
+          "lng": 126.88426329
+        },
+        {
+          "lat": 37.47123528,
+          "lng": 126.88424926
+        },
+        {
+          "lat": 37.47110975,
+          "lng": 126.88379085
+        }
+      ],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line\">유부장국</div>\n<div class=\"menu-line\">돼지갈비찜</div>\n<div class=\"menu-line\">해물동그랑땡전/어두부전</div>\n<div class=\"menu-line\">콩나물무침/고사리나물</div>\n<div class=\"menu-line\">도토리묵무침</div>\n<div class=\"menu-line\">꿀떡</div>\n<div class=\"menu-line\">가든샐러드</div>\n<div class=\"menu-line\">포기김치</div>\n<div class=\"menu-line\">음료/한강라면</div>\n    </div>\n    ",
+      "menu_status": "today",
+      "menu_date": "2026-09-23",
+      "checked_at": "11:35"
+    },
+    {
+      "name": "밥심",
+      "address": "서울 금천구 가산디지털2로 46",
+      "lat": 37.472650897653246,
+      "lng": 126.8826763789836,
+      "dist": 325,
+      "walk_min": 5,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47165478,
+          "lng": 126.88409702
+        },
+        {
+          "lat": 37.47165478,
+          "lng": 126.88409702
+        },
+        {
+          "lat": 37.47141378,
+          "lng": 126.88320316
+        },
+        {
+          "lat": 37.47142388,
+          "lng": 126.88317276
+        },
+        {
+          "lat": 37.47145146,
+          "lng": 126.88315929
+        },
+        {
+          "lat": 37.47145481,
+          "lng": 126.88312678
+        },
+        {
+          "lat": 37.47140399,
+          "lng": 126.8829444
+        },
+        {
+          "lat": 37.47140399,
+          "lng": 126.8829444
+        },
+        {
+          "lat": 37.47160237,
+          "lng": 126.88286166
+        },
+        {
+          "lat": 37.47219358,
+          "lng": 126.8826016
+        },
+        {
+          "lat": 37.47225733,
+          "lng": 126.8825791
+        },
+        {
+          "lat": 37.47229512,
+          "lng": 126.882637
+        },
+        {
+          "lat": 37.47229512,
+          "lng": 126.882637
+        },
+        {
+          "lat": 37.47238517,
+          "lng": 126.88259021
+        },
+        {
+          "lat": 37.47238517,
+          "lng": 126.88259021
+        },
+        {
+          "lat": 37.47238286,
+          "lng": 126.88252802
+        },
+        {
+          "lat": 37.47245058,
+          "lng": 126.88247493
+        },
+        {
+          "lat": 37.47257841,
+          "lng": 126.88241839
+        }
+      ],
+      "source": "kakao_first",
+      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/bV5Xsx/dJMcaamr1gL/xL7n5oQEcNdlp69AzRbiDK/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"밥심 오늘의 메뉴\"\n                    >\n                    ",
+      "menu_status": "today",
+      "menu_date": "2026-09-23",
+      "checked_at": "11:35"
+    }
+  ]
+}
