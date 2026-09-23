@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-23 17:10:14",
-  "updated_at_display": "2026.09.23 17:10",
+  "updated_at": "2026-09-23 18:49:35",
+  "updated_at_display": "2026.09.23 18:49",
   "date": "2026-09-23",
   "date_display": "9월 23일",
   "weekday": "수",
@@ -37,6 +37,7 @@
       ],
       "source": "gemini_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">곤드레무나물밥&amp;양념장</div>\n<div class=\"menu-line cat-main\">온두부&amp;볶음김치</div>\n<div class=\"menu-line cat-soup\">우거지 닭개장</div>\n<div class=\"menu-line cat-side\">나비쥐포강정</div>\n<div class=\"menu-line cat-side\">간장마늘쫑</div>\n<div class=\"menu-line cat-side\">구이김</div>\n<div class=\"menu-line cat-side\">그린샐러드</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-snack\">카라멜팝콘</div>\n<div class=\"menu-line cat-drink\">따끈누룽지숭늉/식혜</div>\n<div class=\"menu-line cat-drink\">백미/흑미</div>\n    </div>\n    ",
+      "raw_ref": null,
       "menu_status": "today",
       "menu_date": "2026-09-23",
       "checked_at": "13:13",
@@ -73,6 +74,7 @@
       ],
       "source": "gemini_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">도톰목살김치찜</div>\n<div class=\"menu-line cat-main\">등심돈까스&amp;소스</div>\n<div class=\"menu-line cat-main\">동그랑땡달걀부침</div>\n<div class=\"menu-line cat-main\">바질냉파스타</div>\n<div class=\"menu-line cat-soup\">얼큰콩나물국</div>\n<div class=\"menu-line cat-side\">모듬야채무침</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-snack\">단호박죽&amp;꿀떡</div>\n<div class=\"menu-line cat-snack\">가든샐러드&amp;드레싱2중</div>\n<div class=\"menu-line cat-snack\">셀프한강라면</div>\n<div class=\"menu-line cat-drink\">숭늉,매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
+      "raw_ref": null,
       "menu_status": "today",
       "menu_date": "2026-09-23",
       "checked_at": "13:13",
@@ -129,9 +131,13 @@
       ],
       "source": "kakao_profile",
       "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/cdNtle/dJMcajcIr0D/cbf7Od0SkkWneaFNhN9761/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
+      "raw_ref": {
+        "type": "image",
+        "url": "https://k.kakaocdn.net/dn/cdNtle/dJMcajcIr0D/cbf7Od0SkkWneaFNhN9761/img_xl.jpg"
+      },
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "17:10",
+      "checked_at": "18:49",
       "pipeline_version": 2
     },
     {
@@ -161,9 +167,13 @@
       ],
       "source": "threads",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">유부장국</div>\n<div class=\"menu-line cat-side\">돼지갈비찜</div>\n<div class=\"menu-line cat-side\">해물동그랑땡전/어두부전</div>\n<div class=\"menu-line cat-side\">콩나물무침/고사리나물</div>\n<div class=\"menu-line cat-side\">도토리묵무침</div>\n<div class=\"menu-line cat-side\">꿀떡</div>\n<div class=\"menu-line cat-side\">가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "17:10",
+      "checked_at": "18:49",
       "pipeline_version": 2
     },
     {
@@ -253,6 +263,7 @@
       ],
       "source": "openrouter_ocr",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">매콤제육볶음</div>\n<div class=\"menu-line cat-main\">포장마차잔치국수</div>\n<div class=\"menu-line cat-main\">한강라면</div>\n<div class=\"menu-line cat-side\">김말이튀김</div>\n<div class=\"menu-line cat-side\">멸치마늘쫑볶음</div>\n<div class=\"menu-line cat-side\">무말랭이오징어젓갈무침</div>\n<div class=\"menu-line cat-side\">어묵볶음</div>\n<div class=\"menu-line cat-side\">청경채찜</div>\n<div class=\"menu-line cat-side\">야채샐러드(with블루베리드레싱)</div>\n<div class=\"menu-line cat-kimchi\">겉절이김치</div>\n<div class=\"menu-line cat-snack\">소떡소떡</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
+      "raw_ref": null,
       "menu_status": "today",
       "menu_date": "2026-09-23",
       "checked_at": "13:38",
