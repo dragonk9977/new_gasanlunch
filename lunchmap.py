@@ -752,29 +752,69 @@ def download_image_bytes(url):
     return None, None
 
 
+def build_image_extraction_prompt(restaurant_name):
+    return (
+        f"이 이미지는 한국 '{restaurant_name}' 식당의 점심 메뉴판입니다. "
+        f"오늘은 {today.year}년 {today_date_str_space} {today_weekday}요일입니다. "
+        "이미지 제목이나 상단에 특정 날짜(예: '9월 23일')가 적혀있다면, 그 날짜가 오늘과 "
+        "일치하는지 확인하세요. 날짜가 아예 안 적혀 있고 요일별 표만 있는 이미지라면 "
+        "(이미 오늘 요일에 해당하는 부분만 잘려서 온 이미지라고 가정하고) 오늘 것으로 간주하세요. "
+        "이미지에 적힌 날짜가 오늘과 다르면 is_today를 false로, 맞거나 날짜 표기가 없으면 "
+        "true로 답하세요. "
+        "items에는 오늘 날짜(요일)에 해당하는 메뉴 항목만, 각 항목마다 category를 "
+        "main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
+        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥) 중 "
+        "하나로 분류해서 main→soup→side→kimchi→snack→drink 순으로 정렬해 담아주세요. "
+        "다른 설명 없이 JSON 객체 하나만 답변하세요. "
+        '형식: {"is_today":true,"items":[{"name":"오징어김치볶음밥","category":"main"}]}. '
+        "메뉴를 읽을 수 없으면 items를 빈 배열 []로 반환하세요."
+    )
+
+
+def parse_ai_extraction_response(text, restaurant_name, provider_label):
+    """
+    {"is_today":bool,"items":[...]} 형태의 응답을 검증한다.
+    is_today가 false면(=이미지가 오늘 날짜가 아니면) None을 반환해서
+    이 결과를 절대 신뢰/캐시하지 않게 한다.
+    """
+    try:
+        data = _parse_ai_json(text)
+    except Exception as e:
+        print(f"     → [{restaurant_name}] {provider_label} 응답 파싱 실패: {e}")
+        return None
+
+    if isinstance(data, dict):
+        items = data.get("items")
+        is_today = data.get("is_today", True)
+    else:
+        # 혹시 예전 방식(배열만)으로 답하면 그대로 사용
+        items = data
+        is_today = True
+
+    if is_today is False:
+        print(f"     → [{restaurant_name}] {provider_label}: 오늘 날짜 메뉴가 아닌 것으로 판단 (오래된 게시물)")
+        return None
+
+    menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
+
+    if not menu_items:
+        print(f"     → [{restaurant_name}] {provider_label}가 메뉴를 못 읽음 (빈 결과)")
+        return None
+
+    return menu_items
+
+
 def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
     """
     메뉴판 사진을 Gemini에게 보내서, 오늘 날짜에 해당하는 메뉴를
     {"name": 메뉴명, "category": 분류} 목록으로 뽑아온다.
+    이미지 자체가 오늘 게시물이 아니라고 판단되면 None을 반환한다.
     실패하면 None을 반환하고, 호출하는 쪽에서 원본 이미지로 폴백한다.
     """
     if not GEMINI_API_KEY or not image_bytes:
         return None
 
-    prompt = (
-        f"이 이미지는 한국 '{restaurant_name}' 식당의 점심 메뉴판입니다. "
-        f"오늘은 {today.year}년 {today_date_str_space} {today_weekday}요일입니다. "
-        "이미지 안에 여러 날짜/요일의 메뉴가 같이 있다면, 오늘 날짜(요일)에 해당하는 "
-        "메뉴만 골라주세요. 날짜 구분이 없고 하나의 메뉴만 있다면 그걸 사용하세요. "
-        "각 메뉴 항목마다 category를 다음 중 하나로 분류하세요: "
-        "main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
-        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥). "
-        "정렬 순서도 main → soup → side → kimchi → snack → drink 순으로 해주세요. "
-        "다른 설명 없이 JSON 배열만 답변하세요. "
-        '형식: [{"name":"오징어김치볶음밥","category":"main"}, {"name":"팽이미소국","category":"soup"}]. '
-        "메뉴를 읽을 수 없으면 빈 배열 []을 반환하세요."
-    )
-
+    prompt = build_image_extraction_prompt(restaurant_name)
     b64 = base64.b64encode(image_bytes).decode("utf-8")
 
     try:
@@ -803,28 +843,11 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
             return None
 
         text = data["candidates"][0]["content"]["parts"][0]["text"]
-        items = json.loads(text)
+        menu_items = parse_ai_extraction_response(text, restaurant_name, "Gemini")
 
-        if not isinstance(items, list) or not items:
-            print(f"     → [{restaurant_name}] Gemini가 메뉴를 못 읽음 (빈 결과)")
-            return None
+        if menu_items:
+            print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_items)}개 항목)")
 
-        valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
-        menu_items = []
-
-        for entry in items:
-            if isinstance(entry, dict) and str(entry.get("name", "")).strip():
-                name = str(entry["name"]).strip()
-                category = entry.get("category")
-                category = category if category in valid_categories else "side"
-                menu_items.append({"name": name, "category": category})
-            elif isinstance(entry, str) and entry.strip():
-                menu_items.append({"name": entry.strip(), "category": "side"})
-
-        if not menu_items:
-            return None
-
-        print(f"     → [{restaurant_name}] Gemini 메뉴 추출 성공 ({len(menu_items)}개 항목)")
         return menu_items
 
     except Exception as e:
@@ -832,7 +855,7 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
         return None
 
 
-def _parse_ai_json_list(text):
+def _parse_ai_json(text):
     """LLM 응답에서 JSON 배열만 뽑아 파싱한다 (```json 코드펜스가 섞여 와도 처리)."""
     text = text.strip()
     if text.startswith("```"):
@@ -865,16 +888,7 @@ def extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name):
     if not OPENROUTER_API_KEY or not image_bytes:
         return None
 
-    prompt = (
-        f"이 이미지는 한국 '{restaurant_name}' 식당의 점심 메뉴판입니다. "
-        f"오늘은 {today.year}년 {today_date_str_space} {today_weekday}요일입니다. "
-        "이미지 안에 여러 날짜/요일의 메뉴가 같이 있다면 오늘 날짜(요일)에 해당하는 "
-        "메뉴만 골라주세요. 각 항목마다 category를 main/soup/side/kimchi/snack/drink 중 "
-        "하나로 분류하고, main→soup→side→kimchi→snack→drink 순서로 정렬해주세요. "
-        "다른 설명 없이 JSON 배열만 답변하세요. "
-        '형식: [{"name":"오징어김치볶음밥","category":"main"}]. '
-        "메뉴를 읽을 수 없으면 빈 배열 []을 반환하세요."
-    )
+    prompt = build_image_extraction_prompt(restaurant_name)
 
     try:
         b64 = base64.b64encode(image_bytes).decode("utf-8")
@@ -907,14 +921,11 @@ def extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name):
             return None
 
         text = data["choices"][0]["message"]["content"]
-        items = _parse_ai_json_list(text)
-        menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
+        menu_items = parse_ai_extraction_response(text, restaurant_name, "OpenRouter")
 
-        if not menu_items:
-            print(f"     → [{restaurant_name}] OpenRouter가 메뉴를 못 읽음")
-            return None
+        if menu_items:
+            print(f"     → [{restaurant_name}] OpenRouter 메뉴 추출 성공 ({len(menu_items)}개 항목)")
 
-        print(f"     → [{restaurant_name}] OpenRouter 메뉴 추출 성공 ({len(menu_items)}개 항목)")
         return menu_items
 
     except Exception as e:
@@ -1077,7 +1088,7 @@ def classify_menu_lines_via_openrouter(menu_lines, restaurant_name):
             return None
 
         text = data["choices"][0]["message"]["content"]
-        items = _parse_ai_json_list(text)
+        items = _parse_ai_json(text)
         menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
 
         if not menu_items:
