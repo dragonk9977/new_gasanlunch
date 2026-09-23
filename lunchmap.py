@@ -1229,6 +1229,71 @@ def get_coords(address):
 # 회사 위치 마커 겹침 방지를 위해 요청하신 좌표로 분리
 office_coords = (37.471364252495015, 126.88404214632791)
 
+
+# ==========================================================
+# 11-3. 날씨 (Open-Meteo — 키 발급 불필요)
+# ==========================================================
+
+# WMO 날씨 코드 -> (한글 설명, 이모지)
+WEATHER_CODE_MAP = {
+    0: ("맑음", "☀️"),
+    1: ("대체로 맑음", "🌤️"),
+    2: ("구름 조금", "⛅"),
+    3: ("흐림", "☁️"),
+    45: ("안개", "🌫️"),
+    48: ("안개", "🌫️"),
+    51: ("이슬비", "🌦️"),
+    53: ("이슬비", "🌦️"),
+    55: ("이슬비", "🌦️"),
+    56: ("이슬비(어는)", "🌧️"),
+    57: ("이슬비(어는)", "🌧️"),
+    61: ("비", "🌧️"),
+    63: ("비", "🌧️"),
+    65: ("강한 비", "🌧️"),
+    66: ("비(어는)", "🌧️"),
+    67: ("비(어는)", "🌧️"),
+    71: ("눈", "❄️"),
+    73: ("눈", "❄️"),
+    75: ("강한 눈", "❄️"),
+    77: ("눈", "❄️"),
+    80: ("소나기", "🌦️"),
+    81: ("소나기", "🌦️"),
+    82: ("강한 소나기", "🌦️"),
+    85: ("소나기눈", "🌨️"),
+    86: ("소나기눈", "🌨️"),
+    95: ("뇌우", "⛈️"),
+    96: ("뇌우(우박)", "⛈️"),
+    99: ("뇌우(우박)", "⛈️"),
+}
+
+
+def get_weather():
+    """회사 위치 기준 현재 날씨(기온/강수량/상태)를 가져온다. 실패하면 None."""
+    try:
+        res = requests.get(
+            "https://api.open-meteo.com/v1/forecast",
+            params={
+                "latitude": office_coords[0],
+                "longitude": office_coords[1],
+                "current": "temperature_2m,precipitation,weather_code",
+                "timezone": "Asia/Seoul",
+            },
+            timeout=10,
+        )
+        current = res.json().get("current", {})
+        code = current.get("weather_code")
+        condition, emoji = WEATHER_CODE_MAP.get(code, ("", "🌡️"))
+
+        return {
+            "temp": current.get("temperature_2m"),
+            "precipitation": current.get("precipitation"),
+            "condition": condition,
+            "emoji": emoji,
+        }
+    except Exception as e:
+        print(f"  -> 날씨 조회 실패: {e}")
+        return None
+
 def calculate_walking_info(dest_coords):
     try:
         dist_meters = geodesic(
@@ -1699,6 +1764,10 @@ finally:
 # 13. menu.json 저장
 # ==========================================================
 
+weather = get_weather()
+if weather:
+    print(f"\n날씨: {weather['emoji']} {weather['condition']} {weather['temp']}℃ / 강수 {weather['precipitation']}mm")
+
 result = {
     "updated_at": today.strftime(
         "%Y-%m-%d %H:%M:%S"
@@ -1711,6 +1780,7 @@ result = {
     ),
     "date_display": today_date_str_space,
     "weekday": today_weekday,
+    "weather": weather,
     "office": {
         "address": OFFICE_ADDRESS,
         "lat": office_coords[0],
