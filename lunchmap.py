@@ -40,6 +40,10 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 # openrouter/free는 이미지 인식이 되는 무료 모델 중 하나를 자동으로 골라주는 라우터
 OPENROUTER_MODEL = "openrouter/free"
 
+# 이 번호를 올리면, 오늘 이미 "성공"으로 저장된 캐시라도 무효화되고 새 코드로 다시 시도한다.
+# (OCR 프롬프트/해상도/필터 로직을 고칠 때마다 하나씩 올려주면 됨)
+EXTRACTION_PIPELINE_VERSION = 2
+
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
 today = datetime.now(ZoneInfo("Asia/Seoul"))
@@ -131,36 +135,34 @@ def crop_ojeong_by_weekday(image_path):
             (crop_left, top_margin, crop_right, bottom_margin)
         )
 
-        max_height = 420
+        def to_jpeg_bytes(im, max_height, quality):
+            im2 = im
+            if im2.height > max_height:
+                ratio = max_height / im2.height
+                im2 = im2.resize(
+                    (int(im2.width * ratio), max_height),
+                    Image.LANCZOS
+                )
+            buf = BytesIO()
+            im2.save(buf, format="JPEG", quality=quality)
+            return buf.getvalue()
 
-        if cropped_img.height > max_height:
-            ratio = max_height / cropped_img.height
-            new_width = int(cropped_img.width * ratio)
-            cropped_img = cropped_img.resize(
-                (new_width, max_height),
-                Image.LANCZOS
-            )
+        # OCR용은 화질을 최대한 유지 (작게 줄이면 글자가 뭉개져서 오독이 심해짐)
+        ocr_bytes = to_jpeg_bytes(cropped_img, max_height=1400, quality=95)
 
-        buffered = BytesIO()
-        cropped_img.save(
-            buffered,
-            format="JPEG",
-            quality=95
-        )
-
-        encoded_string = base64.b64encode(
-            buffered.getvalue()
-        ).decode("utf-8")
+        # 화면 표시(폴백 이미지)용은 가볍게
+        display_bytes = to_jpeg_bytes(cropped_img, max_height=420, quality=90)
+        encoded_string = base64.b64encode(display_bytes).decode("utf-8")
 
         print(
             f"  -> [오정] {weekdays[ojeong_weekday_index]}요일 메뉴 Crop 완료"
         )
 
-        return "data:image/jpeg;base64," + encoded_string
+        return "data:image/jpeg;base64," + encoded_string, ocr_bytes
 
     except Exception as e:
         print(f"  -> [오정] Crop 실패 : {e}")
-        return None
+        return None, None
 
 
 # ==========================================================
@@ -809,8 +811,6 @@ def parse_ai_extraction_response(text, restaurant_name, provider_label):
     return menu_items
 
 
-GEMINI_MODEL = "gemini-3.6-flash"  # 항상 최우선으로 시도할 기본 모델
-
 _gemini_model_list_cache = None
 
 
@@ -1179,6 +1179,34 @@ def classify_menu_lines_via_ai(menu_lines, restaurant_name):
     return classify_menu_lines_via_openrouter(menu_lines, restaurant_name)
 
 
+_CATEGORY_KEYWORDS = [
+    ("kimchi", ["김치", "깍두기", "장아찌", "겉절이"]),
+    ("soup", ["국", "찌개", "탕", "장국", "전골", "라면", "우동", "칼국수"]),
+    ("drink", ["음료", "차", "커피", "콜라", "사이다", "식혜", "숭늉", "주스", "우유", "아메리카노"]),
+    ("snack", ["후식", "디저트", "빵", "과자", "요거트", "시리얼", "토스트", "아이스크림", "케이크", "쿠키"]),
+]
+
+
+def classify_menu_lines_locally(menu_lines):
+    """
+    AI를 거치지 않고 키워드 규칙만으로 분류한다. 원문 글자를 단 하나도 바꾸지 않아서
+    (이미 정확한 텍스트인) Threads/Instagram 캡션을 AI가 잘못 다시 쓰는 위험이 없다.
+    """
+    menu_items = []
+
+    for i, line in enumerate(menu_lines):
+        category = "main" if i == 0 else "side"
+
+        for cat, keywords in _CATEGORY_KEYWORDS:
+            if any(k in line for k in keywords):
+                category = cat
+                break
+
+        menu_items.append({"name": line, "category": category})
+
+    return menu_items
+
+
 geolocator = Nominatim(user_agent="gasan_lunch_map_new")
 geocode_cache = {}
 
@@ -1405,6 +1433,7 @@ try:
             and cached_previous.get("menu_date") == today_str
             and cached_previous.get("source") in ("gemini_ocr", "openrouter_ocr")
             and cached_previous.get("html")
+            and cached_previous.get("pipeline_version") == EXTRACTION_PIPELINE_VERSION
         )
 
         checked_at = None
@@ -1417,14 +1446,13 @@ try:
 
         elif item["type"] == "ojeong":
 
-            src = crop_ojeong_by_weekday(
+            src, ocr_bytes = crop_ojeong_by_weekday(
                 item["url"]
             )
 
             if src:
-                img_bytes = base64.b64decode(src.split(",", 1)[1])
                 menu_lines, ocr_source = extract_menu_via_ai(
-                    img_bytes, "image/jpeg", item["name"]
+                    ocr_bytes, "image/jpeg", item["name"]
                 )
 
                 if menu_lines:
@@ -1522,7 +1550,7 @@ try:
 
             if result:
 
-                menu_items = classify_menu_lines_via_ai(result["menu_lines"], item["name"])
+                menu_items = classify_menu_lines_locally(result["menu_lines"])
 
                 if menu_items:
                     html_content = menu_items_to_html(menu_items)
@@ -1546,7 +1574,7 @@ try:
 
                 if result:
 
-                    menu_items = classify_menu_lines_via_ai(result["menu_lines"], item["name"])
+                    menu_items = classify_menu_lines_locally(result["menu_lines"])
 
                     if menu_items:
                         html_content = menu_items_to_html(menu_items)
@@ -1645,6 +1673,7 @@ try:
             "menu_status": menu_status,
             "menu_date": today.strftime("%Y-%m-%d") if menu_status != "missing" else None,
             "checked_at": checked_at,
+            "pipeline_version": EXTRACTION_PIPELINE_VERSION,
         })
 
         time.sleep(1.5)
