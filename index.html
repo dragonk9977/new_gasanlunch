@@ -240,7 +240,6 @@ function popupHtml(r){
     </div>
     <div class="popup-body">
       <div class="address">${esc(r.address)}</div>
-      ${badgeChips(r)}
       <div class="menu">${menuHtml(r)}</div>
       <div class="source">${esc(sourceLine)}</div>
     </div>
@@ -431,7 +430,7 @@ function renderMap(){
   }, 100);
 }
 
-function modalCard(r){const accent=accentColor(r.name);const dateShort=formatMenuDateShort(r.menu_date);const isOcr=r.source==='gemini_ocr'||r.source==='openrouter_ocr';const ocrTip='OCR로 자동 인식한 메뉴명이라 실제와 다르게 표기될 수 있어요. 정확한 메뉴는 원본 게시물을 확인해주세요.';const sourceLine=[r.source||'', r.checked_at?`${r.checked_at} 확인`:''].filter(Boolean).join(' · ');return `<div class="modal-card" style="border-top:3px solid ${accent}">${isOcr?`<span class="ocr-badge modal-ocr-badge" title="${esc(ocrTip)}">ⓘ OCR 인식</span>`:''}<div class="card-head"><span class="accent-dot" style="background:${accent}"></span><div class="name" data-name="${esc(r.name)}">${esc(r.name)}</div>${dateShort?`<div class="popup-date">${esc(dateShort)}</div>`:''}<div class="walk">🚶 ${esc(r.walk_min)}분</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div>${badgeChips(r)}<div class="menu">${menuHtml(r)}</div><div class="source">${esc(sourceLine)}</div></div>`}
+function modalCard(r){const accent=accentColor(r.name);const dateShort=formatMenuDateShort(r.menu_date);const isOcr=r.source==='gemini_ocr'||r.source==='openrouter_ocr';const ocrTip='OCR로 자동 인식한 메뉴명이라 실제와 다르게 표기될 수 있어요. 정확한 메뉴는 원본 게시물을 확인해주세요.';const sourceLine=[r.source||'', r.checked_at?`${r.checked_at} 확인`:''].filter(Boolean).join(' · ');return `<div class="modal-card" style="border-top:3px solid ${accent}">${isOcr?`<span class="ocr-badge modal-ocr-badge" title="${esc(ocrTip)}">ⓘ OCR 인식</span>`:''}<div class="card-head"><span class="accent-dot" style="background:${accent}"></span><div class="name" data-name="${esc(r.name)}">${esc(r.name)}</div>${dateShort?`<div class="popup-date">${esc(dateShort)}</div>`:''}<div class="walk">🚶 ${esc(r.walk_min)}분</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(sourceLine)}</div></div>`}
 function closeModal(){document.getElementById('modalBg').classList.remove('show');resetMap()}
 function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('');document.querySelectorAll('#modalCards .menu').forEach(el=>el.addEventListener('click',closeModal));document.querySelectorAll('#modalCards .name').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();const r=(data?.restaurants||[]).find(x=>x.name===el.dataset.name);if(r){closeModal();openChoiceMenu(r);}}))}
 async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderWeather();renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
