@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-23 13:38:06",
-  "updated_at_display": "2026.09.23 13:38",
+  "updated_at": "2026-09-23 17:10:14",
+  "updated_at_display": "2026.09.23 17:10",
   "date": "2026-09-23",
   "date_display": "9월 23일",
   "weekday": "수",
@@ -128,10 +128,10 @@
         }
       ],
       "source": "kakao_profile",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/czhQYB/dJMcadDo0NF/Ca8dvpsxJ2mdLWJZXkhook/img.png\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
+      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/cdNtle/dJMcajcIr0D/cbf7Od0SkkWneaFNhN9761/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "13:38",
+      "checked_at": "17:10",
       "pipeline_version": 2
     },
     {
@@ -163,7 +163,7 @@
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">유부장국</div>\n<div class=\"menu-line cat-side\">돼지갈비찜</div>\n<div class=\"menu-line cat-side\">해물동그랑땡전/어두부전</div>\n<div class=\"menu-line cat-side\">콩나물무침/고사리나물</div>\n<div class=\"menu-line cat-side\">도토리묵무침</div>\n<div class=\"menu-line cat-side\">꿀떡</div>\n<div class=\"menu-line cat-side\">가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">음료/한강라면</div>\n    </div>\n    ",
       "menu_status": "today",
       "menu_date": "2026-09-23",
-      "checked_at": "13:38",
+      "checked_at": "17:10",
       "pipeline_version": 2
     },
     {
