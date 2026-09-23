@@ -802,7 +802,7 @@ def parse_ai_extraction_response(text, restaurant_name, provider_label):
         return None
 
     garbled = [it["name"] for it in menu_items if _looks_garbled(it["name"])]
-    if garbled:
+    if len(garbled) >= 2:
         print(f"     → [{restaurant_name}] {provider_label} 결과에 깨진 글자 감지, 거부: {garbled}")
         return None
 
@@ -839,6 +839,9 @@ def list_gemini_models():
                 if "generateContent" not in methods:
                     continue
                 if "flash" not in name.lower():
+                    continue
+                # tts/embedding/live/image 전용 등은 이미지+텍스트 메뉴 추출에 못 쓰는 변종 모델
+                if any(bad in name.lower() for bad in ("tts", "embedding", "live", "image-generation", "native-audio")):
                     continue
                 if name not in candidates:
                     candidates.append(name)
@@ -881,7 +884,7 @@ def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
                         "response_mime_type": "application/json",
                     },
                 },
-                timeout=30,
+                timeout=18,
             )
 
             data = res.json()
@@ -976,7 +979,7 @@ def extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name):
                     ],
                 }],
             },
-            timeout=30,
+            timeout=18,
         )
 
         data = res.json()
@@ -1080,7 +1083,7 @@ def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
                         "response_mime_type": "application/json",
                     },
                 },
-                timeout=30,
+                timeout=18,
             )
 
             data = res.json()
@@ -1097,7 +1100,7 @@ def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
                 continue
 
             garbled = [it["name"] for it in menu_items if _looks_garbled(it["name"])]
-            if garbled:
+            if len(garbled) >= 2:
                 print(f"     → [{restaurant_name}] Gemini({model_name}) 분류 결과에 깨진 글자 감지, 거부: {garbled}")
                 continue
 
@@ -1136,7 +1139,7 @@ def classify_menu_lines_via_openrouter(menu_lines, restaurant_name):
                 "model": OPENROUTER_MODEL,
                 "messages": [{"role": "user", "content": prompt}],
             },
-            timeout=30,
+            timeout=18,
         )
 
         data = res.json()
