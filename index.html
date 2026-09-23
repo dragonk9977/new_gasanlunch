@@ -27,6 +27,7 @@
 .map-label.tail-right::after{top:50%;left:100%;margin-top:-7px;margin-left:-1px;border-left-color:#fff}
 .map-label.office.tail-right::after{border-left-color:#222}
 .popup{position:relative;width:min(360px,calc(100vw - 28px));background:#fff;border-radius:15px;border:1px solid #ddd;box-shadow:0 8px 30px rgba(0,0,0,.2);overflow:hidden}.popup-head{display:flex;align-items:center;padding:14px 16px}.accent-dot{width:10px;height:10px;border-radius:50%;margin-right:8px;flex-shrink:0}.popup-name{font-size:19px;font-weight:800;letter-spacing:-.2px}.popup-date{margin-left:8px;font-size:11px;font-weight:700;color:#777;background:#f1f1f1;border-radius:6px;padding:3px 7px;white-space:nowrap}.ocr-badge{position:absolute;top:0;z-index:5;background:#b45309;color:#fff;font-size:9.5px;font-weight:800;padding:3px 8px;border-radius:0 0 7px 7px;box-shadow:0 2px 4px rgba(0,0,0,.2);cursor:help;letter-spacing:.2px;white-space:nowrap}.popup-ocr-badge{right:36px}.modal-ocr-badge{right:12px}.popup-walk{margin-left:auto;font-size:12px;color:#666;white-space:nowrap;font-weight:600}.popup-close{margin-left:8px;border:0;box-shadow:none;padding:2px 7px;font-size:20px;line-height:1;cursor:pointer}.popup-body{padding:14px 16px 16px;max-height:66vh;overflow:auto}.address{font-size:11px;color:#999;margin-bottom:10px}.menu{font-size:14px;line-height:1.6;cursor:pointer}.menu-image{display:block;width:100%;max-height:360px;object-fit:contain;border-radius:9px;background:#f7f7f7}.text-menu{padding:2px 0;display:flex;flex-direction:column;gap:2px}.menu-line{padding:5px 9px;font-size:14px;border-radius:7px}.menu-line.cat-main{font-weight:800;color:#a8380a;font-size:15.5px;background:rgba(193,68,14,.09);margin-bottom:2px}.menu-line.cat-soup{color:#1d4ed8;font-weight:600}.menu-line.cat-side{color:#333}.menu-line.cat-kimchi{color:#0369a1}.menu-line.cat-snack{color:#7e22ce}.menu-line.cat-drink{color:#0f766e}.source{margin-top:10px;font-size:10px;color:#bbb}
+.choice-menu{position:relative;width:210px;background:#fff;border-radius:14px;border:1px solid #ddd;box-shadow:0 8px 26px rgba(0,0,0,.22);padding:14px 14px 12px;display:flex;flex-direction:column;gap:8px}.choice-close{position:absolute;top:6px;right:8px;border:0;box-shadow:none;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:#999;padding:2px 6px}.choice-title{font-size:15px;font-weight:800;margin-bottom:2px;padding-right:20px}.choice-btn{border:1px solid #e5e7eb;background:#f8f8f8;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;text-align:left;cursor:pointer}.choice-btn:hover{background:#eee}.choice-btn-kakao{color:#1a1a1a}
 .notice{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:15;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;border-radius:12px;padding:9px 13px;font-size:12px;color:#777;box-shadow:0 3px 12px rgba(0,0,0,.1);white-space:nowrap}
 .visitor-badge{position:absolute;left:12px;bottom:12px;z-index:15;opacity:.85;line-height:0}.visitor-badge:hover{opacity:1}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-bg.show{display:flex}.modal{width:min(1180px,100%);max-height:90vh;background:#fff;border-radius:17px;overflow:hidden;display:flex;flex-direction:column}.modal-head{padding:15px 18px;border-bottom:1px solid #eee;display:flex;align-items:center}.modal-title{font-size:18px;font-weight:800}.modal-close{margin-left:auto;border:0;box-shadow:none;font-size:22px;padding:2px 8px;cursor:pointer}.modal-body{padding:15px;overflow:auto}.modal-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.modal-card{position:relative;border:1px solid #e5e7eb;border-radius:13px;padding:14px;min-width:0}.modal-card .card-head{display:flex;align-items:center;gap:2px}.modal-card .name{font-size:16px;font-weight:800}.modal-card .walk{margin-left:auto;font-size:10px;color:#666;white-space:nowrap;font-weight:600}.modal-card .address{margin-top:6px}.modal-card .menu{margin-top:10px}.modal-card .menu-image{max-height:400px}
@@ -46,7 +47,7 @@
 <script>
 const DEFAULT_CENTER={lat:37.4795,lng:126.8820};
 const DEFAULT_LEVEL=4; // 기본 확대 레벨 (숫자가 작을수록 확대됨)
-let map=null,data=null,markers=[],labels=[],activePopup=null,activeRoute=null,initialCenter=null,initialLevel=DEFAULT_LEVEL;
+let map=null,data=null,markers=[],labels=[],activePopup=null,activeChoice=null,activeRoute=null,initialCenter=null,initialLevel=DEFAULT_LEVEL;
 
 // 식당들이 서로 가까이 붙어있어 라벨이 겹치므로, 마커 기준 라벨을 놓을 방향을 식당별로 지정
 // above: 마커 위(기본, 꼬리 아래) / below: 마커 아래(꼬리 위) / left: 마커 왼쪽(꼬리 오른쪽) / right: 마커 오른쪽(꼬리 왼쪽)
@@ -102,6 +103,44 @@ function formatMenuDateShort(dateStr){
 function resetMap(){if(!map||!initialCenter)return;map.setCenter(initialCenter);map.setLevel(initialLevel)}
 function clearRoute(){if(activeRoute){activeRoute.setMap(null);activeRoute=null}}
 function closePopup(){if(activePopup){activePopup.setMap(null);activePopup=null}clearRoute();resetMap()}
+function closeChoice(){if(activeChoice){activeChoice.setMap(null);activeChoice=null}}
+
+function openChoiceMenu(r){
+  closeChoice();
+  if(activePopup){activePopup.setMap(null);activePopup=null;clearRoute()}
+
+  const pos=new kakao.maps.LatLng(r.lat,r.lng);
+  const wrapper=document.createElement('div');
+  wrapper.className='choice-menu';
+  wrapper.innerHTML=`
+    <button class="choice-close" type="button">×</button>
+    <div class="choice-title">${esc(r.name)}</div>
+    <button class="choice-btn choice-btn-menu" type="button">📋 메뉴 원본 보기</button>
+    <button class="choice-btn choice-btn-kakao" type="button">📍 카카오맵 바로가기</button>
+  `;
+  wrapper.querySelector('.choice-close').addEventListener('click',closeChoice);
+  wrapper.querySelector('.choice-btn-menu').addEventListener('click',()=>{
+    closeChoice();
+    openPopup(r);
+  });
+  wrapper.querySelector('.choice-btn-kakao').addEventListener('click',()=>{
+    const url=KAKAO_PLACE_URLS[r.name];
+    if(url) window.open(url,'_blank','noopener');
+    closeChoice();
+  });
+
+  activeChoice=new kakao.maps.CustomOverlay({
+    position:pos,
+    content:wrapper,
+    xAnchor:-0.05,
+    yAnchor:0.5,
+    zIndex:20,
+    clickable:true
+  });
+  activeChoice.setMap(map);
+  map.panTo(pos);
+  if(map.relayout) map.relayout();
+}
 
 // 식당별 포인트 컬러 — 팝업/카드 헤더에 표시
 const ACCENT_COLORS={
@@ -112,6 +151,14 @@ const ACCENT_COLORS={
   '밥심':'#7c3aed'
 };
 function accentColor(name){return ACCENT_COLORS[name]||'#666'}
+
+const KAKAO_PLACE_URLS={
+  '오정':'https://place.map.kakao.com/743883728',
+  '온정찬':'https://place.map.kakao.com/1848680699',
+  '런치투게더':'https://place.map.kakao.com/544428179',
+  '런치타임':'https://place.map.kakao.com/947488989',
+  '밥심':'https://place.map.kakao.com/1458594857'
+};
 
 function popupHtml(r){
   const accent=accentColor(r.name);
@@ -201,7 +248,7 @@ function addLabel(lat,lng,text,clickFn,cls='',pos='above'){
   ov.setMap(map);
   labels.push(ov);
 }
-function clearObjects(){markers.forEach(m=>m.setMap(null));labels.forEach(o=>o.setMap(null));markers=[];labels=[];if(activePopup){activePopup.setMap(null);activePopup=null}clearRoute()}
+function clearObjects(){markers.forEach(m=>m.setMap(null));labels.forEach(o=>o.setMap(null));markers=[];labels=[];if(activePopup){activePopup.setMap(null);activePopup=null}closeChoice();clearRoute()}
 function createMap(){if(!window.kakao||!kakao.maps){document.getElementById('notice').textContent='카카오맵을 불러오지 못했습니다. JavaScript 키와 Web 도메인 설정을 확인해 주세요.';return false}map=new kakao.maps.Map(document.getElementById('map'),{center:new kakao.maps.LatLng(DEFAULT_CENTER.lat,DEFAULT_CENTER.lng),level:DEFAULT_LEVEL});map.addControl(new kakao.maps.ZoomControl(),kakao.maps.ControlPosition.RIGHT);map.addControl(new kakao.maps.MapTypeControl(),kakao.maps.ControlPosition.TOPRIGHT);return true}
 
 function renderMap(){
@@ -217,7 +264,7 @@ function renderMap(){
     const marker=new kakao.maps.Marker({position:pos});
     marker.setMap(map);
     markers.push(marker);
-    addLabel(r.lat,r.lng,r.name,()=>openPopup(r),'',LABEL_LAYOUT[r.name]||'above');
+    addLabel(r.lat,r.lng,r.name,()=>openChoiceMenu(r),'',LABEL_LAYOUT[r.name]||'above');
     kakao.maps.event.addListener(marker,'click',()=>openPopup(r));
   });
 
@@ -241,6 +288,6 @@ function modalCard(r){const accent=accentColor(r.name);const dateShort=formatMen
 function closeModal(){document.getElementById('modalBg').classList.remove('show');resetMap()}
 function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('');document.querySelectorAll('#modalCards .menu').forEach(el=>el.addEventListener('click',closeModal))}
 async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
-document.getElementById('resetBtn').addEventListener('click',closePopup);document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}clearRoute();document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',closeModal);document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){closeModal()}});document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){closeModal();return}if(activePopup){activePopup.setMap(null);activePopup=null;resetMap()}});if(createMap())loadData();
+document.getElementById('resetBtn').addEventListener('click',()=>{closeChoice();closePopup()});document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}closeChoice();clearRoute();document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',closeModal);document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){closeModal()}});document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){closeModal();return}if(activeChoice){closeChoice();resetMap();return}if(activePopup){activePopup.setMap(null);activePopup=null;resetMap()}});if(createMap())loadData();
 </script>
 </body></html>
