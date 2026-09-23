@@ -42,7 +42,7 @@ OPENROUTER_MODEL = "openrouter/free"
 
 # 이 번호를 올리면, 오늘 이미 "성공"으로 저장된 캐시라도 무효화되고 새 코드로 다시 시도한다.
 # (OCR 프롬프트/해상도/필터 로직을 고칠 때마다 하나씩 올려주면 됨)
-EXTRACTION_PIPELINE_VERSION = 2
+EXTRACTION_PIPELINE_VERSION = 3
 
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
@@ -1051,15 +1051,23 @@ def compute_badges(menu_items):
 
 
 def menu_items_to_html(menu_items):
-    """카테고리별로 색을 입혀서 메뉴 목록 HTML을 만든다."""
+    """카테고리별로 색을 입히고, 최애 메뉴 키워드에 걸리는 항목엔 이모지를 붙여서 목록 HTML을 만든다."""
     if not menu_items:
         return "<div>오늘의 메뉴를 찾지 못했습니다.</div>"
 
     safe_lines = []
 
     for item in menu_items:
+        raw_name = item["name"]
+
+        prefix_emojis = []
+        for _label, emoji, keywords in BADGE_GROUPS:
+            if any(k in raw_name for k in keywords) and emoji not in prefix_emojis:
+                prefix_emojis.append(emoji)
+        display_name = (" ".join(prefix_emojis) + " " + raw_name) if prefix_emojis else raw_name
+
         name = (
-            item["name"].replace("&", "&amp;")
+            display_name.replace("&", "&amp;")
                         .replace("<", "&lt;")
                         .replace(">", "&gt;")
         )
