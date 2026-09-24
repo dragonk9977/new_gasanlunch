@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-24 09:00:36",
-  "updated_at_display": "2026.09.24 09:00",
+  "updated_at": "2026-09-24 09:10:21",
+  "updated_at_display": "2026.09.24 09:10",
   "date": "2026-09-24",
   "date_display": "9월 24일",
   "weekday": "목",
   "weather": {
-    "temp": 18.4,
+    "temp": 18.6,
     "precipitation": 0.0,
     "condition": "흐림",
     "emoji": "☁️"
@@ -51,7 +51,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-24",
-      "checked_at": "09:00",
+      "checked_at": "09:10",
       "pipeline_version": 3
     },
     {
@@ -93,7 +93,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-24",
-      "checked_at": "09:00",
+      "checked_at": "09:10",
       "pipeline_version": 3
     },
     {
@@ -155,7 +155,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-24",
-      "checked_at": "09:00",
+      "checked_at": "09:10",
       "pipeline_version": 3
     },
     {
@@ -288,7 +288,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-24",
-      "checked_at": "09:00",
+      "checked_at": "09:10",
       "pipeline_version": 3
     }
   ]
