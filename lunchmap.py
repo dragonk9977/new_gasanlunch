@@ -1,8 +1,10 @@
 import os
 import re
+import sys
 import time
 import json
 import base64
+import random
 import hashlib
 import requests
 from io import BytesIO
@@ -16,6 +18,11 @@ from geopy.distance import geodesic
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+
+try:
+    import holidays
+except ImportError:
+    holidays = None
 
 
 # ==========================================================
@@ -60,6 +67,76 @@ print()
 print("=" * 60)
 print(f"오늘 날짜 : {today_date_str_space} ({today_weekday}요일)")
 print("=" * 60)
+
+
+# ==========================================================
+# 1-2. 주말/공휴일 체크 — 쉬는 날이면 크롤링 없이 메시지만 남기고 종료
+# ==========================================================
+
+CLOSED_DAY_MESSAGES = {
+    "weekend": [
+        "🏠 오늘은 주말이에요! 식당도 다 문 닫았어요, 집밥 드시고 푹 쉬세요~",
+        "🛌 주말엔 사무실도 식당도 쉬어요. 오늘은 집밥 찬스!",
+        "🌴 주말이니까 오늘은 냉장고 파먹기 어떠세요?",
+    ],
+    "holiday": [
+        "🎉 오늘은 공휴일! 식당도 다 같이 쉬는 날이에요. 집밥 드세요~",
+        "🎊 공휴일엔 가산도 조용해요. 오늘은 집에서 맛있게 드세요!",
+        "🥳 쉬는 날엔 집밥이 최고죠. 맛있는 하루 보내세요!",
+    ],
+}
+
+
+def get_closed_day_info():
+    if today_weekday_index >= 5:  # 토(5)/일(6)
+        return {"reason": "주말", "message": random.choice(CLOSED_DAY_MESSAGES["weekend"])}
+
+    holiday_name = None
+    if holidays:
+        try:
+            kr_holidays = holidays.SouthKorea(years=[today.year])
+            holiday_name = kr_holidays.get(today.date())
+        except Exception as e:
+            print(f"  -> 공휴일 조회 실패: {e}")
+
+    if holiday_name:
+        return {"reason": holiday_name, "message": random.choice(CLOSED_DAY_MESSAGES["holiday"])}
+
+    return None
+
+
+closed_info = get_closed_day_info()
+
+if closed_info:
+    print(f"오늘은 쉬는 날입니다 ({closed_info['reason']}) — 크롤링을 건너뜁니다.")
+
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    closed_result = {
+        "updated_at": today.strftime("%Y-%m-%d %H:%M:%S"),
+        "updated_at_display": today.strftime("%Y.%m.%d %H:%M"),
+        "date": today.strftime("%Y-%m-%d"),
+        "date_display": today_date_str_space,
+        "weekday": today_weekday,
+        "is_closed_day": True,
+        "closed_reason": closed_info["reason"],
+        "closed_message": closed_info["message"],
+        "weather": None,
+        "office": {
+            "address": OFFICE_ADDRESS,
+            "lat": 37.471364252495015,
+            "lng": 126.88404214632791,
+        },
+        "restaurants": [],
+    }
+
+    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
+        json.dump(closed_result, f, ensure_ascii=False, indent=2)
+
+    print("=" * 60)
+    print("휴무일 처리 완료, 종료합니다.")
+    print("=" * 60)
+    sys.exit(0)
 
 
 # ==========================================================
