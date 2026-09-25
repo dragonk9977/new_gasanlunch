@@ -30,6 +30,10 @@
 .choice-menu{position:relative;width:210px;background:#fff;border-radius:14px;border:1px solid #ddd;box-shadow:0 8px 26px rgba(0,0,0,.22);padding:14px 14px 12px;display:flex;flex-direction:column;gap:8px}.choice-close{position:absolute;top:6px;right:8px;border:0;box-shadow:none;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:#999;padding:2px 6px}.choice-title{font-size:15px;font-weight:800;margin-bottom:2px;padding-right:20px}.choice-btn{border:1px solid #e5e7eb;background:#f8f8f8;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;text-align:left;cursor:pointer}.choice-btn:hover{background:#eee}.choice-btn:disabled{opacity:.45;cursor:not-allowed}.choice-btn:disabled:hover{background:#f8f8f8}.choice-btn-kakao{color:#1a1a1a}
 .notice{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:15;background:rgba(255,255,255,.95);border:1px solid #e5e7eb;border-radius:12px;padding:9px 13px;font-size:12px;color:#777;box-shadow:0 3px 12px rgba(0,0,0,.1);white-space:nowrap}
 .visitor-badge{position:absolute;left:12px;bottom:12px;z-index:15;opacity:.85;line-height:0}.visitor-badge:hover{opacity:1}
+.closed-banner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:18;background:#fff;border-radius:20px;padding:38px 32px;box-shadow:0 12px 40px rgba(0,0,0,.25);text-align:center;width:min(340px,86vw)}
+.closed-emoji{font-size:50px;margin-bottom:12px}
+.closed-title{font-size:21px;font-weight:900;margin-bottom:10px;color:#111}
+.closed-message{font-size:14px;color:#555;line-height:1.7}
 .roulette-fab{position:absolute;right:16px;bottom:16px;z-index:16;background:#111;color:#fff;border:none;border-radius:30px;padding:13px 20px;font-size:14px;font-weight:800;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer}.roulette-fab:hover{background:#000}
 .roulette-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:110;align-items:center;justify-content:center;padding:16px}.roulette-bg.show{display:flex}
 .roulette-box{background:#fff;border-radius:18px;padding:30px 26px;width:min(320px,100%);text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.4)}
@@ -63,6 +67,11 @@
   </div>
 </div>
 <div id="notice" class="notice">5개 식당 위치를 표시합니다. 식당 이름을 눌러 메뉴를 확인하세요.</div>
+<div id="closedBanner" class="closed-banner" style="display:none">
+  <div id="closedEmoji" class="closed-emoji"></div>
+  <div id="closedReason" class="closed-title"></div>
+  <div id="closedMessage" class="closed-message"></div>
+</div>
 <a href="https://hits.sh/dragonk9977.github.io/new_gasanlunch/" target="_blank" rel="noopener" class="visitor-badge"><img alt="방문자 수" src="https://hits.sh/dragonk9977.github.io/new_gasanlunch/.svg?style=flat-square&label=방문&color=555555"/></a>
 </div>
 <div id="error" style="display:none"></div>
@@ -433,7 +442,23 @@ function renderMap(){
 function modalCard(r){const accent=accentColor(r.name);const dateShort=formatMenuDateShort(r.menu_date);const isOcr=r.source==='gemini_ocr'||r.source==='openrouter_ocr';const ocrTip='OCR로 자동 인식한 메뉴명이라 실제와 다르게 표기될 수 있어요. 정확한 메뉴는 원본 게시물을 확인해주세요.';const sourceLine=[r.source||'', r.checked_at?`${r.checked_at} 확인`:''].filter(Boolean).join(' · ');return `<div class="modal-card" style="border-top:3px solid ${accent}">${isOcr?`<span class="ocr-badge modal-ocr-badge" title="${esc(ocrTip)}">ⓘ OCR 인식</span>`:''}<div class="card-head"><span class="accent-dot" style="background:${accent}"></span><div class="name" data-name="${esc(r.name)}">${esc(r.name)}</div>${dateShort?`<div class="popup-date">${esc(dateShort)}</div>`:''}<div class="walk">🚶 ${esc(r.walk_min)}분</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(sourceLine)}</div></div>`}
 function closeModal(){document.getElementById('modalBg').classList.remove('show');resetMap()}
 function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('');document.querySelectorAll('#modalCards .menu').forEach(el=>el.addEventListener('click',closeModal));document.querySelectorAll('#modalCards .name').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();const r=(data?.restaurants||[]).find(x=>x.name===el.dataset.name);if(r){closeModal();openChoiceMenu(r);}}))}
-async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;renderWeather();renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
+async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;
+  if(data.is_closed_day){
+    document.getElementById('notice').style.display='none';
+    document.getElementById('rouletteBtn').style.display='none';
+    document.getElementById('copyBtn').style.display='none';
+    document.getElementById('allBtn').style.display='none';
+    const msg=data.closed_message||'오늘은 쉬는 날이에요';
+    const m=msg.match(/^(\S+)\s*(.*)$/);
+    document.getElementById('closedEmoji').textContent=m?m[1]:'🎉';
+    document.getElementById('closedReason').textContent=`오늘은 ${data.closed_reason||'쉬는 날'}이에요`;
+    document.getElementById('closedMessage').textContent=m?m[2]:msg;
+    document.getElementById('closedBanner').style.display='block';
+    renderWeather();
+    return;
+  }
+  document.getElementById('closedBanner').style.display='none';
+  renderWeather();renderMap();renderModal()}catch(e){document.getElementById('date').textContent='메뉴 데이터 준비 중';document.getElementById('notice').textContent='아직 오늘 메뉴 데이터가 없습니다.'}}
 function renderWeather(){
   const el=document.getElementById('clockWeather');
   if(!el) return;
