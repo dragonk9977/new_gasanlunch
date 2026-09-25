@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-09-25 10:20:22",
-  "updated_at_display": "2026.09.25 10:20",
+  "updated_at": "2026-09-25 10:30:31",
+  "updated_at_display": "2026.09.25 10:30",
   "date": "2026-09-25",
   "date_display": "9월 25일",
   "weekday": "금",
   "weather": {
-    "temp": 21.1,
+    "temp": 21.5,
     "precipitation": 0.0,
-    "condition": "흐림",
-    "emoji": "☁️"
+    "condition": "구름 조금",
+    "emoji": "⛅"
   },
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
@@ -51,7 +51,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-25",
-      "checked_at": "10:20",
+      "checked_at": "10:30",
       "pipeline_version": 3
     },
     {
@@ -93,7 +93,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-25",
-      "checked_at": "10:20",
+      "checked_at": "10:30",
       "pipeline_version": 3
     },
     {
@@ -155,7 +155,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-25",
-      "checked_at": "10:20",
+      "checked_at": "10:30",
       "pipeline_version": 3
     },
     {
@@ -288,7 +288,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-25",
-      "checked_at": "10:20",
+      "checked_at": "10:30",
       "pipeline_version": 3
     }
   ]
