@@ -86,6 +86,37 @@ CLOSED_DAY_MESSAGES = {
     ],
 }
 
+# holidays 라이브러리가 영어로 주는 공휴일 이름을 한글로 바꿔줌
+HOLIDAY_NAME_KO = [
+    ("Chuseok", "추석"),
+    ("Korean Mid Autumn", "추석"),
+    ("Seollal", "설날"),
+    ("Korean New Year", "설날"),
+    ("Lunar New Year", "설날"),
+    ("New Year's Day", "신정"),
+    ("Independence Movement Day", "삼일절"),
+    ("Children's Day", "어린이날"),
+    ("Buddha's Birthday", "부처님오신날"),
+    ("Memorial Day", "현충일"),
+    ("Liberation Day", "광복절"),
+    ("National Foundation Day", "개천절"),
+    ("Hangeul Day", "한글날"),
+    ("Christmas Day", "크리스마스"),
+    ("Labour Day", "근로자의날"),
+]
+
+
+def translate_holiday_name(name):
+    if not name:
+        return name
+
+    for en, ko in HOLIDAY_NAME_KO:
+        if en.lower() in name.lower():
+            suffix = " 대체공휴일" if "substitute" in name.lower() else ""
+            return ko + suffix
+
+    return name  # 매핑에 없는 이름은 원문 그대로
+
 
 def get_closed_day_info():
     if today_weekday_index >= 5:  # 토(5)/일(6)
@@ -95,7 +126,7 @@ def get_closed_day_info():
     if holidays:
         try:
             kr_holidays = holidays.SouthKorea(years=[today.year])
-            holiday_name = kr_holidays.get(today.date())
+            holiday_name = translate_holiday_name(kr_holidays.get(today.date()))
         except Exception as e:
             print(f"  -> 공휴일 조회 실패: {e}")
 
