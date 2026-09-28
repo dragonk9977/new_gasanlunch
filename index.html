@@ -41,7 +41,7 @@
 .roulette-title{font-size:20px;font-weight:900;margin-bottom:10px}
 .roulette-walk{font-size:13px;color:#666;margin:10px 0 18px}
 .roulette-actions{display:flex;flex-direction:column;gap:8px}
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-bg.show{display:flex}.modal{width:min(1180px,100%);max-height:90vh;background:#fff;border-radius:17px;overflow:hidden;display:flex;flex-direction:column}.modal-head{padding:15px 18px;border-bottom:1px solid #eee;display:flex;align-items:center}.modal-title{font-size:18px;font-weight:800}.modal-close{margin-left:auto;border:0;box-shadow:none;font-size:22px;padding:2px 8px;cursor:pointer}.modal-body{padding:15px;overflow:auto}.modal-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.modal-card{position:relative;border:1px solid #e5e7eb;border-radius:13px;padding:14px;min-width:0}.modal-card .card-head{display:flex;align-items:center;gap:2px}.modal-card .name{font-size:16px;font-weight:800;cursor:pointer}.modal-card .name:hover{text-decoration:underline}.modal-card .walk{margin-left:auto;font-size:10px;color:#666;white-space:nowrap;font-weight:600}.modal-card .address{margin-top:6px}.modal-card .menu{margin-top:10px}.modal-card .menu-image{max-height:400px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-bg.show{display:flex}.modal{width:min(1180px,100%);max-height:90vh;background:#fff;border-radius:17px;overflow:hidden;display:flex;flex-direction:column}.modal-head{padding:15px 18px;border-bottom:1px solid #eee;display:flex;align-items:center;user-select:none;-webkit-user-select:none;touch-action:none}.modal-title{font-size:18px;font-weight:800}.modal-close{margin-left:auto;border:0;box-shadow:none;font-size:22px;padding:2px 8px;cursor:pointer}.modal-body{padding:15px;overflow:auto}.modal-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.modal-card{position:relative;border:1px solid #e5e7eb;border-radius:13px;padding:14px;min-width:0}.modal-card .card-head{display:flex;align-items:center;gap:2px}.modal-card .name{font-size:16px;font-weight:800;cursor:pointer}.modal-card .name:hover{text-decoration:underline}.modal-card .walk{margin-left:auto;font-size:10px;color:#666;white-space:nowrap;font-weight:600}.modal-card .address{margin-top:6px}.modal-card .menu{margin-top:10px}.modal-card .menu-image{max-height:400px}
 @media(min-width:901px){.clockbox{padding:14px 28px}.clock-date{font-size:13px}.clock-time{font-size:36px}.clock-weather{font-size:17px}.clock-countdown{font-size:13.5px}.ocr-note{font-size:10.5px}}
 @media(max-width:900px){.modal-cards{display:flex;overflow-x:auto}.modal-card{flex:0 0 280px}}@media(max-width:600px){.topbar{top:8px;left:8px;right:8px;flex-direction:column;align-items:stretch;gap:6px}.titlebox{padding:9px 11px}.title{font-size:16px}.date{font-size:10px}.clockbox{padding:6px 10px}.clock-time{font-size:17px}.clock-date{font-size:10px}.clock-weather{font-size:10.5px}.clock-countdown{font-size:10px}.ocr-note{font-size:9px;white-space:normal;text-align:center}.actions{margin-left:0;justify-content:flex-end;gap:5px}.actions button{padding:8px 10px;font-size:11px}.notice{bottom:10px;font-size:11px;padding:8px 10px}.popup{width:calc(100vw - 28px)}.popup-body{max-height:54vh}.modal-bg{padding:8px}.modal{max-height:94vh}.roulette-fab{right:10px;bottom:56px;padding:10px 14px;font-size:12px}}
 @media(max-width:420px){button .full{display:none}button .short{display:inline}}
@@ -50,7 +50,7 @@
 </head>
 <body>
 <div id="app"><div id="map"></div>
-<div class="topbar"><div class="titlebox"><div class="title">🍚 가산 점심 메뉴</div><div id="date" class="date">메뉴 불러오는 중...</div></div><div id="clockBox" class="clockbox"><div id="clockDate" class="clock-date"></div><div id="clockTime" class="clock-time"></div><div id="clockWeather" class="clock-weather"></div><div id="clockCountdown" class="clock-countdown"></div><div class="ocr-note">※ 메뉴는 OCR로 자동 인식돼 이름이 부정확할 수 있습니다.· 오류 발견 시 dragon.k에게 연락주세요</div></div><div class="actions"><button id="copyBtn"><span class="full">📋 오늘 메뉴 복사</span><span class="short">📋 복사</span></button><button id="resetBtn"><span class="full">지도 초기화</span><span class="short">초기화</span></button><button id="allBtn" class="primary"><span class="full">메뉴 한번에 보기</span><span class="short">전체보기</span></button></div></div>
+<div class="topbar"><div class="titlebox"><div class="title">🍚 가산 점심 메뉴</div><div id="date" class="date">메뉴 불러오는 중...</div></div><div id="clockBox" class="clockbox"><div id="clockDate" class="clock-date"></div><div id="clockTime" class="clock-time"></div><div id="clockWeather" class="clock-weather"></div><div id="clockCountdown" class="clock-countdown"></div><div class="ocr-note">※ 메뉴는 OCR로 자동 인식돼 이름이 부정확 할 수 있습니다. · 오류 발견 시 dragon.k에게 연락 부탁드립니다.</div></div><div class="actions"><button id="copyBtn"><span class="full">📋 오늘 메뉴 복사</span><span class="short">📋 복사</span></button><button id="resetBtn"><span class="full">지도 초기화</span><span class="short">초기화</span></button><button id="allBtn" class="primary"><span class="full">메뉴 한번에 보기</span><span class="short">전체보기</span></button></div></div>
 <button id="rouletteBtn" class="roulette-fab">🎲 오늘 뭐 먹지?</button>
 <div id="rouletteBg" class="roulette-bg">
   <div class="roulette-box">
@@ -330,9 +330,10 @@ function showPopupOverlay(r, wrapper){
 }
 
 // 팝업 헤더를 잡고 끌면 화면 안에서 자유롭게 옮길 수 있게 함 (자동 배치가 마음에 안 들 때 수동 조정용)
-function makeDraggable(headEl, wrapperEl){
-  if(!headEl || !wrapperEl) return;
-  let startX=0, startY=0, offX=0, offY=0, dragging=false;
+function makeDraggable(headEl, wrapperEl, excludeSel, onDragged){
+  if(!headEl || !wrapperEl) return {reset(){}};
+  excludeSel = excludeSel || '.popup-close, .popup-name';
+  let startX=0, startY=0, offX=0, offY=0, dragging=false, moved=false;
 
   const getPoint=e=>e.touches?e.touches[0]:e;
 
@@ -340,7 +341,9 @@ function makeDraggable(headEl, wrapperEl){
     if(!dragging) return;
     if(e.cancelable) e.preventDefault();
     const p=getPoint(e);
-    wrapperEl.style.transform=`translate(${offX+(p.clientX-startX)}px, ${offY+(p.clientY-startY)}px)`;
+    const dx=p.clientX-startX, dy=p.clientY-startY;
+    if(Math.abs(dx)+Math.abs(dy)>3) moved=true;
+    wrapperEl.style.transform=`translate(${offX+dx}px, ${offY+dy}px)`;
   };
   const onUp=e=>{
     if(!dragging) return;
@@ -353,10 +356,11 @@ function makeDraggable(headEl, wrapperEl){
     document.removeEventListener('touchmove',onMove);
     document.removeEventListener('mouseup',onUp);
     document.removeEventListener('touchend',onUp);
+    if(moved && onDragged) onDragged();
   };
   const onDown=e=>{
-    if(e.target.closest('.popup-close')||e.target.closest('.popup-name')) return;
-    dragging=true;
+    if(e.target.closest(excludeSel)) return;
+    dragging=true; moved=false;
     const p=getPoint(e);
     startX=p.clientX; startY=p.clientY;
     headEl.style.cursor='grabbing';
@@ -369,6 +373,8 @@ function makeDraggable(headEl, wrapperEl){
   headEl.style.cursor='grab';
   headEl.addEventListener('mousedown',onDown);
   headEl.addEventListener('touchstart',onDown,{passive:true});
+
+  return { reset(){ offX=0; offY=0; wrapperEl.style.transform=''; } };
 }
 
 function openPopup(r){
@@ -467,6 +473,14 @@ function renderWeather(){
   const precip=(w.precipitation!=null && w.precipitation>0) ? ` · 강수 ${w.precipitation}mm` : '';
   el.textContent=`${w.emoji||''} ${w.condition||''} ${Math.round(w.temp)}℃${precip}`;
 }
+let justDraggedModal=false;
+const modalDrag=makeDraggable(
+  document.querySelector('#modalBg .modal-head'),
+  document.querySelector('#modalBg .modal'),
+  '.modal-close',
+  ()=>{ justDraggedModal=true; setTimeout(()=>{justDraggedModal=false},300); }
+);
+
 let rouletteTimer=null;
 
 function openRoulette(){
@@ -551,6 +565,6 @@ async function copyMenuSummary(){
   }
 }
 
-document.getElementById('resetBtn').addEventListener('click',()=>{closeChoice();closePopup()});document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}closeChoice();clearRoute();document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',closeModal);document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg'){closeModal()}});document.getElementById('rouletteBtn').addEventListener('click',openRoulette);document.getElementById('rouletteBg').addEventListener('click',e=>{if(e.target.id==='rouletteBg'){closeRoulette();}});document.getElementById('copyBtn').addEventListener('click',copyMenuSummary);document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(document.getElementById('rouletteBg').classList.contains('show')){closeRoulette();return}const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){closeModal();return}if(activeChoice){closeChoice();resetMap();return}if(activePopup){closePopup()}});if(createMap())loadData();
+document.getElementById('resetBtn').addEventListener('click',()=>{closeChoice();closePopup()});document.getElementById('allBtn').addEventListener('click',()=>{if(activePopup){activePopup.setMap(null);activePopup=null}closeChoice();clearRoute();modalDrag.reset();document.getElementById('modalBg').classList.add('show')});document.getElementById('closeBtn').addEventListener('click',closeModal);document.getElementById('modalBg').addEventListener('click',e=>{if(justDraggedModal){justDraggedModal=false;return}if(e.target.id==='modalBg'){closeModal()}});document.getElementById('rouletteBtn').addEventListener('click',openRoulette);document.getElementById('rouletteBg').addEventListener('click',e=>{if(e.target.id==='rouletteBg'){closeRoulette();}});document.getElementById('copyBtn').addEventListener('click',copyMenuSummary);document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(document.getElementById('rouletteBg').classList.contains('show')){closeRoulette();return}const modal=document.getElementById('modalBg');if(modal.classList.contains('show')){closeModal();return}if(activeChoice){closeChoice();resetMap();return}if(activePopup){closePopup()}});if(createMap())loadData();
 </script>
 </body></html>
