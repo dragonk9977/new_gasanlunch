@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-28 10:20:22",
-  "updated_at_display": "2026.09.28 10:20",
+  "updated_at": "2026-09-28 10:30:26",
+  "updated_at_display": "2026.09.28 10:30",
   "date": "2026-09-28",
   "date_display": "9월 28일",
   "weekday": "월",
   "weather": {
-    "temp": 20.2,
+    "temp": 20.5,
     "precipitation": 0.0,
     "condition": "대체로 맑음",
     "emoji": "🌤️"
