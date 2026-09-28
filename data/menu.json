@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-28 10:10:23",
-  "updated_at_display": "2026.09.28 10:10",
+  "updated_at": "2026-09-28 10:20:22",
+  "updated_at_display": "2026.09.28 10:20",
   "date": "2026-09-28",
   "date_display": "9월 28일",
   "weekday": "월",
   "weather": {
-    "temp": 19.8,
+    "temp": 20.2,
     "precipitation": 0.0,
     "condition": "대체로 맑음",
     "emoji": "🌤️"
@@ -128,17 +128,71 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/MPKWE/dJMcagUE061/tkqkPSIj8kpa2zHMJKbkck/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 콩나물돈불고기</div>\n<div class=\"menu-line cat-main\">타코야끼&amp;데리마요</div>\n<div class=\"menu-line cat-main\">카레라이스</div>\n<div class=\"menu-line cat-main\">표고어묵채볶음</div>\n<div class=\"menu-line cat-soup\">호박두부된장찌개</div>\n<div class=\"menu-line cat-side\">쑥갓무침</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-snack\">과일~바나나</div>\n<div class=\"menu-line cat-snack\">가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-snack\">셀프한강라면</div>\n<div class=\"menu-line cat-drink\">숭늉,매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/MPKWE/dJMcagUE061/tkqkPSIj8kpa2zHMJKbkck/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/hciaZ/dJMcab6V0Dz/QilvusOG9gTzLfyPp7bCBk/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        }
+      ],
+      "items": [
+        {
+          "name": "콩나물돈불고기",
+          "category": "main"
+        },
+        {
+          "name": "타코야끼&데리마요",
+          "category": "main"
+        },
+        {
+          "name": "카레라이스",
+          "category": "main"
+        },
+        {
+          "name": "표고어묵채볶음",
+          "category": "main"
+        },
+        {
+          "name": "호박두부된장찌개",
+          "category": "soup"
+        },
+        {
+          "name": "쑥갓무침",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "과일~바나나",
+          "category": "snack"
+        },
+        {
+          "name": "가든샐러드&드레싱2종",
+          "category": "snack"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "snack"
+        },
+        {
+          "name": "숭늉,매실차",
+          "category": "drink"
+        },
+        {
+          "name": "ICE옥수수차",
+          "category": "drink"
+        }
+      ],
       "menu_status": "today",
       "menu_date": "2026-09-28",
-      "checked_at": "10:10",
+      "checked_at": "10:20",
       "pipeline_version": 3
     },
     {
