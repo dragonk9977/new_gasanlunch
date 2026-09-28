@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-09-28 10:40:21",
-  "updated_at_display": "2026.09.28 10:40",
+  "updated_at": "2026-09-28 11:00:40",
+  "updated_at_display": "2026.09.28 11:00",
   "date": "2026-09-28",
   "date_display": "9월 28일",
   "weekday": "월",
   "weather": {
-    "temp": 20.5,
+    "temp": 21.2,
     "precipitation": 0.0,
-    "condition": "대체로 맑음",
-    "emoji": "🌤️"
+    "condition": "구름 조금",
+    "emoji": "⛅"
   },
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
@@ -356,14 +356,54 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-kimchi\">김치콩나물국</div>\n<div class=\"menu-line cat-main\">훈제오리야채찜</div>\n<div class=\"menu-line cat-side\">유린기</div>\n<div class=\"menu-line cat-main\">마파두부덮밥</div>\n<div class=\"menu-line cat-kimchi\">상추겉절이</div>\n<div class=\"menu-line cat-side\">깻잎지무침</div>\n<div class=\"menu-line cat-side\">가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
       "badges": [],
-      "items": [],
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "items": [
+        {
+          "name": "김치콩나물국",
+          "category": "kimchi"
+        },
+        {
+          "name": "훈제오리야채찜",
+          "category": "main"
+        },
+        {
+          "name": "유린기",
+          "category": "side"
+        },
+        {
+          "name": "마파두부덮밥",
+          "category": "main"
+        },
+        {
+          "name": "상추겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "깻잎지무침",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
+      "menu_status": "today",
+      "menu_date": "2026-09-28",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
