@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-29 10:20:25",
-  "updated_at_display": "2026.09.29 10:20",
+  "updated_at": "2026-09-29 10:30:32",
+  "updated_at_display": "2026.09.29 10:30",
   "date": "2026-09-29",
   "date_display": "9월 29일",
   "weekday": "화",
   "weather": {
-    "temp": 20.3,
+    "temp": 20.8,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -138,7 +138,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-29",
-      "checked_at": "10:20",
+      "checked_at": "10:30",
       "pipeline_version": 3
     },
     {
@@ -274,14 +274,67 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">얼갈이된장국</div>\n<div class=\"menu-line cat-main\">🔥 🥩 제육볶음</div>\n<div class=\"menu-line cat-main\">생선까스&amp;타르타르</div>\n<div class=\"menu-line cat-main\">🍳 삼색계란찜</div>\n<div class=\"menu-line cat-kimchi\">김치비빔국수</div>\n<div class=\"menu-line cat-side\">치커리사과무침</div>\n<div class=\"menu-line cat-side\">가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "계란",
+          "emoji": "🍳"
+        }
+      ],
+      "items": [
+        {
+          "name": "얼갈이된장국",
+          "category": "soup"
+        },
+        {
+          "name": "제육볶음",
+          "category": "main"
+        },
+        {
+          "name": "생선까스&타르타르",
+          "category": "main"
+        },
+        {
+          "name": "삼색계란찜",
+          "category": "main"
+        },
+        {
+          "name": "김치비빔국수",
+          "category": "kimchi"
+        },
+        {
+          "name": "치커리사과무침",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
+      "menu_status": "today",
+      "menu_date": "2026-09-29",
+      "checked_at": "10:30",
       "pipeline_version": 3
     },
     {
