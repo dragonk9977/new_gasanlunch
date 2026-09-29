@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-29 11:20:21",
-  "updated_at_display": "2026.09.29 11:20",
+  "updated_at": "2026-09-29 11:30:28",
+  "updated_at_display": "2026.09.29 11:30",
   "date": "2026-09-29",
   "date_display": "9월 29일",
   "weekday": "화",
   "weather": {
-    "temp": 21.9,
+    "temp": 22.3,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -391,7 +391,7 @@
       ],
       "menu_status": "today",
       "menu_date": "2026-09-29",
-      "checked_at": "11:20",
+      "checked_at": "11:30",
       "pipeline_version": 3
     },
     {
