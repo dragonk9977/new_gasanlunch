@@ -6,8 +6,8 @@
   },
   "밥심": {
     "date": "2026-09-29",
-    "hash": "282e0d702e60d1c7",
-    "succeeded": false
+    "hash": "e1049b13a2692fcb",
+    "succeeded": true
   },
   "오정": {
     "date": "2026-09-29",
@@ -21,7 +21,7 @@
   },
   "런치투게더": {
     "date": "2026-09-29",
-    "hash": "4901206e87ab8fb8",
-    "succeeded": false
+    "hash": "bf3445a5cb5275e5",
+    "succeeded": true
   }
 }
