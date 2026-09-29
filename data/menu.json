@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-29 10:30:32",
-  "updated_at_display": "2026.09.29 10:30",
+  "updated_at": "2026-09-29 10:40:22",
+  "updated_at_display": "2026.09.29 10:40",
   "date": "2026-09-29",
   "date_display": "9월 29일",
   "weekday": "화",
@@ -138,7 +138,7 @@
       "items": [],
       "menu_status": "today",
       "menu_date": "2026-09-29",
-      "checked_at": "10:30",
+      "checked_at": "10:40",
       "pipeline_version": 3
     },
     {
@@ -334,7 +334,7 @@
       ],
       "menu_status": "today",
       "menu_date": "2026-09-29",
-      "checked_at": "10:30",
+      "checked_at": "10:40",
       "pipeline_version": 3
     },
     {
