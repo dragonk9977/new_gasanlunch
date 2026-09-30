@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-30 11:30:31",
-  "updated_at_display": "2026.09.30 11:30",
+  "updated_at": "2026-09-30 11:40:23",
+  "updated_at_display": "2026.09.30 11:40",
   "date": "2026-09-30",
   "date_display": "9월 30일",
   "weekday": "수",
@@ -401,9 +401,9 @@
           "category": "soup"
         }
       ],
-      "menu_status": "preserved_from_previous_run",
+      "menu_status": "today",
       "menu_date": "2026-09-30",
-      "checked_at": "11:20",
+      "checked_at": "11:40",
       "pipeline_version": 3
     },
     {
