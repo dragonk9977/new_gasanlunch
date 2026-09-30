@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-09-30 11:20:21",
-  "updated_at_display": "2026.09.30 11:20",
+  "updated_at": "2026-09-30 11:30:31",
+  "updated_at_display": "2026.09.30 11:30",
   "date": "2026-09-30",
   "date_display": "9월 30일",
   "weekday": "수",
   "weather": {
-    "temp": 22.3,
+    "temp": 22.6,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -401,7 +401,7 @@
           "category": "soup"
         }
       ],
-      "menu_status": "today",
+      "menu_status": "preserved_from_previous_run",
       "menu_date": "2026-09-30",
       "checked_at": "11:20",
       "pipeline_version": 3
