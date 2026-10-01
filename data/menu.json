@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-01 11:30:30",
-  "updated_at_display": "2026.10.01 11:30",
+  "updated_at": "2026-10-01 11:40:22",
+  "updated_at_display": "2026.10.01 11:40",
   "date": "2026-10-01",
   "date_display": "10월 1일",
   "weekday": "목",
@@ -415,7 +415,7 @@
       "price": 7500,
       "menu_status": "today",
       "menu_date": "2026-10-01",
-      "checked_at": "11:30",
+      "checked_at": "11:40",
       "pipeline_version": 3
     },
     {
