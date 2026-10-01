@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-01 10:30:28",
-  "updated_at_display": "2026.10.01 10:30",
+  "updated_at": "2026-10-01 10:40:22",
+  "updated_at_display": "2026.10.01 10:40",
   "date": "2026-10-01",
   "date_display": "10월 1일",
   "weekday": "목",
@@ -354,15 +354,68 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 들깨무국</div>\n<div class=\"menu-line cat-soup\">🍲 닭볶음탕</div>\n<div class=\"menu-line cat-side\">타코야끼</div>\n<div class=\"menu-line cat-side\">미트볼브로콜리볶음</div>\n<div class=\"menu-line cat-main\">들기름김구이</div>\n<div class=\"menu-line cat-side\">계절야채무침</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면/음료</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "들깨무국",
+          "category": "soup"
+        },
+        {
+          "name": "닭볶음탕",
+          "category": "soup"
+        },
+        {
+          "name": "타코야끼",
+          "category": "side"
+        },
+        {
+          "name": "미트볼브로콜리볶음",
+          "category": "side"
+        },
+        {
+          "name": "들기름김구이",
+          "category": "main"
+        },
+        {
+          "name": "계절야채무침",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "한강라면/음료",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-01",
+      "checked_at": "10:40",
       "pipeline_version": 3
     },
     {
