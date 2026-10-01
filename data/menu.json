@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-02 00:00:44",
-  "updated_at_display": "2026.10.02 00:00",
+  "updated_at": "2026-10-02 00:20:28",
+  "updated_at_display": "2026.10.02 00:20",
   "date": "2026-10-02",
   "date_display": "10월 2일",
   "weekday": "금",
   "weather": {
-    "temp": 11.4,
+    "temp": 11.5,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -161,7 +161,7 @@
       "price": 7500,
       "menu_status": "today",
       "menu_date": "2026-10-02",
-      "checked_at": "00:00",
+      "checked_at": "00:20",
       "pipeline_version": 3
     },
     {
@@ -224,7 +224,7 @@
       "price": 8000,
       "menu_status": "today",
       "menu_date": "2026-10-02",
-      "checked_at": "00:00",
+      "checked_at": "00:20",
       "pipeline_version": 3
     },
     {
@@ -359,7 +359,7 @@
       "price": 7500,
       "menu_status": "today",
       "menu_date": "2026-10-02",
-      "checked_at": "00:00",
+      "checked_at": "00:20",
       "pipeline_version": 3
     }
   ]
