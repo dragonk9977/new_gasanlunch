@@ -39,7 +39,7 @@
 .roulette-box{background:#fff;border-radius:18px;padding:30px 26px;width:min(400px,100%);max-height:90vh;overflow:auto;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.4)}.roulette-menu{text-align:left;max-height:38vh;overflow:auto;margin:0 0 16px;padding:10px 12px;background:#fafafa;border:1px solid #eee;border-radius:12px}
 .roulette-spin{font-size:24px;font-weight:900;padding:34px 0;color:#111;letter-spacing:-.3px}
 .roulette-title{font-size:20px;font-weight:900;margin-bottom:10px}
-.roulette-walk{font-size:13px;color:#666;margin:10px 0 18px}
+.roulette-walk{font-size:13px;color:#666;margin:10px 0 18px}.roulette-price{font-size:13px;color:#c2410c;font-weight:800;margin:-10px 0 14px}
 .roulette-actions{display:flex;flex-direction:column;gap:8px}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-bg.show{display:flex}.modal{width:min(1180px,100%);max-height:90vh;background:#fff;border-radius:17px;overflow:hidden;display:flex;flex-direction:column}.modal-head{padding:15px 18px;border-bottom:1px solid #eee;display:flex;align-items:center;user-select:none;-webkit-user-select:none;touch-action:none}.modal-title{font-size:18px;font-weight:800}.modal-close{margin-left:auto;border:0;box-shadow:none;font-size:22px;padding:2px 8px;cursor:pointer}.modal-body{padding:15px;overflow:auto}.modal-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.modal-card{position:relative;border:1px solid #e5e7eb;border-radius:13px;padding:14px;min-width:0}.modal-card .card-head{display:flex;align-items:center;gap:2px}.modal-card .name{font-size:16px;font-weight:800;cursor:pointer}.modal-card .name:hover{text-decoration:underline}.modal-card .walk{margin-left:auto;font-size:10px;color:#666;white-space:nowrap;font-weight:600}.modal-card .address{margin-top:6px}.modal-card .menu{margin-top:10px}.modal-card .menu-image{max-height:400px}
 @media(min-width:901px){.clockbox{padding:14px 28px}.clock-date{font-size:13px}.clock-time{font-size:36px}.clock-weather{font-size:17px}.clock-countdown{font-size:13.5px}.ocr-note{font-size:10.5px}}
@@ -58,6 +58,7 @@
       <div class="roulette-title">🎉 오늘은 <span id="rouletteName"></span>!</div>
       <div id="rouletteBadges" class="badge-row" style="justify-content:center"></div>
       <div id="rouletteWalk" class="roulette-walk"></div>
+      <div id="roulettePrice" class="roulette-price"></div>
       <div id="rouletteMenu" class="roulette-menu"></div>
       <div class="roulette-actions">
         <button id="rouletteGoBtn" class="choice-btn">🗺️ 지도에서 보기</button>
@@ -127,6 +128,7 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function menuHtml(r){return r.html||'<div>오늘의 메뉴가 아직 없습니다.</div>'}
 function walkDisplay(r){return r.name==='오정' ? '🛗 엘베만 빨리 오면 몇초?' : `🚶 ${esc(r.walk_min)}분 · ${esc(r.dist)}m`}
 function walkDisplayShort(r){return r.name==='오정' ? '🛗 엘베 몇초?' : `🚶 ${esc(r.walk_min)}분`}
+function priceText(r){return r.price?`💰 ${r.price.toLocaleString()}원`:''}
 function formatMenuDateShort(dateStr){
   if(!dateStr) return null;
   const d=new Date(dateStr+'T00:00:00');
@@ -250,7 +252,7 @@ function popupHtml(r){
       <button class="popup-close" onclick="closePopup()">×</button>
     </div>
     <div class="popup-body">
-      <div class="address">${esc(r.address)}</div>
+      <div class="address">${esc(r.address)}${r.price?` · ${priceText(r)}`:""}</div>
       <div class="menu">${menuHtml(r)}</div>
       <div class="source">${esc(sourceLine)}</div>
     </div>
@@ -447,7 +449,7 @@ function renderMap(){
   }, 100);
 }
 
-function modalCard(r){const accent=accentColor(r.name);const dateShort=formatMenuDateShort(r.menu_date);const isOcr=r.source==='gemini_ocr'||r.source==='openrouter_ocr';const ocrTip='OCR로 자동 인식한 메뉴명이라 실제와 다르게 표기될 수 있어요. 정확한 메뉴는 원본 게시물을 확인해주세요.';const sourceLine=[r.source||'', r.checked_at?`${r.checked_at} 확인`:''].filter(Boolean).join(' · ');return `<div class="modal-card" style="border-top:3px solid ${accent}">${isOcr?`<span class="ocr-badge modal-ocr-badge" title="${esc(ocrTip)}">ⓘ OCR 인식</span>`:''}<div class="card-head"><span class="accent-dot" style="background:${accent}"></span><div class="name" data-name="${esc(r.name)}">${esc(r.name)}</div>${dateShort?`<div class="popup-date">${esc(dateShort)}</div>`:''}<div class="walk">${walkDisplayShort(r)}</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(sourceLine)}</div></div>`}
+function modalCard(r){const accent=accentColor(r.name);const dateShort=formatMenuDateShort(r.menu_date);const isOcr=r.source==='gemini_ocr'||r.source==='openrouter_ocr';const ocrTip='OCR로 자동 인식한 메뉴명이라 실제와 다르게 표기될 수 있어요. 정확한 메뉴는 원본 게시물을 확인해주세요.';const sourceLine=[r.source||'', r.checked_at?`${r.checked_at} 확인`:''].filter(Boolean).join(' · ');return `<div class="modal-card" style="border-top:3px solid ${accent}">${isOcr?`<span class="ocr-badge modal-ocr-badge" title="${esc(ocrTip)}">ⓘ OCR 인식</span>`:''}<div class="card-head"><span class="accent-dot" style="background:${accent}"></span><div class="name" data-name="${esc(r.name)}">${esc(r.name)}</div>${dateShort?`<div class="popup-date">${esc(dateShort)}</div>`:''}<div class="walk">${walkDisplayShort(r)}</div></div><div class="address">${esc(r.address)} · ${esc(r.dist)}m${r.price?` · ${priceText(r)}`:""}</div><div class="menu">${menuHtml(r)}</div><div class="source">${esc(sourceLine)}</div></div>`}
 function closeModal(){document.getElementById('modalBg').classList.remove('show');resetMap()}
 function renderModal(){document.getElementById('modalTitle').textContent=`${data?.date_display||data?.date||'오늘'} 가산 식단`;document.getElementById('modalCards').innerHTML=(data?.restaurants||[]).map(modalCard).join('');document.querySelectorAll('#modalCards .menu').forEach(el=>el.addEventListener('click',closeModal));document.querySelectorAll('#modalCards .name').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();const r=(data?.restaurants||[]).find(x=>x.name===el.dataset.name);if(r){closeModal();openChoiceMenu(r);}}))}
 async function loadData(){try{const res=await fetch(`data/menu.json?t=${Date.now()}`,{cache:'no-store'});if(!res.ok)throw new Error(res.status);data=await res.json();document.getElementById('date').textContent=`${data.date_display||data.date||''} · 최종 업데이트 ${data.updated_at_display||data.updated_at||''}`;
@@ -518,7 +520,7 @@ function showRouletteResult(r){
   document.getElementById('rouletteSpin').style.display='none';
   document.getElementById('rouletteResult').style.display='block';
   document.getElementById('rouletteName').textContent=r.name;
-  document.getElementById('rouletteWalk').textContent = r.name==='오정' ? '🛗 엘베만 빨리 오면 몇초?' : `🚶 회사에서 ${r.walk_min}분`;document.getElementById('rouletteMenu').innerHTML=menuHtml(r);
+  document.getElementById('rouletteWalk').textContent = r.name==='오정' ? '🛗 엘베만 빨리 오면 몇초?' : `🚶 회사에서 ${r.walk_min}분`;document.getElementById('rouletteMenu').innerHTML=menuHtml(r);document.getElementById('roulettePrice').textContent=priceText(r);
   document.getElementById('rouletteBadges').innerHTML=(r.badges||[]).map(b=>`<span class="badge-chip">${esc(b.emoji)} ${esc(b.label)}</span>`).join('');
   document.getElementById('rouletteGoBtn').onclick=()=>{ closeRoulette(); openPopup(r); };
   document.getElementById('rouletteAgainBtn').onclick=runRoulette;
@@ -538,7 +540,7 @@ function buildMenuSummaryText(){
 
   (data.restaurants||[]).forEach(r=>{
     const names=(r.items||[]).slice(0,4).map(it=>it.name);
-    lines.push(`🍱 ${r.name}`);
+    lines.push(`🍱 ${r.name}${r.price?` (${r.price.toLocaleString()}원)`:''}`);
     lines.push(names.length?names.join(' / '):'(메뉴 확인 필요)');
     lines.push('');
   });
