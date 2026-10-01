@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-10-01 00:40:23",
-  "updated_at_display": "2026.10.01 00:40",
+  "updated_at": "2026-10-01 09:00:41",
+  "updated_at_display": "2026.10.01 09:00",
   "date": "2026-10-01",
   "date_display": "10월 1일",
   "weekday": "목",
   "weather": {
-    "temp": 15.9,
+    "temp": 14.8,
     "precipitation": 0.0,
-    "condition": "구름 조금",
-    "emoji": "⛅"
+    "condition": "대체로 맑음",
+    "emoji": "🌤️"
   },
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
@@ -252,17 +252,78 @@
           "lng": 126.8860495
         }
       ],
-      "source": "kakao_profile",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/caBBgn/dJMcairpCmh/Y8ec1ly4hLlNoMCKKnDTg1/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">우삼겹대파볶음</div>\n<div class=\"menu-line cat-main\">생선까스</div>\n<div class=\"menu-line cat-main\">아라비아따스파게티</div>\n<div class=\"menu-line cat-main\">셀프라면</div>\n<div class=\"menu-line cat-soup\">감자버섯짜글이찌개</div>\n<div class=\"menu-line cat-side\">킬바사소세지호박볶음</div>\n<div class=\"menu-line cat-side\">오이탕탕이</div>\n<div class=\"menu-line cat-side\">그린샐러드&amp;드레싱</div>\n<div class=\"menu-line cat-kimchi\">알배추열무겉절이</div>\n<div class=\"menu-line cat-snack\">라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">바나나</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-drink\">잡곡밥 &amp; 흰밥</div>\n<div class=\"menu-line cat-drink\">누룽지 숭늉</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/caBBgn/dJMcairpCmh/Y8ec1ly4hLlNoMCKKnDTg1/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/CZj4R/dJMcah0jwZH/uMoPPoN3WnzAmqloPRsKM0/img.png"
       },
       "badges": [],
-      "items": [],
+      "items": [
+        {
+          "name": "우삼겹대파볶음",
+          "category": "main"
+        },
+        {
+          "name": "생선까스",
+          "category": "main"
+        },
+        {
+          "name": "아라비아따스파게티",
+          "category": "main"
+        },
+        {
+          "name": "셀프라면",
+          "category": "main"
+        },
+        {
+          "name": "감자버섯짜글이찌개",
+          "category": "soup"
+        },
+        {
+          "name": "킬바사소세지호박볶음",
+          "category": "side"
+        },
+        {
+          "name": "오이탕탕이",
+          "category": "side"
+        },
+        {
+          "name": "그린샐러드&드레싱",
+          "category": "side"
+        },
+        {
+          "name": "알배추열무겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "라면땅 or 새우칩",
+          "category": "snack"
+        },
+        {
+          "name": "바나나",
+          "category": "snack"
+        },
+        {
+          "name": "식빵 토스트",
+          "category": "snack"
+        },
+        {
+          "name": "요거트&시리얼",
+          "category": "snack"
+        },
+        {
+          "name": "잡곡밥 & 흰밥",
+          "category": "drink"
+        },
+        {
+          "name": "누룽지 숭늉",
+          "category": "drink"
+        }
+      ],
       "menu_status": "today",
       "menu_date": "2026-10-01",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     },
     {
@@ -385,17 +446,79 @@
           "lng": 126.88241839
         }
       ],
-      "source": "kakao_first",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/cPyDBs/dJMcahsFmCY/SsnZt4F07acliqOiaSNckK/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"밥심 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 등갈비김치찜</div>\n<div class=\"menu-line cat-main\">🔥 치킨가라아게</div>\n<div class=\"menu-line cat-main\">해장파스타</div>\n<div class=\"menu-line cat-main\">야채비빔만두</div>\n<div class=\"menu-line cat-main\">한강라면</div>\n<div class=\"menu-line cat-soup\">어묵콩나물국</div>\n<div class=\"menu-line cat-side\">건새우마늘쫑볶음</div>\n<div class=\"menu-line cat-side\">무생채</div>\n<div class=\"menu-line cat-side\">숙주맛살무침</div>\n<div class=\"menu-line cat-side\">야채샐러드(with 파인애플드레싱)</div>\n<div class=\"menu-line cat-kimchi\">열무김치</div>\n<div class=\"menu-line cat-drink\">누룽지</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/cPyDBs/dJMcahsFmCY/SsnZt4F07acliqOiaSNckK/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/be18pI/dJMcagmPS5S/DBItukycKhV4DtKZNmNBY0/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        }
+      ],
+      "items": [
+        {
+          "name": "등갈비김치찜",
+          "category": "main"
+        },
+        {
+          "name": "치킨가라아게",
+          "category": "main"
+        },
+        {
+          "name": "해장파스타",
+          "category": "main"
+        },
+        {
+          "name": "야채비빔만두",
+          "category": "main"
+        },
+        {
+          "name": "한강라면",
+          "category": "main"
+        },
+        {
+          "name": "어묵콩나물국",
+          "category": "soup"
+        },
+        {
+          "name": "건새우마늘쫑볶음",
+          "category": "side"
+        },
+        {
+          "name": "무생채",
+          "category": "side"
+        },
+        {
+          "name": "숙주맛살무침",
+          "category": "side"
+        },
+        {
+          "name": "야채샐러드(with 파인애플드레싱)",
+          "category": "side"
+        },
+        {
+          "name": "열무김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "누룽지",
+          "category": "drink"
+        },
+        {
+          "name": "아이스커피",
+          "category": "drink"
+        }
+      ],
       "menu_status": "today",
       "menu_date": "2026-10-01",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     }
   ]
