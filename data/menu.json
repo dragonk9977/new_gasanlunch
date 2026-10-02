@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-02 10:30:31",
-  "updated_at_display": "2026.10.02 10:30",
+  "updated_at": "2026-10-02 10:40:22",
+  "updated_at_display": "2026.10.02 10:40",
   "date": "2026-10-02",
   "date_display": "10월 2일",
   "weekday": "금",
@@ -412,15 +412,76 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 어묵국</div>\n<div class=\"menu-line cat-side\">묵은지돼지고기두루치기</div>\n<div class=\"menu-line cat-side\">김말이</div>\n<div class=\"menu-line cat-side\">군만두</div>\n<div class=\"menu-line cat-main\">🥗 두부구이</div>\n<div class=\"menu-line cat-side\">로제떡볶이(카레)</div>\n<div class=\"menu-line cat-side\">깻잎무침</div>\n<div class=\"menu-line cat-side\">고추지무침</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "어묵국",
+          "category": "soup"
+        },
+        {
+          "name": "묵은지돼지고기두루치기",
+          "category": "side"
+        },
+        {
+          "name": "김말이",
+          "category": "side"
+        },
+        {
+          "name": "군만두",
+          "category": "side"
+        },
+        {
+          "name": "두부구이",
+          "category": "main"
+        },
+        {
+          "name": "로제떡볶이(카레)",
+          "category": "side"
+        },
+        {
+          "name": "깻잎무침",
+          "category": "side"
+        },
+        {
+          "name": "고추지무침",
+          "category": "side"
+        },
+        {
+          "name": "깍두기",
+          "category": "kimchi"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-02",
+      "checked_at": "10:40",
       "pipeline_version": 3
     },
     {
