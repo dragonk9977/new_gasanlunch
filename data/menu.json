@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-06 00:30:32",
-  "updated_at_display": "2026.10.06 00:30",
+  "updated_at": "2026-10-06 00:40:24",
+  "updated_at_display": "2026.10.06 00:40",
   "date": "2026-10-06",
   "date_display": "10월 6일",
   "weekday": "화",
@@ -161,7 +161,7 @@
       "price": 7500,
       "menu_status": "today",
       "menu_date": "2026-10-06",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     },
     {
@@ -224,7 +224,7 @@
       "price": 8000,
       "menu_status": "today",
       "menu_date": "2026-10-06",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     },
     {
@@ -359,7 +359,7 @@
       "price": 7500,
       "menu_status": "today",
       "menu_date": "2026-10-06",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     }
   ]
