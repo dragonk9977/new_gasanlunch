@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-06 09:10:20",
-  "updated_at_display": "2026.10.06 09:10",
+  "updated_at": "2026-10-06 09:20:23",
+  "updated_at_display": "2026.10.06 09:20",
   "date": "2026-10-06",
   "date_display": "10월 6일",
   "weekday": "화",
   "weather": {
-    "temp": 13.7,
+    "temp": 14.3,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -161,7 +161,7 @@
       "price": 7500,
       "menu_status": "today",
       "menu_date": "2026-10-06",
-      "checked_at": "09:10",
+      "checked_at": "09:20",
       "pipeline_version": 3
     },
     {
