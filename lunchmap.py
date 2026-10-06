@@ -1654,12 +1654,24 @@ try:
         # (무료 할당량이 하루 20회로 빠듯해서, 성공한 건 그날 하루 캐시해서 아낀다)
         today_str = today.strftime("%Y-%m-%d")
         cached_previous = previous_restaurants.get(item["name"])
+        # 오정은 사람이 올리는 이미지 파일(오정메뉴.jpg)이 원본이라, 파일이 바뀌면
+        # 같은 날이어도 캐시를 버리고 새로 읽어야 한다 (파일 내용 해시로 변경 감지)
+        current_source_hash = None
+        if item["type"] == "ojeong":
+            try:
+                with open(item["url"], "rb") as f:
+                    current_source_hash = hashlib.sha256(f.read()).hexdigest()[:16]
+            except Exception:
+                current_source_hash = None
+
         cache_hit = bool(
             cached_previous
             and cached_previous.get("menu_date") == today_str
             and cached_previous.get("source") in ("gemini_ocr", "openrouter_ocr")
             and cached_previous.get("html")
             and cached_previous.get("pipeline_version") == EXTRACTION_PIPELINE_VERSION
+            and (item["type"] != "ojeong"
+                 or cached_previous.get("source_hash") == current_source_hash)
         )
 
         checked_at = None
@@ -1925,6 +1937,7 @@ try:
             "badges": badges,
             "items": items_data,
             "price": RESTAURANT_PRICES.get(item["name"]),
+            "source_hash": current_source_hash,
             "menu_status": menu_status,
             "menu_date": today.strftime("%Y-%m-%d") if menu_status != "missing" else None,
             "checked_at": checked_at,
