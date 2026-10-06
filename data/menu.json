@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-06 10:40:26",
-  "updated_at_display": "2026.10.06 10:40",
+  "updated_at": "2026-10-06 11:00:34",
+  "updated_at_display": "2026.10.06 11:00",
   "date": "2026-10-06",
   "date_display": "10월 6일",
   "weekday": "화",
   "weather": {
-    "temp": 16.6,
+    "temp": 17.2,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -155,7 +155,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-06",
-      "checked_at": "10:40",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
@@ -337,16 +337,81 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 된장찌개</div>\n<div class=\"menu-line cat-main\">🥩 🌶️ 파채고추장불고기</div>\n<div class=\"menu-line cat-main\">파래오징어까스</div>\n<div class=\"menu-line cat-side\">🍜 🥗 파스타샐러드</div>\n<div class=\"menu-line cat-side\">고기곤약무조림</div>\n<div class=\"menu-line cat-kimchi\">상추쑥갓겉절이</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 헌강라면/음료</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "된장찌개",
+          "category": "soup"
+        },
+        {
+          "name": "파채고추장불고기",
+          "category": "main"
+        },
+        {
+          "name": "파래오징어까스",
+          "category": "main"
+        },
+        {
+          "name": "파스타샐러드",
+          "category": "side"
+        },
+        {
+          "name": "고기곤약무조림",
+          "category": "side"
+        },
+        {
+          "name": "상추쑥갓겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "호박죽",
+          "category": "side"
+        },
+        {
+          "name": "헌강라면/음료",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-06",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
