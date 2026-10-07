@@ -1,1 +1,662 @@
-
+{
+  "updated_at": "2026-10-07 11:40:24",
+  "updated_at_display": "2026.10.07 11:40",
+  "date": "2026-10-07",
+  "date_display": "10월 7일",
+  "weekday": "수",
+  "weather": {
+    "temp": 20.1,
+    "precipitation": 0.0,
+    "condition": "맑음",
+    "emoji": "☀️"
+  },
+  "office": {
+    "address": "서울 금천구 가산디지털2로 30",
+    "lat": 37.471364252495015,
+    "lng": 126.88404214632791
+  },
+  "restaurants": [
+    {
+      "name": "오정",
+      "address": "서울 금천구 가산디지털2로 30",
+      "lat": 37.47120020547345,
+      "lng": 126.88352033871539,
+      "dist": 116,
+      "walk_min": 2,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47130062,
+          "lng": 126.88426329
+        },
+        {
+          "lat": 37.47123528,
+          "lng": 126.88424926
+        },
+        {
+          "lat": 37.47105304,
+          "lng": 126.88358378
+        }
+      ],
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 치즈떡춘천닭갈비</div>\n<div class=\"menu-line cat-soup\">🍲 가마보꼬 어묵탕</div>\n<div class=\"menu-line cat-side\">청양부추전</div>\n<div class=\"menu-line cat-side\">히카마과일사라다</div>\n<div class=\"menu-line cat-side\">나비 쥐포</div>\n<div class=\"menu-line cat-side\">🥗 단배추나물</div>\n<div class=\"menu-line cat-side\">🥗 그린샐러드</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-snack\">김치알새우칩</div>\n<div class=\"menu-line cat-drink\">따끈누룽지숭늉/냉식혜</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "image",
+        "url": "data:image/jpeg;base64,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"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "치즈떡춘천닭갈비",
+          "category": "main"
+        },
+        {
+          "name": "가마보꼬 어묵탕",
+          "category": "soup"
+        },
+        {
+          "name": "청양부추전",
+          "category": "side"
+        },
+        {
+          "name": "히카마과일사라다",
+          "category": "side"
+        },
+        {
+          "name": "나비 쥐포",
+          "category": "side"
+        },
+        {
+          "name": "단배추나물",
+          "category": "side"
+        },
+        {
+          "name": "그린샐러드",
+          "category": "side"
+        },
+        {
+          "name": "깍두기",
+          "category": "kimchi"
+        },
+        {
+          "name": "김치알새우칩",
+          "category": "snack"
+        },
+        {
+          "name": "따끈누룽지숭늉/냉식혜",
+          "category": "drink"
+        }
+      ],
+      "price": 7500,
+      "source_hash": "7fd28341131af89c",
+      "menu_status": "today",
+      "menu_date": "2026-10-07",
+      "checked_at": "00:00",
+      "pipeline_version": 3
+    },
+    {
+      "name": "온정찬",
+      "address": "서울 금천구 가산디지털1로 75-15",
+      "lat": 37.47218918507373,
+      "lng": 126.88410160863671,
+      "dist": 234,
+      "walk_min": 4,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47197731,
+          "lng": 126.88394386
+        },
+        {
+          "lat": 37.47257659,
+          "lng": 126.88368111
+        },
+        {
+          "lat": 37.47257659,
+          "lng": 126.88368111
+        },
+        {
+          "lat": 37.47265805,
+          "lng": 126.88397958
+        }
+      ],
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 묵은지도톰목살찜</div>\n<div class=\"menu-line cat-main\">청파래오징어까스</div>\n<div class=\"menu-line cat-main\">🍲 로제미트볼그라탕</div>\n<div class=\"menu-line cat-main\">쫄면야채무침</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-soup\">🍲 🥗 해물순두부찌개</div>\n<div class=\"menu-line cat-side\">🥗 가지나물볶음</div>\n<div class=\"menu-line cat-side\">청경채무침</div>\n<div class=\"menu-line cat-side\">무생채</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "image",
+        "url": "https://k.kakaocdn.net/dn/dkIdzz/dJMcahMRsTV/hyIyQ2WERrKNqTnc1exDJk/img_xl.jpg"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "묵은지도톰목살찜",
+          "category": "main"
+        },
+        {
+          "name": "청파래오징어까스",
+          "category": "main"
+        },
+        {
+          "name": "로제미트볼그라탕",
+          "category": "main"
+        },
+        {
+          "name": "쫄면야채무침",
+          "category": "main"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "해물순두부찌개",
+          "category": "soup"
+        },
+        {
+          "name": "가지나물볶음",
+          "category": "side"
+        },
+        {
+          "name": "청경채무침",
+          "category": "side"
+        },
+        {
+          "name": "무생채",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드&드레싱2종",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "숭늉",
+          "category": "drink"
+        },
+        {
+          "name": "매실차",
+          "category": "drink"
+        },
+        {
+          "name": "ICE옥수수차",
+          "category": "drink"
+        }
+      ],
+      "price": 7500,
+      "source_hash": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-07",
+      "checked_at": "09:00",
+      "pipeline_version": 3
+    },
+    {
+      "name": "런치투게더",
+      "address": "서울 금천구 가산디지털1로 58",
+      "lat": 37.471346435440815,
+      "lng": 126.88633772331427,
+      "dist": 342,
+      "walk_min": 6,
+      "route": [
+        {
+          "lat": 37.47140824,
+          "lng": 126.88421754
+        },
+        {
+          "lat": 37.47172571,
+          "lng": 126.88530234
+        },
+        {
+          "lat": 37.47172571,
+          "lng": 126.88530234
+        },
+        {
+          "lat": 37.47179012,
+          "lng": 126.88552416
+        },
+        {
+          "lat": 37.47179012,
+          "lng": 126.88552416
+        },
+        {
+          "lat": 37.47085344,
+          "lng": 126.88594936
+        },
+        {
+          "lat": 37.47085344,
+          "lng": 126.88594936
+        },
+        {
+          "lat": 37.47092577,
+          "lng": 126.88621146
+        },
+        {
+          "lat": 37.47092577,
+          "lng": 126.88621146
+        },
+        {
+          "lat": 37.47125687,
+          "lng": 126.8860495
+        }
+      ],
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🔥 수제후라이드치킨</div>\n<div class=\"menu-line cat-main\">🥩 삼겹살김치볶음</div>\n<div class=\"menu-line cat-main\">참치맛살또띠아롤</div>\n<div class=\"menu-line cat-soup\">🍜 우동</div>\n<div class=\"menu-line cat-side\">오징어어묵볶음</div>\n<div class=\"menu-line cat-side\">🥗 온두부</div>\n<div class=\"menu-line cat-side\">🥗 숙주나물무침</div>\n<div class=\"menu-line cat-side\">🥗 그린샐러드&amp;드레싱</div>\n<div class=\"menu-line cat-kimchi\">오이겉절이</div>\n<div class=\"menu-line cat-snack\">🍜 라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">누룽지 숭늉</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-soup\">🍜 셀프라면</div>\n<div class=\"menu-line cat-drink\">아메리카노</div>\n<div class=\"menu-line cat-drink\">🍚 잡곡밥 &amp; 흰밥</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "image",
+        "url": "https://k.kakaocdn.net/dn/bGw03Y/dJMcajqiNMM/mVH4eqKaPPgoK2iG6K9tV0/img.png"
+      },
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "밥",
+          "emoji": "🍚"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "수제후라이드치킨",
+          "category": "main"
+        },
+        {
+          "name": "삼겹살김치볶음",
+          "category": "main"
+        },
+        {
+          "name": "참치맛살또띠아롤",
+          "category": "main"
+        },
+        {
+          "name": "우동",
+          "category": "soup"
+        },
+        {
+          "name": "오징어어묵볶음",
+          "category": "side"
+        },
+        {
+          "name": "온두부",
+          "category": "side"
+        },
+        {
+          "name": "숙주나물무침",
+          "category": "side"
+        },
+        {
+          "name": "그린샐러드&드레싱",
+          "category": "side"
+        },
+        {
+          "name": "오이겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "라면땅 or 새우칩",
+          "category": "snack"
+        },
+        {
+          "name": "누룽지 숭늉",
+          "category": "snack"
+        },
+        {
+          "name": "식빵 토스트",
+          "category": "snack"
+        },
+        {
+          "name": "요거트&시리얼",
+          "category": "snack"
+        },
+        {
+          "name": "셀프라면",
+          "category": "soup"
+        },
+        {
+          "name": "아메리카노",
+          "category": "drink"
+        },
+        {
+          "name": "잡곡밥 & 흰밥",
+          "category": "drink"
+        }
+      ],
+      "price": 8000,
+      "source_hash": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-07",
+      "checked_at": "09:00",
+      "pipeline_version": 3
+    },
+    {
+      "name": "런치타임",
+      "address": "서울 금천구 가산디지털2로 24",
+      "lat": 37.47089827252637,
+      "lng": 126.88388201555182,
+      "dist": 104,
+      "walk_min": 2,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47130062,
+          "lng": 126.88426329
+        },
+        {
+          "lat": 37.47123528,
+          "lng": 126.88424926
+        },
+        {
+          "lat": 37.47110975,
+          "lng": 126.88379085
+        }
+      ],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 나주곰탕</div>\n<div class=\"menu-line cat-side\">🥩 햄오리훈제볶음</div>\n<div class=\"menu-line cat-side\">새우감자고로케</div>\n<div class=\"menu-line cat-kimchi\">김치전</div>\n<div class=\"menu-line cat-side\">추억옛날사라다</div>\n<div class=\"menu-line cat-kimchi\">배추겉절이</div>\n<div class=\"menu-line cat-side\">명엽채볶음</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n<div class=\"menu-line cat-drink\">음료</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "나주곰탕",
+          "category": "soup"
+        },
+        {
+          "name": "햄오리훈제볶음",
+          "category": "side"
+        },
+        {
+          "name": "새우감자고로케",
+          "category": "side"
+        },
+        {
+          "name": "김치전",
+          "category": "kimchi"
+        },
+        {
+          "name": "추억옛날사라다",
+          "category": "side"
+        },
+        {
+          "name": "배추겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "명엽채볶음",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "깍두기",
+          "category": "kimchi"
+        },
+        {
+          "name": "단호박죽",
+          "category": "side"
+        },
+        {
+          "name": "한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "음료",
+          "category": "drink"
+        }
+      ],
+      "price": 7500,
+      "source_hash": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-07",
+      "checked_at": "11:40",
+      "pipeline_version": 3
+    },
+    {
+      "name": "밥심",
+      "address": "서울 금천구 가산디지털2로 46",
+      "lat": 37.472650897653246,
+      "lng": 126.8826763789836,
+      "dist": 325,
+      "walk_min": 5,
+      "route": [
+        {
+          "lat": 37.47141734,
+          "lng": 126.88421309
+        },
+        {
+          "lat": 37.47165478,
+          "lng": 126.88409702
+        },
+        {
+          "lat": 37.47165478,
+          "lng": 126.88409702
+        },
+        {
+          "lat": 37.47141378,
+          "lng": 126.88320316
+        },
+        {
+          "lat": 37.47142388,
+          "lng": 126.88317276
+        },
+        {
+          "lat": 37.47145146,
+          "lng": 126.88315929
+        },
+        {
+          "lat": 37.47145481,
+          "lng": 126.88312678
+        },
+        {
+          "lat": 37.47140399,
+          "lng": 126.8829444
+        },
+        {
+          "lat": 37.47140399,
+          "lng": 126.8829444
+        },
+        {
+          "lat": 37.47160237,
+          "lng": 126.88286166
+        },
+        {
+          "lat": 37.47219358,
+          "lng": 126.8826016
+        },
+        {
+          "lat": 37.47225733,
+          "lng": 126.8825791
+        },
+        {
+          "lat": 37.47229512,
+          "lng": 126.882637
+        },
+        {
+          "lat": 37.47229512,
+          "lng": 126.882637
+        },
+        {
+          "lat": 37.47238517,
+          "lng": 126.88259021
+        },
+        {
+          "lat": 37.47238517,
+          "lng": 126.88259021
+        },
+        {
+          "lat": 37.47238286,
+          "lng": 126.88252802
+        },
+        {
+          "lat": 37.47245058,
+          "lng": 126.88247493
+        },
+        {
+          "lat": 37.47257841,
+          "lng": 126.88241839
+        }
+      ],
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 수제보쌈</div>\n<div class=\"menu-line cat-main\">🍜 🍲 쟁반막국수</div>\n<div class=\"menu-line cat-soup\">🍲 🥗 시래기콩나물된장국</div>\n<div class=\"menu-line cat-side\">상추쌈세트</div>\n<div class=\"menu-line cat-side\">고추군만두</div>\n<div class=\"menu-line cat-side\">감자메추리알조림</div>\n<div class=\"menu-line cat-side\">나비쥐포조림</div>\n<div class=\"menu-line cat-side\">🥗 근대나물</div>\n<div class=\"menu-line cat-side\">🥗 야채샐러드(with 유자드레싱)</div>\n<div class=\"menu-line cat-kimchi\">무생채</div>\n<div class=\"menu-line cat-kimchi\">겉절이김치</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n<div class=\"menu-line cat-drink\">누룽지</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "image",
+        "url": "https://k.kakaocdn.net/dn/bxqbAI/dJMcac5UJbg/bp7TZaKkJllIUN52tSpJaK/img_xl.jpg"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "수제보쌈",
+          "category": "main"
+        },
+        {
+          "name": "쟁반막국수",
+          "category": "main"
+        },
+        {
+          "name": "시래기콩나물된장국",
+          "category": "soup"
+        },
+        {
+          "name": "상추쌈세트",
+          "category": "side"
+        },
+        {
+          "name": "고추군만두",
+          "category": "side"
+        },
+        {
+          "name": "감자메추리알조림",
+          "category": "side"
+        },
+        {
+          "name": "나비쥐포조림",
+          "category": "side"
+        },
+        {
+          "name": "근대나물",
+          "category": "side"
+        },
+        {
+          "name": "야채샐러드(with 유자드레싱)",
+          "category": "side"
+        },
+        {
+          "name": "무생채",
+          "category": "kimchi"
+        },
+        {
+          "name": "겉절이김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "누룽지",
+          "category": "drink"
+        },
+        {
+          "name": "아이스커피",
+          "category": "drink"
+        }
+      ],
+      "price": 7500,
+      "source_hash": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-07",
+      "checked_at": "09:00",
+      "pipeline_version": 3
+    }
+  ]
+}
