@@ -1050,6 +1050,16 @@ def _looks_garbled(name):
     return False
 
 
+def apply_category_overrides(menu_items):
+    """AI가 호출할 때마다 다르게 분류하는 항목은 규칙으로 한 분류에 고정한다.
+    라면류(라면땅 같은 과자류 제외)는 식당과 상관없이 국물(soup)로 통일."""
+    for it in menu_items:
+        name = it.get("name", "")
+        if "라면" in name and "라면땅" not in name:
+            it["category"] = "soup"
+    return menu_items
+
+
 def _normalize_menu_items(items):
     valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
     menu_items = []
@@ -1065,7 +1075,7 @@ def _normalize_menu_items(items):
         elif isinstance(entry, str) and entry.strip():
             menu_items.append({"name": entry.strip(), "category": "side"})
 
-    return menu_items
+    return apply_category_overrides(menu_items)
 
 
 def extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name):
@@ -1146,7 +1156,9 @@ def extract_menu_via_ai(image_bytes, mime_type, restaurant_name):
 # (하나의 메뉴가 여러 뱃지에 동시에 걸릴 수 있음 — 예: 제육은 인기이자 고기)
 BADGE_GROUPS = [
     ("인기", "🔥", ["제육", "돈까스", "돈가스", "치킨"]),
-    ("고기", "🥩", ["삼겹살", "목살", "제육", "불고기", "갈비"]),
+    ("고기", "🥩", ["삼겹살", "목살", "제육", "불고기", "갈비", "소고기", "쇠고기", "돼지",
+               "차돌", "스테이크", "보쌈", "수육", "족발", "편육", "함박", "육개장", "닭",
+               "오리고기", "오리훈제", "훈제오리", "오리주물럭", "오리로스", "오리볶음", "오리백숙"]),
     ("계란", "🍳", ["계란", "달걀"]),
     ("면", "🍜", ["라면", "우동", "칼국수", "짜장", "짬뽕", "파스타", "국수", "잔치국수", "수제비"]),
     ("밥", "🍚", ["덮밥", "볶음밥", "비빔밥", "잡곡밥", "흰밥", "백미", "주먹밥"]),
@@ -1362,7 +1374,7 @@ def classify_menu_lines_locally(menu_lines):
 
         menu_items.append({"name": line, "category": category})
 
-    return menu_items
+    return apply_category_overrides(menu_items)
 
 
 geolocator = Nominatim(user_agent="gasan_lunch_map_new")
@@ -1683,6 +1695,12 @@ try:
             raw_ref = cached_previous.get("raw_ref")
             badges = cached_previous.get("badges", [])
             items_data = cached_previous.get("items", [])
+
+            # 키워드/분류 규칙이 바뀌어도 AI를 다시 부르지 않고, 저장된 항목으로 화면만 새로 만든다
+            if items_data:
+                items_data = apply_category_overrides(items_data)
+                html_content = menu_items_to_html(items_data)
+                badges = compute_badges(items_data)
             checked_at = cached_previous.get("checked_at")
 
         elif item["type"] == "ojeong":
