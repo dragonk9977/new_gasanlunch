@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-07 11:30:31",
-  "updated_at_display": "2026.10.07 11:30",
+  "updated_at": "2026-10-07 11:40:24",
+  "updated_at_display": "2026.10.07 11:40",
   "date": "2026-10-07",
   "date_display": "10월 7일",
   "weekday": "수",
@@ -140,7 +140,7 @@
         }
       ],
       "source": "gemini_ocr",
-      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 묵은지도톰목살찜</div>\n<div class=\"menu-line cat-main\">청파래오징어까스</div>\n<div class=\"menu-line cat-main\">🍲 로제미트볼그라탕</div>\n<div class=\"menu-line cat-main\">쫄면야채무침</div>\n<div class=\"menu-line cat-main\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-soup\">🍲 🥗 해물순두부찌개</div>\n<div class=\"menu-line cat-side\">🥗 가지나물볶음</div>\n<div class=\"menu-line cat-side\">청경채무침</div>\n<div class=\"menu-line cat-side\">무생채</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 묵은지도톰목살찜</div>\n<div class=\"menu-line cat-main\">청파래오징어까스</div>\n<div class=\"menu-line cat-main\">🍲 로제미트볼그라탕</div>\n<div class=\"menu-line cat-main\">쫄면야채무침</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-soup\">🍲 🥗 해물순두부찌개</div>\n<div class=\"menu-line cat-side\">🥗 가지나물볶음</div>\n<div class=\"menu-line cat-side\">청경채무침</div>\n<div class=\"menu-line cat-side\">무생채</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">매실차</div>\n<div class=\"menu-line cat-drink\">ICE옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
         "url": "https://k.kakaocdn.net/dn/dkIdzz/dJMcahMRsTV/hyIyQ2WERrKNqTnc1exDJk/img_xl.jpg"
@@ -182,7 +182,7 @@
         },
         {
           "name": "셀프한강라면",
-          "category": "main"
+          "category": "soup"
         },
         {
           "name": "해물순두부찌개",
@@ -278,7 +278,7 @@
         }
       ],
       "source": "gemini_ocr",
-      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🔥 수제후라이드치킨</div>\n<div class=\"menu-line cat-main\">🥩 삼겹살김치볶음</div>\n<div class=\"menu-line cat-main\">참치맛살또띠아롤</div>\n<div class=\"menu-line cat-soup\">🍜 우동</div>\n<div class=\"menu-line cat-side\">오징어어묵볶음</div>\n<div class=\"menu-line cat-side\">🥗 온두부</div>\n<div class=\"menu-line cat-side\">🥗 숙주나물무침</div>\n<div class=\"menu-line cat-side\">🥗 그린샐러드&amp;드레싱</div>\n<div class=\"menu-line cat-kimchi\">오이겉절이</div>\n<div class=\"menu-line cat-snack\">🍜 라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">누룽지 숭늉</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-snack\">🍜 셀프라면</div>\n<div class=\"menu-line cat-drink\">아메리카노</div>\n<div class=\"menu-line cat-drink\">🍚 잡곡밥 &amp; 흰밥</div>\n    </div>\n    ",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🔥 수제후라이드치킨</div>\n<div class=\"menu-line cat-main\">🥩 삼겹살김치볶음</div>\n<div class=\"menu-line cat-main\">참치맛살또띠아롤</div>\n<div class=\"menu-line cat-soup\">🍜 우동</div>\n<div class=\"menu-line cat-side\">오징어어묵볶음</div>\n<div class=\"menu-line cat-side\">🥗 온두부</div>\n<div class=\"menu-line cat-side\">🥗 숙주나물무침</div>\n<div class=\"menu-line cat-side\">🥗 그린샐러드&amp;드레싱</div>\n<div class=\"menu-line cat-kimchi\">오이겉절이</div>\n<div class=\"menu-line cat-snack\">🍜 라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">누룽지 숭늉</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-soup\">🍜 셀프라면</div>\n<div class=\"menu-line cat-drink\">아메리카노</div>\n<div class=\"menu-line cat-drink\">🍚 잡곡밥 &amp; 흰밥</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
         "url": "https://k.kakaocdn.net/dn/bGw03Y/dJMcajqiNMM/mVH4eqKaPPgoK2iG6K9tV0/img.png"
@@ -360,7 +360,7 @@
         },
         {
           "name": "셀프라면",
-          "category": "snack"
+          "category": "soup"
         },
         {
           "name": "아메리카노",
@@ -404,12 +404,16 @@
         }
       ],
       "source": "threads",
-      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 나주곰탕</div>\n<div class=\"menu-line cat-side\">햄오리훈제볶음</div>\n<div class=\"menu-line cat-side\">새우감자고로케</div>\n<div class=\"menu-line cat-kimchi\">김치전</div>\n<div class=\"menu-line cat-side\">추억옛날사라다</div>\n<div class=\"menu-line cat-kimchi\">배추겉절이</div>\n<div class=\"menu-line cat-side\">명엽채볶음</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n<div class=\"menu-line cat-drink\">음료</div>\n    </div>\n    ",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 나주곰탕</div>\n<div class=\"menu-line cat-side\">🥩 햄오리훈제볶음</div>\n<div class=\"menu-line cat-side\">새우감자고로케</div>\n<div class=\"menu-line cat-kimchi\">김치전</div>\n<div class=\"menu-line cat-side\">추억옛날사라다</div>\n<div class=\"menu-line cat-kimchi\">배추겉절이</div>\n<div class=\"menu-line cat-side\">명엽채볶음</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n<div class=\"menu-line cat-drink\">음료</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "link",
         "url": "https://www.threads.net/@lunchtime_ypp"
       },
       "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
         {
           "label": "면",
           "emoji": "🍜"
@@ -477,7 +481,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-07",
-      "checked_at": "11:30",
+      "checked_at": "11:40",
       "pipeline_version": 3
     },
     {
@@ -566,12 +570,16 @@
         }
       ],
       "source": "gemini_ocr",
-      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">수제보쌈</div>\n<div class=\"menu-line cat-main\">🍜 🍲 쟁반막국수</div>\n<div class=\"menu-line cat-soup\">🍲 🥗 시래기콩나물된장국</div>\n<div class=\"menu-line cat-side\">상추쌈세트</div>\n<div class=\"menu-line cat-side\">고추군만두</div>\n<div class=\"menu-line cat-side\">감자메추리알조림</div>\n<div class=\"menu-line cat-side\">나비쥐포조림</div>\n<div class=\"menu-line cat-side\">🥗 근대나물</div>\n<div class=\"menu-line cat-side\">🥗 야채샐러드(with 유자드레싱)</div>\n<div class=\"menu-line cat-kimchi\">무생채</div>\n<div class=\"menu-line cat-kimchi\">겉절이김치</div>\n<div class=\"menu-line cat-snack\">🍜 한강라면</div>\n<div class=\"menu-line cat-drink\">누룽지</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 수제보쌈</div>\n<div class=\"menu-line cat-main\">🍜 🍲 쟁반막국수</div>\n<div class=\"menu-line cat-soup\">🍲 🥗 시래기콩나물된장국</div>\n<div class=\"menu-line cat-side\">상추쌈세트</div>\n<div class=\"menu-line cat-side\">고추군만두</div>\n<div class=\"menu-line cat-side\">감자메추리알조림</div>\n<div class=\"menu-line cat-side\">나비쥐포조림</div>\n<div class=\"menu-line cat-side\">🥗 근대나물</div>\n<div class=\"menu-line cat-side\">🥗 야채샐러드(with 유자드레싱)</div>\n<div class=\"menu-line cat-kimchi\">무생채</div>\n<div class=\"menu-line cat-kimchi\">겉절이김치</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n<div class=\"menu-line cat-drink\">누룽지</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
         "url": "https://k.kakaocdn.net/dn/bxqbAI/dJMcac5UJbg/bp7TZaKkJllIUN52tSpJaK/img_xl.jpg"
       },
       "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
         {
           "label": "면",
           "emoji": "🍜"
@@ -632,7 +640,7 @@
         },
         {
           "name": "한강라면",
-          "category": "snack"
+          "category": "soup"
         },
         {
           "name": "누룽지",
