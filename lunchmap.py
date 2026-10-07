@@ -1,12 +1,8 @@
 import os
 import re
-import sys
 import time
 import json
 import base64
-import random
-import hashlib
-import requests
 from io import BytesIO
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -19,11 +15,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-try:
-    import holidays
-except ImportError:
-    holidays = None
-
 
 # ==========================================================
 # 1. 기본 설정
@@ -34,22 +25,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OJEONG_IMAGE_PATH = os.path.join(BASE_DIR, "오정메뉴.jpg")
 OUTPUT_DIR = os.path.join(BASE_DIR, "data")
 OUTPUT_JSON = os.path.join(OUTPUT_DIR, "menu.json")
-ROUTES_CACHE_JSON = os.path.join(OUTPUT_DIR, "routes_cache.json")
-GEMINI_ATTEMPTS_JSON = os.path.join(OUTPUT_DIR, "gemini_attempts.json")
 
 OFFICE_ADDRESS = "서울 금천구 가산디지털2로 30"
-KAKAO_REST_KEY = os.environ.get("KAKAO_REST_KEY", "")
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = "gemini-3.6-flash"
-
-# Gemini가 실패(특히 할당량 초과)했을 때의 보험용 폴백
-OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
-# openrouter/free는 이미지 인식이 되는 무료 모델 중 하나를 자동으로 골라주는 라우터
-OPENROUTER_MODEL = "openrouter/free"
-
-# 이 번호를 올리면, 오늘 이미 "성공"으로 저장된 캐시라도 무효화되고 새 코드로 다시 시도한다.
-# (OCR 프롬프트/해상도/필터 로직을 고칠 때마다 하나씩 올려주면 됨)
-EXTRACTION_PIPELINE_VERSION = 3
 
 weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
@@ -70,118 +47,8 @@ print("=" * 60)
 
 
 # ==========================================================
-# 1-2. 주말/공휴일 체크 — 쉬는 날이면 크롤링 없이 메시지만 남기고 종료
+# 2. 식당 정보 (호서구내식당 추가 완료)
 # ==========================================================
-
-CLOSED_DAY_MESSAGES = {
-    "weekend": [
-        "🏠 오늘은 주말이에요! 식당도 다 문 닫았어요, 집밥 드시고 푹 쉬세요~",
-        "🛌 주말엔 사무실도 식당도 쉬어요. 오늘은 집밥 찬스!",
-        "🌴 주말이니까 오늘은 냉장고 파먹기 어떠세요?",
-    ],
-    "holiday": [
-        "🎉 오늘은 공휴일! 식당도 다 같이 쉬는 날이에요. 집밥 드세요~",
-        "🎊 공휴일엔 가산도 조용해요. 오늘은 집에서 맛있게 드세요!",
-        "🥳 쉬는 날엔 집밥이 최고죠. 맛있는 하루 보내세요!",
-    ],
-}
-
-# holidays 라이브러리가 영어로 주는 공휴일 이름을 한글로 바꿔줌
-HOLIDAY_NAME_KO = [
-    ("Chuseok", "추석"),
-    ("Korean Mid Autumn", "추석"),
-    ("Seollal", "설날"),
-    ("Korean New Year", "설날"),
-    ("Lunar New Year", "설날"),
-    ("New Year's Day", "신정"),
-    ("Independence Movement Day", "삼일절"),
-    ("Children's Day", "어린이날"),
-    ("Buddha's Birthday", "부처님오신날"),
-    ("Memorial Day", "현충일"),
-    ("Liberation Day", "광복절"),
-    ("National Foundation Day", "개천절"),
-    ("Hangeul Day", "한글날"),
-    ("Christmas Day", "크리스마스"),
-    ("Labour Day", "근로자의날"),
-]
-
-
-def translate_holiday_name(name):
-    if not name:
-        return name
-
-    for en, ko in HOLIDAY_NAME_KO:
-        if en.lower() in name.lower():
-            suffix = " 대체공휴일" if "substitute" in name.lower() else ""
-            return ko + suffix
-
-    return name  # 매핑에 없는 이름은 원문 그대로
-
-
-def get_closed_day_info():
-    if today_weekday_index >= 5:  # 토(5)/일(6)
-        return {"reason": "주말", "message": random.choice(CLOSED_DAY_MESSAGES["weekend"])}
-
-    holiday_name = None
-    if holidays:
-        try:
-            kr_holidays = holidays.SouthKorea(years=[today.year])
-            holiday_name = translate_holiday_name(kr_holidays.get(today.date()))
-        except Exception as e:
-            print(f"  -> 공휴일 조회 실패: {e}")
-
-    if holiday_name:
-        return {"reason": holiday_name, "message": random.choice(CLOSED_DAY_MESSAGES["holiday"])}
-
-    return None
-
-
-closed_info = get_closed_day_info()
-
-if closed_info:
-    print(f"오늘은 쉬는 날입니다 ({closed_info['reason']}) — 크롤링을 건너뜁니다.")
-
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-    closed_result = {
-        "updated_at": today.strftime("%Y-%m-%d %H:%M:%S"),
-        "updated_at_display": today.strftime("%Y.%m.%d %H:%M"),
-        "date": today.strftime("%Y-%m-%d"),
-        "date_display": today_date_str_space,
-        "weekday": today_weekday,
-        "is_closed_day": True,
-        "closed_reason": closed_info["reason"],
-        "closed_message": closed_info["message"],
-        "weather": None,
-        "office": {
-            "address": OFFICE_ADDRESS,
-            "lat": 37.471364252495015,
-            "lng": 126.88404214632791,
-        },
-        "restaurants": [],
-    }
-
-    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-        json.dump(closed_result, f, ensure_ascii=False, indent=2)
-
-    print("=" * 60)
-    print("휴무일 처리 완료, 종료합니다.")
-    print("=" * 60)
-    sys.exit(0)
-
-
-# ==========================================================
-# 2. 식당 정보 (전달해주신 정확한 위경도 좌표 적용)
-# ==========================================================
-
-# 식당별 하루 정액 가격 (뷔페식이라 메뉴별이 아니라 식당별로 고정된 가격)
-RESTAURANT_PRICES = {
-    "오정": 7500,
-    "온정찬": 7500,
-    "런치투게더": 8000,
-    "런치타임": 7500,
-    "밥심": 7500,
-}
 
 cafeteria_list = [
     {
@@ -225,6 +92,14 @@ cafeteria_list = [
         "exact_lat": 37.472650897653246,
         "exact_lng": 126.8826763789836,
     },
+    {
+        "name": "호서구내식당",
+        "address": "서울 금천구 가산디지털1로 70",
+        "type": "static_link",
+        "url": "https://www.instagram.com/hoseofood",
+        "exact_lat": 37.47245465756811,
+        "exact_lng": 126.88608348190839,
+    },
 ]
 
 
@@ -252,34 +127,36 @@ def crop_ojeong_by_weekday(image_path):
             (crop_left, top_margin, crop_right, bottom_margin)
         )
 
-        def to_jpeg_bytes(im, max_height, quality):
-            im2 = im
-            if im2.height > max_height:
-                ratio = max_height / im2.height
-                im2 = im2.resize(
-                    (int(im2.width * ratio), max_height),
-                    Image.LANCZOS
-                )
-            buf = BytesIO()
-            im2.save(buf, format="JPEG", quality=quality)
-            return buf.getvalue()
+        max_height = 420
 
-        # OCR용은 화질을 최대한 유지 (작게 줄이면 글자가 뭉개져서 오독이 심해짐)
-        ocr_bytes = to_jpeg_bytes(cropped_img, max_height=1400, quality=95)
+        if cropped_img.height > max_height:
+            ratio = max_height / cropped_img.height
+            new_width = int(cropped_img.width * ratio)
+            cropped_img = cropped_img.resize(
+                (new_width, max_height),
+                Image.LANCZOS
+            )
 
-        # 화면 표시(폴백 이미지)용은 가볍게
-        display_bytes = to_jpeg_bytes(cropped_img, max_height=420, quality=90)
-        encoded_string = base64.b64encode(display_bytes).decode("utf-8")
+        buffered = BytesIO()
+        cropped_img.save(
+            buffered,
+            format="JPEG",
+            quality=95
+        )
+
+        encoded_string = base64.b64encode(
+            buffered.getvalue()
+        ).decode("utf-8")
 
         print(
             f"  -> [오정] {weekdays[ojeong_weekday_index]}요일 메뉴 Crop 완료"
         )
 
-        return "data:image/jpeg;base64," + encoded_string, ocr_bytes
+        return "data:image/jpeg;base64," + encoded_string
 
     except Exception as e:
         print(f"  -> [오정] Crop 실패 : {e}")
-        return None, None
+        return None
 
 
 # ==========================================================
@@ -592,25 +469,9 @@ def extract_instagram_menu_from_post(body_text):
     menu_lines = []
 
     ignored = {
-        "로그인",
-        "가입하기",
-        "팔로우",
-        "팔로우하기",
-        "Follow",
-        "Following",
-        "Threads",
-        "Instagram",
-        "홈",
-        "Home",
-        "좋아요",
-        "댓글",
-        "공유",
-        "보내기",
-        "저장",
-        "번역",
-        "Translate",
-        "더 보기",
-        "More",
+        "로그인", "가입하기", "팔로우", "팔로우하기", "Follow", "Following", 
+        "Threads", "Instagram", "홈", "Home", "좋아요", "댓글", "공유", 
+        "보내기", "저장", "번역", "Translate", "더 보기", "More",
     }
 
     for line in lines[date_index + 1:]:
@@ -652,49 +513,28 @@ def get_instagram_menu(driver, profile_url):
     print("  -> [런치타임] Instagram 게시글 메뉴 수집 중")
 
     try:
-        links = find_instagram_post_links(
-            driver,
-            profile_url
-        )
-
+        links = find_instagram_post_links(driver, profile_url)
         print(f"     Instagram 게시글 링크 {len(links)}개 발견")
 
         for post_url in links[:10]:
-
             try:
                 driver.get(post_url)
                 time.sleep(3)
-
-                body_text = driver.find_element(
-                    By.TAG_NAME,
-                    "body"
-                ).text
-
-                post_date = parse_instagram_post_date(
-                    body_text
-                )
+                body_text = driver.find_element(By.TAG_NAME, "body").text
+                post_date = parse_instagram_post_date(body_text)
 
                 if not post_date:
                     continue
 
                 post_month, post_day = post_date
 
-                if (
-                    post_month != today.month
-                    or post_day != today.day
-                ):
+                if post_month != today.month or post_day != today.day:
                     continue
 
-                menu_lines = extract_instagram_menu_from_post(
-                    body_text
-                )
+                menu_lines = extract_instagram_menu_from_post(body_text)
 
                 if menu_lines:
                     print("     Instagram 오늘 게시글 발견")
-                    print("     메뉴:")
-                    for menu in menu_lines:
-                        print(f"       - {menu}")
-
                     return {
                         "source": "instagram",
                         "source_url": post_url,
@@ -724,11 +564,7 @@ def get_threads_menu(driver, url):
         driver.get(url)
         time.sleep(4)
 
-        body_text = driver.find_element(
-            By.TAG_NAME,
-            "body"
-        ).text
-
+        body_text = driver.find_element(By.TAG_NAME, "body").text
         lines = body_text.split("\n")
 
         target_date1 = today_date_str_nospace
@@ -738,11 +574,7 @@ def get_threads_menu(driver, url):
 
         for i, line in enumerate(lines):
             line_clean = line.strip()
-
-            if (
-                target_date1 in line_clean
-                or target_date2 in line_clean
-            ):
+            if target_date1 in line_clean or target_date2 in line_clean:
                 start_idx = i
                 break
 
@@ -752,23 +584,9 @@ def get_threads_menu(driver, url):
         filtered_lines = []
 
         ignored = {
-            "스레드",
-            "답글",
-            "미디어",
-            "리포스트",
-            "팔로우",
-            "언급",
-            "로그인",
-            "가입하기",
-            "lunchtime_ypp",
-            "Home",
-            "Follow",
-            "Mention",
-            "Threads",
-            "Replies",
-            "Media",
-            "Reposts",
-            "Translate",
+            "스레드", "답글", "미디어", "리포스트", "팔로우", "언급", "로그인", 
+            "가입하기", "lunchtime_ypp", "Home", "Follow", "Mention", 
+            "Threads", "Replies", "Media", "Reposts", "Translate",
         }
 
         for line in lines[start_idx + 1:]:
@@ -777,26 +595,14 @@ def get_threads_menu(driver, url):
             if not line:
                 continue
 
-            if (
-                "월" in line
-                and "일" in line
-                and target_date1 not in line
-                and target_date2 not in line
-            ):
+            if "월" in line and "일" in line and target_date1 not in line and target_date2 not in line:
                 break
 
             if line in ignored:
                 continue
 
-            if (
-                "팔로워" in line
-                or "followers" in line
-                or "시간 전" in line
-                or "일 전" in line
-                or line.endswith("h")
-                or line.endswith("d")
-                or line.isdigit()
-            ):
+            if ("팔로워" in line or "followers" in line or "시간 전" in line 
+                or "일 전" in line or line.endswith("h") or line.endswith("d") or line.isdigit()):
                 continue
 
             filtered_lines.append(line)
@@ -852,530 +658,8 @@ def menu_lines_to_html(menu_lines):
 
 
 # ==========================================================
-# 10-2. Gemini Vision - 메뉴판 이미지에서 텍스트만 추출
+# 11. 주소 → 좌표 (정확한 고정 좌표값 사용)
 # ==========================================================
-
-def download_image_bytes(url):
-    """카카오 CDN 등에 올라온 이미지를 다운로드해서 (bytes, mime_type)으로 반환"""
-    try:
-        res = requests.get(
-            url,
-            timeout=15,
-            headers={"User-Agent": "Mozilla/5.0"},
-        )
-        if res.status_code == 200 and res.content:
-            mime_type = res.headers.get("Content-Type", "image/jpeg").split(";")[0]
-            return res.content, mime_type
-    except Exception as e:
-        print(f"     이미지 다운로드 실패: {e}")
-    return None, None
-
-
-def build_image_extraction_prompt(restaurant_name):
-    return (
-        f"이 이미지는 한국 '{restaurant_name}' 식당의 점심 메뉴판입니다. "
-        f"오늘은 {today.year}년 {today_date_str_space} {today_weekday}요일입니다. "
-        "이미지 제목이나 상단에 특정 날짜(예: '9월 23일')가 적혀있다면, 그 날짜가 오늘과 "
-        "일치하는지 확인하세요. 날짜가 아예 안 적혀 있고 요일별 표만 있는 이미지라면 "
-        "(이미 오늘 요일에 해당하는 부분만 잘려서 온 이미지라고 가정하고) 오늘 것으로 간주하세요. "
-        "이미지에 적힌 날짜가 오늘과 다르면 is_today를 false로, 맞거나 날짜 표기가 없으면 "
-        "true로 답하세요. "
-        "items에는 오늘 날짜(요일)에 해당하는 메뉴 항목만, 각 항목마다 category를 "
-        "main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
-        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥) 중 "
-        "하나로 분류해서 main→soup→side→kimchi→snack→drink 순으로 정렬해 담아주세요. "
-        "다른 설명 없이 JSON 객체 하나만 답변하세요. "
-        '형식: {"is_today":true,"items":[{"name":"오징어김치볶음밥","category":"main"}]}. '
-        "메뉴를 읽을 수 없으면 items를 빈 배열 []로 반환하세요."
-    )
-
-
-def parse_ai_extraction_response(text, restaurant_name, provider_label):
-    """
-    {"is_today":bool,"items":[...]} 형태의 응답을 검증한다.
-    is_today가 false면(=이미지가 오늘 날짜가 아니면) None을 반환해서
-    이 결과를 절대 신뢰/캐시하지 않게 한다.
-    """
-    try:
-        data = _parse_ai_json(text)
-    except Exception as e:
-        print(f"     → [{restaurant_name}] {provider_label} 응답 파싱 실패: {e}")
-        return None
-
-    if isinstance(data, dict):
-        items = data.get("items")
-        is_today = data.get("is_today", True)
-    else:
-        # 혹시 예전 방식(배열만)으로 답하면 그대로 사용
-        items = data
-        is_today = True
-
-    if is_today is False:
-        print(f"     → [{restaurant_name}] {provider_label}: 오늘 날짜 메뉴가 아닌 것으로 판단 (오래된 게시물)")
-        return None
-
-    menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
-
-    if not menu_items:
-        print(f"     → [{restaurant_name}] {provider_label}가 메뉴를 못 읽음 (빈 결과)")
-        return None
-
-    garbled = [it["name"] for it in menu_items if _looks_garbled(it["name"])]
-    if len(garbled) >= 2:
-        print(f"     → [{restaurant_name}] {provider_label} 결과에 깨진 글자 감지, 거부: {garbled}")
-        return None
-
-    return menu_items
-
-
-_gemini_model_list_cache = None
-
-
-def list_gemini_models():
-    """
-    이 API 키로 지금 실제 쓸 수 있는 flash 계열(이미지 입력 가능) 모델 목록을 가져온다.
-    무료 할당량은 모델별로 따로 매겨지므로, 여러 모델을 순서대로 시도하면
-    OpenRouter로 넘어가기 전에 Gemini만으로 쓸 수 있는 총량이 늘어난다.
-    실행당 한 번만 조회해서 캐시해둔다.
-    """
-    global _gemini_model_list_cache
-    if _gemini_model_list_cache is not None:
-        return _gemini_model_list_cache
-
-    candidates = [GEMINI_MODEL]
-
-    if GEMINI_API_KEY:
-        try:
-            res = requests.get(
-                f"https://generativelanguage.googleapis.com/v1beta/models?key={GEMINI_API_KEY}",
-                timeout=15,
-            )
-            for m in res.json().get("models", []):
-                name = m.get("name", "").replace("models/", "")
-                methods = m.get("supportedGenerationMethods", [])
-                if "generateContent" not in methods:
-                    continue
-                if "flash" not in name.lower():
-                    continue
-                # tts/embedding/live/image 전용 등은 이미지+텍스트 메뉴 추출에 못 쓰는 변종 모델
-                if any(bad in name.lower() for bad in ("tts", "embedding", "live", "image-generation", "native-audio")):
-                    continue
-                if name not in candidates:
-                    candidates.append(name)
-        except Exception as e:
-            print(f"     (Gemini 모델 목록 조회 실패, 기본 모델만 사용: {e})")
-
-    _gemini_model_list_cache = candidates[:5]  # 무한정 시도하지 않도록 상한
-    print(f"     Gemini 시도 순서: {_gemini_model_list_cache}")
-    return _gemini_model_list_cache
-
-
-def extract_menu_via_gemini(image_bytes, mime_type, restaurant_name):
-    """
-    메뉴판 사진을 Gemini에게 보내서, 오늘 날짜에 해당하는 메뉴를
-    {"name": 메뉴명, "category": 분류} 목록으로 뽑아온다.
-    이미지 자체가 오늘 게시물이 아니라고 판단되면 None을 반환한다.
-    여러 Gemini 모델을 순서대로 시도해보고, 전부 실패하면 None을 반환한다
-    (호출하는 쪽에서 OpenRouter나 원본 이미지로 폴백한다).
-    """
-    if not GEMINI_API_KEY or not image_bytes:
-        return None
-
-    prompt = build_image_extraction_prompt(restaurant_name)
-    b64 = base64.b64encode(image_bytes).decode("utf-8")
-
-    for model_name in list_gemini_models():
-        try:
-            res = requests.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{model_name}:generateContent?key={GEMINI_API_KEY}",
-                json={
-                    "contents": [{
-                        "parts": [
-                            {"text": prompt},
-                            {"inline_data": {"mime_type": mime_type, "data": b64}},
-                        ]
-                    }],
-                    "generationConfig": {
-                        "temperature": 0,
-                        "response_mime_type": "application/json",
-                    },
-                },
-                timeout=18,
-            )
-
-            data = res.json()
-
-            if "candidates" not in data:
-                print(f"     → [{restaurant_name}] Gemini({model_name}) 응답 이상 (HTTP {res.status_code}): {data}")
-                continue
-
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-            menu_items = parse_ai_extraction_response(text, restaurant_name, f"Gemini({model_name})")
-
-            if menu_items:
-                print(f"     → [{restaurant_name}] Gemini({model_name}) 메뉴 추출 성공 ({len(menu_items)}개 항목)")
-                return menu_items
-
-        except Exception as e:
-            print(f"     → [{restaurant_name}] Gemini({model_name}) 추출 실패: {e}")
-
-    return None
-
-
-def _parse_ai_json(text):
-    """LLM 응답에서 JSON 배열만 뽑아 파싱한다 (```json 코드펜스가 섞여 와도 처리)."""
-    text = text.strip()
-    if text.startswith("```"):
-        text = text.strip("`")
-        if text.startswith("json"):
-            text = text[4:]
-    return json.loads(text.strip())
-
-
-def _looks_garbled(name):
-    """
-    한글 사이/옆에 소문자 영어가 바로 붙어 나오면 OCR이 깨졌을 가능성이 높다고 본다.
-    (BBQ, ICE처럼 대문자 약어는 정상적인 메뉴 표기라 걸러내지 않음)
-    """
-    for m in re.finditer(r"[A-Za-z]+", name):
-        run = m.group()
-        if sum(1 for c in run if c.islower()) < 1:
-            continue
-        start, end = m.span()
-        before = name[start - 1] if start > 0 else ""
-        after = name[end] if end < len(name) else ""
-        if re.match(r"[가-힣]", before) or re.match(r"[가-힣]", after):
-            return True
-    return False
-
-
-def apply_category_overrides(menu_items):
-    """AI가 호출할 때마다 다르게 분류하는 항목은 규칙으로 한 분류에 고정한다.
-    라면류(라면땅 같은 과자류 제외)는 식당과 상관없이 국물(soup)로 통일."""
-    for it in menu_items:
-        name = it.get("name", "")
-        if "라면" in name and "라면땅" not in name:
-            it["category"] = "soup"
-    return menu_items
-
-
-def _normalize_menu_items(items):
-    valid_categories = {"main", "soup", "side", "kimchi", "snack", "drink"}
-    menu_items = []
-
-    for entry in items:
-        if isinstance(entry, dict) and str(entry.get("name", "")).strip():
-            category = entry.get("category")
-            category = category if category in valid_categories else "side"
-            menu_items.append({
-                "name": str(entry["name"]).strip(),
-                "category": category,
-            })
-        elif isinstance(entry, str) and entry.strip():
-            menu_items.append({"name": entry.strip(), "category": "side"})
-
-    return apply_category_overrides(menu_items)
-
-
-def extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name):
-    """Gemini가 실패했을 때의 보험용 폴백. OpenRouter의 무료 비전 모델로 재시도한다."""
-    if not OPENROUTER_API_KEY or not image_bytes:
-        return None
-
-    prompt = build_image_extraction_prompt(restaurant_name)
-
-    try:
-        b64 = base64.b64encode(image_bytes).decode("utf-8")
-
-        res = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": OPENROUTER_MODEL,
-                "messages": [{
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                        {"type": "image_url", "image_url": {
-                            "url": f"data:{mime_type};base64,{b64}"
-                        }},
-                    ],
-                }],
-            },
-            timeout=18,
-        )
-
-        data = res.json()
-
-        if "choices" not in data:
-            print(f"     → [{restaurant_name}] OpenRouter 응답 이상 (HTTP {res.status_code}): {data}")
-            return None
-
-        text = data["choices"][0]["message"]["content"]
-        menu_items = parse_ai_extraction_response(text, restaurant_name, "OpenRouter")
-
-        if menu_items:
-            print(f"     → [{restaurant_name}] OpenRouter 메뉴 추출 성공 ({len(menu_items)}개 항목)")
-
-        return menu_items
-
-    except Exception as e:
-        print(f"     → [{restaurant_name}] OpenRouter 추출 실패: {e}")
-        return None
-
-
-def extract_menu_via_ai(image_bytes, mime_type, restaurant_name):
-    """
-    이미지에서 메뉴를 뽑는 통합 진입점.
-    Gemini 우선(할당량/내용 중복 체크 포함) → 실패하면 OpenRouter 무료 모델로 보험 시도.
-    반환: (menu_items 또는 None, 성공한 소스 이름 또는 None)
-    """
-    if not image_bytes:
-        return None, None
-
-    h = content_hash(image_bytes)
-
-    if should_call_gemini(restaurant_name, h):
-        items = extract_menu_via_gemini(image_bytes, mime_type, restaurant_name)
-        record_gemini_attempt(restaurant_name, h, bool(items))
-        if items:
-            return items, "gemini_ocr"
-
-    items = extract_menu_via_openrouter(image_bytes, mime_type, restaurant_name)
-    if items:
-        return items, "openrouter_ocr"
-
-    return None, None
-
-
-# 메뉴 키워드로 붙이는 "최애 메뉴" 뱃지. 항목 중 하나라도 키워드에 걸리면 그 뱃지가 붙는다
-# (하나의 메뉴가 여러 뱃지에 동시에 걸릴 수 있음 — 예: 제육은 인기이자 고기)
-BADGE_GROUPS = [
-    ("인기", "🔥", ["제육", "돈까스", "돈가스", "치킨"]),
-    ("고기", "🥩", ["삼겹살", "목살", "제육", "불고기", "갈비", "소고기", "쇠고기", "돼지",
-               "차돌", "스테이크", "보쌈", "수육", "족발", "편육", "함박", "육개장", "닭",
-               "오리고기", "오리훈제", "훈제오리", "오리주물럭", "오리로스", "오리볶음", "오리백숙"]),
-    ("계란", "🍳", ["계란", "달걀"]),
-    ("면", "🍜", ["라면", "우동", "칼국수", "짜장", "짬뽕", "파스타", "국수", "잔치국수", "수제비"]),
-    ("밥", "🍚", ["덮밥", "볶음밥", "비빔밥", "잡곡밥", "흰밥", "백미", "주먹밥"]),
-    ("매운맛", "🌶️", ["매콤", "매운", "불닭", "고추장", "얼큰"]),
-    ("국물", "🍲", ["국", "찌개", "탕", "장국", "전골"]),
-    ("생선", "🐟", ["고등어", "갈치", "생선", "동태", "코다리", "삼치", "젓갈"]),
-    ("건강식", "🥗", ["샐러드", "나물", "두부", "현미", "곤드레"]),
-]
-
-
-def compute_badges(menu_items):
-    if not menu_items:
-        return []
-
-    names = " ".join(
-        it.get("name", "") for it in menu_items if isinstance(it, dict)
-    )
-
-    badges = []
-    for label, emoji, keywords in BADGE_GROUPS:
-        if any(k in names for k in keywords):
-            badges.append({"label": label, "emoji": emoji})
-
-    return badges
-
-
-def menu_items_to_html(menu_items):
-    """카테고리별로 색을 입히고, 최애 메뉴 키워드에 걸리는 항목엔 이모지를 붙여서 목록 HTML을 만든다."""
-    if not menu_items:
-        return "<div>오늘의 메뉴를 찾지 못했습니다.</div>"
-
-    safe_lines = []
-
-    for item in menu_items:
-        raw_name = item["name"]
-
-        prefix_emojis = []
-        for _label, emoji, keywords in BADGE_GROUPS:
-            if any(k in raw_name for k in keywords) and emoji not in prefix_emojis:
-                prefix_emojis.append(emoji)
-        display_name = (" ".join(prefix_emojis) + " " + raw_name) if prefix_emojis else raw_name
-
-        name = (
-            display_name.replace("&", "&amp;")
-                        .replace("<", "&lt;")
-                        .replace(">", "&gt;")
-        )
-        category = item.get("category", "side")
-
-        safe_lines.append(
-            f'<div class="menu-line cat-{category}">{name}</div>'
-        )
-
-    return """
-    <div class="text-menu">
-        %s
-    </div>
-    """ % "\n".join(safe_lines)
-
-
-def classify_menu_lines_via_gemini(menu_lines, restaurant_name):
-    """
-    이미 텍스트로 확보된 메뉴 줄(예: Threads/Instagram 캡션)을
-    Gemini에게 다시 보내서 카테고리만 분류받는다. 이미지가 없으므로
-    텍스트 프롬프트만 보내고, 여러 모델을 순서대로 시도한다.
-    """
-    if not GEMINI_API_KEY or not menu_lines:
-        return None
-
-    prompt = (
-        f"다음은 한국 '{restaurant_name}' 식당의 오늘 점심 메뉴를 줄 단위로 나열한 것입니다. "
-        "각 줄을 아래 카테고리 중 하나로 분류하고, 순서는 원래 순서를 최대한 유지해주세요. "
-        "카테고리: main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
-        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥/라면). "
-        "메뉴가 아닌 광고 문구나 해시태그, 이모지만 있는 줄은 제외하세요. "
-        "다른 설명 없이 JSON 배열만 답변하세요. "
-        '형식: [{"name":"콩나물국","category":"soup"}, {"name":"바싹불고기","category":"main"}]\n\n'
-        "메뉴 목록:\n" + "\n".join(menu_lines)
-    )
-
-    for model_name in list_gemini_models():
-        try:
-            res = requests.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/"
-                f"{model_name}:generateContent?key={GEMINI_API_KEY}",
-                json={
-                    "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {
-                        "temperature": 0,
-                        "response_mime_type": "application/json",
-                    },
-                },
-                timeout=18,
-            )
-
-            data = res.json()
-
-            if "candidates" not in data:
-                print(f"     → [{restaurant_name}] Gemini({model_name}) 분류 실패 (HTTP {res.status_code}): {data}")
-                continue
-
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-            items = json.loads(text)
-            menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
-
-            if not menu_items:
-                continue
-
-            garbled = [it["name"] for it in menu_items if _looks_garbled(it["name"])]
-            if len(garbled) >= 2:
-                print(f"     → [{restaurant_name}] Gemini({model_name}) 분류 결과에 깨진 글자 감지, 거부: {garbled}")
-                continue
-
-            print(f"     → [{restaurant_name}] Gemini({model_name}) 텍스트 분류 성공 ({len(menu_items)}개 항목)")
-            return menu_items
-
-        except Exception as e:
-            print(f"     → [{restaurant_name}] Gemini({model_name}) 분류 오류: {e}")
-
-    return None
-
-
-def classify_menu_lines_via_openrouter(menu_lines, restaurant_name):
-    """Gemini 텍스트 분류가 실패했을 때의 보험용 폴백."""
-    if not OPENROUTER_API_KEY or not menu_lines:
-        return None
-
-    prompt = (
-        f"다음은 한국 '{restaurant_name}' 식당의 오늘 점심 메뉴를 줄 단위로 나열한 것입니다. "
-        "각 줄을 main(메인 요리/특선), soup(국/찌개/탕), side(반찬/나물/볶음), "
-        "kimchi(김치/깍두기/장아찌), snack(간식/과자/후식/빵), drink(음료/차/커피/밥/라면) "
-        "중 하나로 분류하고, 원래 순서를 최대한 유지해주세요. 메뉴가 아닌 광고 문구, "
-        "해시태그, 이모지만 있는 줄은 제외하세요. 다른 설명 없이 JSON 배열만 답변하세요. "
-        '형식: [{"name":"콩나물국","category":"soup"}]\n\n'
-        "메뉴 목록:\n" + "\n".join(menu_lines)
-    )
-
-    try:
-        res = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": OPENROUTER_MODEL,
-                "messages": [{"role": "user", "content": prompt}],
-            },
-            timeout=18,
-        )
-
-        data = res.json()
-
-        if "choices" not in data:
-            print(f"     → [{restaurant_name}] OpenRouter 분류 실패 (HTTP {res.status_code}): {data}")
-            return None
-
-        text = data["choices"][0]["message"]["content"]
-        items = _parse_ai_json(text)
-        menu_items = _normalize_menu_items(items) if isinstance(items, list) else []
-
-        if not menu_items:
-            return None
-
-        print(f"     → [{restaurant_name}] OpenRouter 텍스트 분류 성공 ({len(menu_items)}개 항목)")
-        return menu_items
-
-    except Exception as e:
-        print(f"     → [{restaurant_name}] OpenRouter 분류 오류: {e}")
-        return None
-
-
-def classify_menu_lines_via_ai(menu_lines, restaurant_name):
-    """텍스트 분류 통합 진입점. Gemini 우선 → 실패하면 OpenRouter 보험 시도."""
-    if not menu_lines:
-        return None
-
-    h = content_hash("\n".join(menu_lines))
-
-    if should_call_gemini(restaurant_name, h):
-        items = classify_menu_lines_via_gemini(menu_lines, restaurant_name)
-        record_gemini_attempt(restaurant_name, h, bool(items))
-        if items:
-            return items
-
-    return classify_menu_lines_via_openrouter(menu_lines, restaurant_name)
-
-
-_CATEGORY_KEYWORDS = [
-    ("main", ["돈까스", "돈가스", "까스", "치킨", "제육", "불고기", "갈비", "수육",
-              "보쌈", "족발", "튀김", "구이", "찜", "덮밥", "정식", "스테이크"]),
-    ("kimchi", ["김치", "깍두기", "장아찌", "겉절이"]),
-    ("soup", ["국", "찌개", "탕", "장국", "전골", "라면", "우동", "칼국수", "수제비"]),
-    ("drink", ["음료", "차", "커피", "콜라", "사이다", "식혜", "숭늉", "주스", "우유", "아메리카노"]),
-    ("snack", ["후식", "디저트", "빵", "과자", "요거트", "시리얼", "토스트", "아이스크림", "케이크", "쿠키"]),
-]
-
-
-def classify_menu_lines_locally(menu_lines):
-    """
-    AI를 거치지 않고 키워드 규칙만으로 분류한다. 원문 글자를 단 하나도 바꾸지 않아서
-    (이미 정확한 텍스트인) Threads/Instagram 캡션을 AI가 잘못 다시 쓰는 위험이 없다.
-    """
-    menu_items = []
-
-    for i, line in enumerate(menu_lines):
-        category = "main" if i == 0 else "side"
-
-        for cat, keywords in _CATEGORY_KEYWORDS:
-            if any(k in line for k in keywords):
-                category = cat
-                break
-
-        menu_items.append({"name": line, "category": category})
-
-    return apply_category_overrides(menu_items)
-
 
 geolocator = Nominatim(user_agent="gasan_lunch_map_new")
 geocode_cache = {}
@@ -1392,77 +676,11 @@ def get_coords(address):
     except Exception as e:
         print(f"  -> 주소 좌표 변환 실패: {address} / {e}")
     
-    fallback = (37.471364252495015, 126.88404214632791) # 실패 시 기준좌표(회사)
+    fallback = (37.471364252495015, 126.88404214632791) 
     geocode_cache[address] = fallback
     return fallback
 
-# 회사 위치 마커 겹침 방지를 위해 요청하신 좌표로 분리
 office_coords = (37.471364252495015, 126.88404214632791)
-
-
-# ==========================================================
-# 11-3. 날씨 (Open-Meteo — 키 발급 불필요)
-# ==========================================================
-
-# WMO 날씨 코드 -> (한글 설명, 이모지)
-WEATHER_CODE_MAP = {
-    0: ("맑음", "☀️"),
-    1: ("대체로 맑음", "🌤️"),
-    2: ("구름 조금", "⛅"),
-    3: ("흐림", "☁️"),
-    45: ("안개", "🌫️"),
-    48: ("안개", "🌫️"),
-    51: ("이슬비", "🌦️"),
-    53: ("이슬비", "🌦️"),
-    55: ("이슬비", "🌦️"),
-    56: ("이슬비(어는)", "🌧️"),
-    57: ("이슬비(어는)", "🌧️"),
-    61: ("비", "🌧️"),
-    63: ("비", "🌧️"),
-    65: ("강한 비", "🌧️"),
-    66: ("비(어는)", "🌧️"),
-    67: ("비(어는)", "🌧️"),
-    71: ("눈", "❄️"),
-    73: ("눈", "❄️"),
-    75: ("강한 눈", "❄️"),
-    77: ("눈", "❄️"),
-    80: ("소나기", "🌦️"),
-    81: ("소나기", "🌦️"),
-    82: ("강한 소나기", "🌦️"),
-    85: ("소나기눈", "🌨️"),
-    86: ("소나기눈", "🌨️"),
-    95: ("뇌우", "⛈️"),
-    96: ("뇌우(우박)", "⛈️"),
-    99: ("뇌우(우박)", "⛈️"),
-}
-
-
-def get_weather():
-    """회사 위치 기준 현재 날씨(기온/강수량/상태)를 가져온다. 실패하면 None."""
-    try:
-        res = requests.get(
-            "https://api.open-meteo.com/v1/forecast",
-            params={
-                "latitude": office_coords[0],
-                "longitude": office_coords[1],
-                "current": "temperature_2m,precipitation,weather_code",
-                "timezone": "Asia/Seoul",
-            },
-            timeout=10,
-        )
-        current = res.json().get("current", {})
-        code = current.get("weather_code")
-        condition, emoji = WEATHER_CODE_MAP.get(code, ("", "🌡️"))
-
-        return {
-            "temp": current.get("temperature_2m"),
-            "precipitation": current.get("precipitation"),
-            "condition": condition,
-            "emoji": emoji,
-        }
-    except Exception as e:
-        print(f"  -> 날씨 조회 실패: {e}")
-        return None
 
 def calculate_walking_info(dest_coords):
     try:
@@ -1484,116 +702,6 @@ def calculate_walking_info(dest_coords):
 
     except Exception:
         return 0, 0
-
-
-# ==========================================================
-# 11-2. 카카오 도보 경로 조회 (회사 ↔ 각 식당, 결과는 캐시해서 재사용)
-# ==========================================================
-
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-routes_cache = {}
-if os.path.exists(ROUTES_CACHE_JSON):
-    try:
-        with open(ROUTES_CACHE_JSON, "r", encoding="utf-8") as f:
-            routes_cache = json.load(f)
-    except Exception:
-        routes_cache = {}
-
-gemini_attempts = {}
-if os.path.exists(GEMINI_ATTEMPTS_JSON):
-    try:
-        with open(GEMINI_ATTEMPTS_JSON, "r", encoding="utf-8") as f:
-            gemini_attempts = json.load(f)
-    except Exception:
-        gemini_attempts = {}
-
-
-def content_hash(data):
-    """이미지 bytes 또는 텍스트를 짧은 지문으로 바꾼다 (내용이 바뀌었는지 비교용)."""
-    if isinstance(data, str):
-        data = data.encode("utf-8")
-    return hashlib.sha256(data).hexdigest()[:16]
-
-
-def should_call_gemini(restaurant_name, current_hash):
-    """
-    오늘 이미 이 정확한 내용(해시)으로 Gemini를 불렀다가 실패했다면,
-    새 게시물이 올라오기 전까지는 다시 불러도 결과가 같으므로 호출을 건너뛴다.
-    """
-    entry = gemini_attempts.get(restaurant_name)
-    today_str = today.strftime("%Y-%m-%d")
-
-    if (
-        entry
-        and entry.get("date") == today_str
-        and entry.get("hash") == current_hash
-        and not entry.get("succeeded")
-    ):
-        print(f"     → [{restaurant_name}] 지난번과 같은 내용, Gemini 재호출 생략")
-        return False
-
-    return True
-
-
-def record_gemini_attempt(restaurant_name, current_hash, succeeded):
-    gemini_attempts[restaurant_name] = {
-        "date": today.strftime("%Y-%m-%d"),
-        "hash": current_hash,
-        "succeeded": succeeded,
-    }
-
-
-def get_walking_route(dest_coords, cache_key):
-    """
-    회사(office_coords) -> dest_coords 도보 경로를 카카오 도보 경로 조회 API로 가져온다.
-    같은 식당 좌표는 항상 같은 경로이므로, 한 번 성공하면 routes_cache.json에 저장해두고
-    다음부터는 API를 다시 호출하지 않는다 (무료 쿼터 절약).
-    """
-    cached = routes_cache.get(cache_key)
-    if cached and cached.get("points"):
-        return cached
-
-    if not KAKAO_REST_KEY:
-        return None
-
-    try:
-        res = requests.get(
-            "https://dapi.kakao.com/v2/routing/walk",
-            headers={"Authorization": f"KakaoAK {KAKAO_REST_KEY}"},
-            params={
-                "start_x": office_coords[1],
-                "start_y": office_coords[0],
-                "end_x": dest_coords[1],
-                "end_y": dest_coords[0],
-            },
-            timeout=10,
-        )
-        data = res.json()
-
-        if data.get("status") != "OK":
-            print(f"     → [{cache_key}] 도보 경로 조회 실패: {data.get('status')}")
-            return None
-
-        route = data["route"]
-        points = []
-        for leg in route.get("legs", []):
-            for step in leg.get("steps", []):
-                for x, y in step.get("path", {}).get("points", []):
-                    points.append({"lat": y, "lng": x})
-
-        result = {
-            "points": points,
-            "distance": route["properties"].get("totalDistance"),
-            "time_sec": route["properties"].get("totalTime"),
-        }
-        routes_cache[cache_key] = result
-        print(f"     → [{cache_key}] 도보 경로 {len(points)}개 좌표 수신")
-        return result
-
-    except Exception as e:
-        print(f"     → [{cache_key}] 도보 경로 조회 오류: {e}")
-        return None
 
 
 # ==========================================================
@@ -1634,7 +742,6 @@ try:
         print()
         print(f"[{item['name']}] 정보 수집 중...")
 
-        # exact_lat, exact_lng 값이 리스트에 있으면 그 좌표를 무조건 사용
         if "exact_lat" in item and "exact_lng" in item:
             lat = item["exact_lat"]
             lng = item["exact_lng"]
@@ -1647,89 +754,24 @@ try:
             (lat, lng)
         )
 
-        # 카카오 도보 경로 API로 실제 걷는 경로(선)와, 가능하면 더 정확한 거리/시간을 받아온다
-        route_info = get_walking_route((lat, lng), item["name"])
-        route_points = route_info["points"] if route_info else []
-
-        if route_info and route_info.get("distance"):
-            dist = route_info["distance"]
-        if route_info and route_info.get("time_sec"):
-            walk_min = max(1, round(route_info["time_sec"] / 60))
-
         html_content = ""
         source = ""
-        raw_ref = None  # OCR 돌리기 전 원본(이미지 데이터/URL 또는 원본 게시물 링크)
-        badges = []  # 최애 메뉴 뱃지 (제육/고기/계란 등)
-        items_data = []  # 구조화된 메뉴 항목 (메뉴 복사 기능용)
 
-        # 오늘 이미 Gemini로 성공 추출한 식당은 다시 이미지/API 호출 없이 그대로 재사용
-        # (무료 할당량이 하루 20회로 빠듯해서, 성공한 건 그날 하루 캐시해서 아낀다)
-        today_str = today.strftime("%Y-%m-%d")
-        cached_previous = previous_restaurants.get(item["name"])
-        # 오정은 사람이 올리는 이미지 파일(오정메뉴.jpg)이 원본이라, 파일이 바뀌면
-        # 같은 날이어도 캐시를 버리고 새로 읽어야 한다 (파일 내용 해시로 변경 감지)
-        current_source_hash = None
         if item["type"] == "ojeong":
-            try:
-                with open(item["url"], "rb") as f:
-                    current_source_hash = hashlib.sha256(f.read()).hexdigest()[:16]
-            except Exception:
-                current_source_hash = None
 
-        cache_hit = bool(
-            cached_previous
-            and cached_previous.get("menu_date") == today_str
-            and cached_previous.get("source") in ("gemini_ocr", "openrouter_ocr")
-            and cached_previous.get("html")
-            and cached_previous.get("pipeline_version") == EXTRACTION_PIPELINE_VERSION
-            and (item["type"] != "ojeong"
-                 or cached_previous.get("source_hash") == current_source_hash)
-        )
-
-        checked_at = None
-
-        if cache_hit:
-            print(f"     → [{item['name']}] 오늘 이미 {cached_previous['source']} 추출 성공, 재사용 (API 호출 생략)")
-            html_content = cached_previous["html"]
-            source = cached_previous["source"]
-            raw_ref = cached_previous.get("raw_ref")
-            badges = cached_previous.get("badges", [])
-            items_data = cached_previous.get("items", [])
-
-            # 키워드/분류 규칙이 바뀌어도 AI를 다시 부르지 않고, 저장된 항목으로 화면만 새로 만든다
-            if items_data:
-                items_data = apply_category_overrides(items_data)
-                html_content = menu_items_to_html(items_data)
-                badges = compute_badges(items_data)
-            checked_at = cached_previous.get("checked_at")
-
-        elif item["type"] == "ojeong":
-
-            src, ocr_bytes = crop_ojeong_by_weekday(
+            src = crop_ojeong_by_weekday(
                 item["url"]
             )
 
             if src:
-                raw_ref = {"type": "image", "url": src}
-
-                menu_lines, ocr_source = extract_menu_via_ai(
-                    ocr_bytes, "image/jpeg", item["name"]
-                )
-
-                if menu_lines:
-                    html_content = menu_items_to_html(menu_lines)
-                    badges = compute_badges(menu_lines)
-                    items_data = menu_lines
-                    source = ocr_source
-                else:
-                    html_content = f"""
-                    <img
-                        src="{src}"
-                        class="menu-image"
-                        alt="오정 오늘의 메뉴"
-                    >
-                    """
-                    source = "local_image"
+                html_content = f"""
+                <img
+                    src="{src}"
+                    class="menu-image"
+                    alt="오정 오늘의 메뉴"
+                >
+                """
+                source = "local_image"
             else:
                 html_content = """
                 <div class="error-menu">
@@ -1745,27 +787,14 @@ try:
             )
 
             if img_src:
-                raw_ref = {"type": "image", "url": img_src}
-                img_bytes, img_mime = download_image_bytes(img_src)
-                menu_lines, ocr_source = (
-                    extract_menu_via_ai(img_bytes, img_mime, item["name"])
-                    if img_bytes else (None, None)
-                )
-
-                if menu_lines:
-                    html_content = menu_items_to_html(menu_lines)
-                    badges = compute_badges(menu_lines)
-                    items_data = menu_lines
-                    source = ocr_source
-                else:
-                    html_content = f"""
-                    <img
-                        src="{img_src}"
-                        class="menu-image"
-                        alt="온정찬 오늘의 메뉴"
-                    >
-                    """
-                    source = "kakao_posts"
+                html_content = f"""
+                <img
+                    src="{img_src}"
+                    class="menu-image"
+                    alt="온정찬 오늘의 메뉴"
+                >
+                """
+                source = "kakao_posts"
             else:
                 html_content = """
                 <div class="error-menu">
@@ -1782,27 +811,14 @@ try:
             )
 
             if img_src:
-                raw_ref = {"type": "image", "url": img_src}
-                img_bytes, img_mime = download_image_bytes(img_src)
-                menu_lines, ocr_source = (
-                    extract_menu_via_ai(img_bytes, img_mime, item["name"])
-                    if img_bytes else (None, None)
-                )
-
-                if menu_lines:
-                    html_content = menu_items_to_html(menu_lines)
-                    badges = compute_badges(menu_lines)
-                    items_data = menu_lines
-                    source = ocr_source
-                else:
-                    html_content = f"""
-                    <img
-                        src="{img_src}"
-                        class="menu-image"
-                        alt="런치투게더 오늘의 메뉴"
-                    >
-                    """
-                    source = "kakao_profile"
+                html_content = f"""
+                <img
+                    src="{img_src}"
+                    class="menu-image"
+                    alt="런치투게더 오늘의 메뉴"
+                >
+                """
+                source = "kakao_profile"
             else:
                 html_content = """
                 <div class="error-menu">
@@ -1819,17 +835,9 @@ try:
 
             if result:
 
-                raw_ref = {"type": "link", "url": result.get("source_url")}
-                menu_items = classify_menu_lines_locally(result["menu_lines"])
-
-                if menu_items:
-                    html_content = menu_items_to_html(menu_items)
-                    badges = compute_badges(menu_items)
-                    items_data = menu_items
-                else:
-                    html_content = menu_lines_to_html(
-                        result["menu_lines"]
-                    )
+                html_content = menu_lines_to_html(
+                    result["menu_lines"]
+                )
 
                 source = result["source"]
 
@@ -1846,17 +854,9 @@ try:
 
                 if result:
 
-                    raw_ref = {"type": "link", "url": result.get("source_url")}
-                    menu_items = classify_menu_lines_locally(result["menu_lines"])
-
-                    if menu_items:
-                        html_content = menu_items_to_html(menu_items)
-                        badges = compute_badges(menu_items)
-                        items_data = menu_items
-                    else:
-                        html_content = menu_lines_to_html(
-                            result["menu_lines"]
-                        )
+                    html_content = menu_lines_to_html(
+                        result["menu_lines"]
+                    )
 
                     source = result["source"]
 
@@ -1879,33 +879,39 @@ try:
             )
 
             if img_src:
-                raw_ref = {"type": "image", "url": img_src}
-                img_bytes, img_mime = download_image_bytes(img_src)
-                menu_lines, ocr_source = (
-                    extract_menu_via_ai(img_bytes, img_mime, item["name"])
-                    if img_bytes else (None, None)
-                )
-
-                if menu_lines:
-                    html_content = menu_items_to_html(menu_lines)
-                    badges = compute_badges(menu_lines)
-                    items_data = menu_lines
-                    source = ocr_source
-                else:
-                    html_content = f"""
-                    <img
-                        src="{img_src}"
-                        class="menu-image"
-                        alt="밥심 오늘의 메뉴"
-                    >
-                    """
-                    source = "kakao_first"
+                html_content = f"""
+                <img
+                    src="{img_src}"
+                    class="menu-image"
+                    alt="밥심 오늘의 메뉴"
+                >
+                """
+                source = "kakao_first"
             else:
                 html_content = """
                 <div class="error-menu">
                     카카오 메뉴 이미지를 찾지 못했습니다.
                 </div>
                 """
+
+        # [NEW] 호서구내식당: 자동 스크래핑 없이 깔끔한 안내 버튼과 정보만 노출 (안정성 100%)
+        elif item["type"] == "static_link":
+            html_content = f"""
+            <div style="padding: 10px 5px; text-align: center;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #111;">
+                    🏷️ 식권 가격 : 7,500원
+                </div>
+                <div style="font-size: 12px; color: #666; margin-bottom: 15px; line-height: 1.4;">
+                    오늘의 메뉴는 매일 오전<br>인스타그램 <strong>스토리</strong>에 업로드됩니다.
+                </div>
+                <a href="{item['url']}" target="_blank" rel="noopener noreferrer" style="display: block; width: 100%; padding: 12px 0; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    📱 오늘 스토리 확인하기
+                </a>
+            </div>
+            """
+            source = "instagram_link"
+            print("     -> [호서구내식당] 정적 링크 렌더링 완료")
+
 
         previous = previous_restaurants.get(item["name"])
         menu_status = "today"
@@ -1926,20 +932,11 @@ try:
         ):
             html_content = previous["html"]
             source = previous["source"]
-            raw_ref = previous.get("raw_ref")
-            badges = previous.get("badges", [])
-            items_data = previous.get("items", [])
             menu_status = "preserved_from_previous_run"
-            checked_at = previous.get("checked_at")
             print(f"     → [{item['name']}] 이전 정상 수집 메뉴 유지")
 
         elif failed_this_run:
             menu_status = "missing"
-            checked_at = None
-
-        elif checked_at is None:
-            # 이번 실행에서 새로 확인된 정상 메뉴
-            checked_at = today.strftime("%H:%M")
 
         scraped_data.append({
             "name": item["name"],
@@ -1948,18 +945,10 @@ try:
             "lng": lng,
             "dist": dist,
             "walk_min": walk_min,
-            "route": route_points,
             "source": source,
             "html": html_content,
-            "raw_ref": raw_ref,
-            "badges": badges,
-            "items": items_data,
-            "price": RESTAURANT_PRICES.get(item["name"]),
-            "source_hash": current_source_hash,
             "menu_status": menu_status,
             "menu_date": today.strftime("%Y-%m-%d") if menu_status != "missing" else None,
-            "checked_at": checked_at,
-            "pipeline_version": EXTRACTION_PIPELINE_VERSION,
         })
 
         time.sleep(1.5)
@@ -1974,10 +963,6 @@ finally:
 # 13. menu.json 저장
 # ==========================================================
 
-weather = get_weather()
-if weather:
-    print(f"\n날씨: {weather['emoji']} {weather['condition']} {weather['temp']}℃ / 강수 {weather['precipitation']}mm")
-
 result = {
     "updated_at": today.strftime(
         "%Y-%m-%d %H:%M:%S"
@@ -1990,7 +975,6 @@ result = {
     ),
     "date_display": today_date_str_space,
     "weekday": today_weekday,
-    "weather": weather,
     "office": {
         "address": OFFICE_ADDRESS,
         "lat": office_coords[0],
@@ -2011,14 +995,6 @@ with open(
         ensure_ascii=False,
         indent=2
     )
-
-# 도보 경로 캐시 저장 (다음 실행부터는 API를 다시 호출하지 않고 재사용)
-with open(ROUTES_CACHE_JSON, "w", encoding="utf-8") as f:
-    json.dump(routes_cache, f, ensure_ascii=False, indent=2)
-
-# Gemini 시도 기록 저장 (내용이 안 바뀌었으면 다음 실행에서 API 재호출을 건너뛴다)
-with open(GEMINI_ATTEMPTS_JSON, "w", encoding="utf-8") as f:
-    json.dump(gemini_attempts, f, ensure_ascii=False, indent=2)
 
 
 print()
