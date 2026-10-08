@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-08 10:40:22",
-  "updated_at_display": "2026.10.08 10:40",
+  "updated_at": "2026-10-08 11:00:45",
+  "updated_at_display": "2026.10.08 11:00",
   "date": "2026-10-08",
   "date_display": "10월 8일",
   "weekday": "목",
   "weather": {
-    "temp": 18.8,
+    "temp": 19.7,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -419,16 +419,81 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 🥗 순두부찌개</div>\n<div class=\"menu-line cat-main\">🥩 직화데리야끼닭다리구이</div>\n<div class=\"menu-line cat-side\">부추고기산적</div>\n<div class=\"menu-line cat-side\">🍜 투움바파스타</div>\n<div class=\"menu-line cat-side\">감자채햄볶음</div>\n<div class=\"menu-line cat-side\">🥗 청경채나물</div>\n<div class=\"menu-line cat-kimchi\">배추겉절이</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "순두부찌개",
+          "category": "soup"
+        },
+        {
+          "name": "직화데리야끼닭다리구이",
+          "category": "main"
+        },
+        {
+          "name": "부추고기산적",
+          "category": "side"
+        },
+        {
+          "name": "투움바파스타",
+          "category": "side"
+        },
+        {
+          "name": "감자채햄볶음",
+          "category": "side"
+        },
+        {
+          "name": "청경채나물",
+          "category": "side"
+        },
+        {
+          "name": "배추겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "깍두기",
+          "category": "kimchi"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "단호박죽",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-08",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
