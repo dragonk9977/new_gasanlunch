@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-10-09 09:30:31",
-  "updated_at_display": "2026.10.09 09:30",
+  "updated_at": "2026-10-09 09:40:21",
+  "updated_at_display": "2026.10.09 09:40",
   "date": "2026-10-09",
   "date_display": "10월 9일",
   "weekday": "금",
   "is_closed_day": true,
   "closed_reason": "Hangul Day",
-  "closed_message": "🎊 공휴일엔 가산도 조용해요. 오늘은 집에서 맛있게 드세요!",
+  "closed_message": "🥳 쉬는 날엔 집밥이 최고죠. 맛있는 하루 보내세요!",
   "weather": null,
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
