@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-12 09:40:25",
-  "updated_at_display": "2026.10.12 09:40",
+  "updated_at": "2026-10-12 10:00:44",
+  "updated_at_display": "2026.10.12 10:00",
   "date": "2026-10-12",
   "date_display": "10월 12일",
   "weekday": "월",
   "weather": {
-    "temp": 21.0,
+    "temp": 21.8,
     "precipitation": 0.0,
     "condition": "대체로 맑음",
     "emoji": "🌤️"
@@ -143,19 +143,93 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 주꾸미돈갈비찜</div>\n<div class=\"menu-line cat-main\">너비아니야채구이</div>\n<div class=\"menu-line cat-main\">🍜 콘치즈파스타마요</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-soup\">🥩 🍲 소고기해장국</div>\n<div class=\"menu-line cat-side\">달콤씨앗고로케</div>\n<div class=\"menu-line cat-side\">🥗 팽이두부조림</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">상추겉절이</div>\n<div class=\"menu-line cat-kimchi\">무생채</div>\n<div class=\"menu-line cat-kimchi\">🍲 국내산포기김치</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">매실차</div>\n<div class=\"menu-line cat-drink\">ICE 옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/bZCgso/dJMb999cvtC/1zklUfm6KEAIBZWffdKly1/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "주꾸미돈갈비찜",
+          "category": "main"
+        },
+        {
+          "name": "너비아니야채구이",
+          "category": "main"
+        },
+        {
+          "name": "콘치즈파스타마요",
+          "category": "main"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "소고기해장국",
+          "category": "soup"
+        },
+        {
+          "name": "달콤씨앗고로케",
+          "category": "side"
+        },
+        {
+          "name": "팽이두부조림",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드&드레싱2종",
+          "category": "side"
+        },
+        {
+          "name": "상추겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "무생채",
+          "category": "kimchi"
+        },
+        {
+          "name": "국내산포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "숭늉",
+          "category": "drink"
+        },
+        {
+          "name": "매실차",
+          "category": "drink"
+        },
+        {
+          "name": "ICE 옥수수차",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-12",
-      "checked_at": "09:40",
+      "checked_at": "10:00",
       "pipeline_version": 3
     },
     {
