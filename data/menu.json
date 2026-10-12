@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-13 00:10:21",
-  "updated_at_display": "2026.10.13 00:10",
+  "updated_at": "2026-10-13 00:20:24",
+  "updated_at_display": "2026.10.13 00:20",
   "date": "2026-10-13",
   "date_display": "10월 13일",
   "weekday": "화",
   "weather": {
-    "temp": 19.1,
+    "temp": 18.9,
     "precipitation": 0.1,
     "condition": "이슬비",
     "emoji": "🌦️"
@@ -285,7 +285,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-13",
-      "checked_at": "00:10",
+      "checked_at": "00:20",
       "pipeline_version": 3
     },
     {
@@ -422,7 +422,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-13",
-      "checked_at": "00:10",
+      "checked_at": "00:20",
       "pipeline_version": 3
     }
   ]
