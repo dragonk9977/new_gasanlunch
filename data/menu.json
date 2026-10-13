@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-13 11:00:40",
-  "updated_at_display": "2026.10.13 11:00",
+  "updated_at": "2026-10-13 11:10:21",
+  "updated_at_display": "2026.10.13 11:10",
   "date": "2026-10-13",
   "date_display": "10월 13일",
   "weekday": "화",
@@ -375,16 +375,73 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">꼬지어묵</div>\n<div class=\"menu-line cat-main\">🔥 지코바치킨</div>\n<div class=\"menu-line cat-side\">🥗 어두부전</div>\n<div class=\"menu-line cat-main\">모둠감자튀김</div>\n<div class=\"menu-line cat-side\">🥗 사과연근치커리샐러드</div>\n<div class=\"menu-line cat-side\">미역줄기볶음</div>\n<div class=\"menu-line cat-side\">모둠버섯볶음</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "꼬지어묵",
+          "category": "main"
+        },
+        {
+          "name": "지코바치킨",
+          "category": "main"
+        },
+        {
+          "name": "어두부전",
+          "category": "side"
+        },
+        {
+          "name": "모둠감자튀김",
+          "category": "main"
+        },
+        {
+          "name": "사과연근치커리샐러드",
+          "category": "side"
+        },
+        {
+          "name": "미역줄기볶음",
+          "category": "side"
+        },
+        {
+          "name": "모둠버섯볶음",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-13",
+      "checked_at": "11:10",
       "pipeline_version": 3
     },
     {
