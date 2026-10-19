@@ -5,23 +5,23 @@
     "succeeded": false
   },
   "밥심": {
-    "date": "2026-10-19",
+    "date": "2026-10-20",
     "hash": "24a26f1eab99c9a6",
-    "succeeded": true
+    "succeeded": false
   },
   "오정": {
-    "date": "2026-10-19",
-    "hash": "3337c771bd84ad17",
+    "date": "2026-10-20",
+    "hash": "1f7a9ba16afae46d",
     "succeeded": true
   },
   "온정찬": {
-    "date": "2026-10-19",
-    "hash": "f2d1a7a422b24eca",
-    "succeeded": true
+    "date": "2026-10-20",
+    "hash": "10930a951b0eec6f",
+    "succeeded": false
   },
   "런치투게더": {
-    "date": "2026-10-19",
+    "date": "2026-10-20",
     "hash": "93bbded203230a69",
-    "succeeded": true
+    "succeeded": false
   }
 }
