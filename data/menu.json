@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-21 10:40:32",
-  "updated_at_display": "2026.10.21 10:40",
+  "updated_at": "2026-10-21 11:00:48",
+  "updated_at_display": "2026.10.21 11:00",
   "date": "2026-10-21",
   "date_display": "10월 21일",
   "weekday": "수",
   "weather": {
-    "temp": 14.3,
+    "temp": 14.4,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -411,16 +411,81 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-drink\">🥩 🍜 차돌박이짬뽕</div>\n<div class=\"menu-line cat-main\">🥩 🍲 맛동산탕수육</div>\n<div class=\"menu-line cat-main\">너비아니세송버섯구이</div>\n<div class=\"menu-line cat-soup\">🍜 해물볶음우동</div>\n<div class=\"menu-line cat-side\">🥗 비타민사과샐러드</div>\n<div class=\"menu-line cat-side\">얼갈이된장무침</div>\n<div class=\"menu-line cat-side\">들기름오이지</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "차돌박이짬뽕",
+          "category": "drink"
+        },
+        {
+          "name": "맛동산탕수육",
+          "category": "main"
+        },
+        {
+          "name": "너비아니세송버섯구이",
+          "category": "main"
+        },
+        {
+          "name": "해물볶음우동",
+          "category": "soup"
+        },
+        {
+          "name": "비타민사과샐러드",
+          "category": "side"
+        },
+        {
+          "name": "얼갈이된장무침",
+          "category": "side"
+        },
+        {
+          "name": "들기름오이지",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "단호박죽",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-21",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
