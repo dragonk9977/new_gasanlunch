@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-21 11:00:48",
-  "updated_at_display": "2026.10.21 11:00",
+  "updated_at": "2026-10-21 11:10:29",
+  "updated_at_display": "2026.10.21 11:10",
   "date": "2026-10-21",
   "date_display": "10월 21일",
   "weekday": "수",
@@ -485,7 +485,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-21",
-      "checked_at": "11:00",
+      "checked_at": "11:10",
       "pipeline_version": 3
     },
     {
