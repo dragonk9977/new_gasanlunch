@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-22 11:20:42",
-  "updated_at_display": "2026.10.22 11:20",
+  "updated_at": "2026-10-22 12:04:44",
+  "updated_at_display": "2026.10.22 12:04",
   "date": "2026-10-22",
   "date_display": "10월 22일",
   "weekday": "목",
   "weather": {
-    "temp": 10.2,
+    "temp": 11.2,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -509,7 +509,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-22",
-      "checked_at": "11:20",
+      "checked_at": "12:04",
       "pipeline_version": 3
     },
     {
