@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-23 00:20:26",
-  "updated_at_display": "2026.10.23 00:20",
+  "updated_at": "2026-10-23 00:30:38",
+  "updated_at_display": "2026.10.23 00:30",
   "date": "2026-10-23",
   "date_display": "10월 23일",
   "weekday": "금",
@@ -53,7 +53,7 @@
       "source_hash": "1c7b85a6fc3198c9",
       "menu_status": "today",
       "menu_date": "2026-10-23",
-      "checked_at": "00:20",
+      "checked_at": "00:30",
       "pipeline_version": 3
     },
     {
@@ -85,19 +85,89 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/bqrHsG/dJMcag1CsWY/xI4avJoQRTJ83GL8yyguo0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "openrouter_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 갈비양념돈목살구이</div>\n<div class=\"menu-line cat-main\">🔥 고추바살후라이드치킨</div>\n<div class=\"menu-line cat-main\">🥗 부대행두부짜글이조림</div>\n<div class=\"menu-line cat-main\">씨알트명업채볶음</div>\n<div class=\"menu-line cat-soup\">🍜 뜨끈한 뼈수제비</div>\n<div class=\"menu-line cat-soup\">🍲 🥗 큰콩나물국</div>\n<div class=\"menu-line cat-side\">청경채무침</div>\n<div class=\"menu-line cat-side\">무생채</div>\n<div class=\"menu-line cat-side\">가든Sel러드&amp;&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">🍲 국내산포기김치</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-drink\">승누, 매실차, ICE옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
         "url": "https://k.kakaocdn.net/dn/bqrHsG/dJMcag1CsWY/xI4avJoQRTJ83GL8yyguo0/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "갈비양념돈목살구이",
+          "category": "main"
+        },
+        {
+          "name": "고추바살후라이드치킨",
+          "category": "main"
+        },
+        {
+          "name": "부대행두부짜글이조림",
+          "category": "main"
+        },
+        {
+          "name": "씨알트명업채볶음",
+          "category": "main"
+        },
+        {
+          "name": "뜨끈한 뼈수제비",
+          "category": "soup"
+        },
+        {
+          "name": "큰콩나물국",
+          "category": "soup"
+        },
+        {
+          "name": "청경채무침",
+          "category": "side"
+        },
+        {
+          "name": "무생채",
+          "category": "side"
+        },
+        {
+          "name": "가든Sel러드&&드레싱2종",
+          "category": "side"
+        },
+        {
+          "name": "국내산포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "승누, 매실차, ICE옥수수차",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-23",
-      "checked_at": "00:20",
+      "checked_at": "00:30",
       "pipeline_version": 3
     },
     {
@@ -161,7 +231,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-23",
-      "checked_at": "00:20",
+      "checked_at": "00:30",
       "pipeline_version": 3
     },
     {
@@ -298,7 +368,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-23",
-      "checked_at": "00:20",
+      "checked_at": "00:30",
       "pipeline_version": 3
     }
   ]
