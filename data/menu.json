@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-23 10:40:33",
-  "updated_at_display": "2026.10.23 10:40",
+  "updated_at": "2026-10-23 11:00:49",
+  "updated_at_display": "2026.10.23 11:00",
   "date": "2026-10-23",
   "date_display": "10월 23일",
   "weekday": "금",
   "weather": {
-    "temp": 13.5,
+    "temp": 14.5,
     "precipitation": 0.0,
     "condition": "대체로 맑음",
     "emoji": "🌤️"
@@ -407,16 +407,81 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 단호박갈비찜</div>\n<div class=\"menu-line cat-main\">🐟 생선까스</div>\n<div class=\"menu-line cat-soup\">🍲 가지탕수</div>\n<div class=\"menu-line cat-side\">🥗 토마토치커리샐러드</div>\n<div class=\"menu-line cat-side\">오이무침</div>\n<div class=\"menu-line cat-side\">🥗 얼갈이나물</div>\n<div class=\"menu-line cat-side\">누룽지</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "생선",
+          "emoji": "🐟"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "단호박갈비찜",
+          "category": "main"
+        },
+        {
+          "name": "생선까스",
+          "category": "main"
+        },
+        {
+          "name": "가지탕수",
+          "category": "soup"
+        },
+        {
+          "name": "토마토치커리샐러드",
+          "category": "side"
+        },
+        {
+          "name": "오이무침",
+          "category": "side"
+        },
+        {
+          "name": "얼갈이나물",
+          "category": "side"
+        },
+        {
+          "name": "누룽지",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-23",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
