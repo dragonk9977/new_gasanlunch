@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-27 00:30:39",
-  "updated_at_display": "2026.10.27 00:30",
+  "updated_at": "2026-10-27 00:40:30",
+  "updated_at_display": "2026.10.27 00:40",
   "date": "2026-10-27",
   "date_display": "10월 27일",
   "weekday": "화",
@@ -293,7 +293,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-27",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     },
     {
@@ -430,7 +430,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-27",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     }
   ]
