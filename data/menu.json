@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-27 10:40:26",
-  "updated_at_display": "2026.10.27 10:40",
+  "updated_at": "2026-10-27 11:00:38",
+  "updated_at_display": "2026.10.27 11:00",
   "date": "2026-10-27",
   "date_display": "10월 27일",
   "weekday": "화",
   "weather": {
-    "temp": 12.3,
+    "temp": 13.0,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -415,16 +415,85 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 황태해장국</div>\n<div class=\"menu-line cat-main\">🔥 🥩 제육볶음</div>\n<div class=\"menu-line cat-main\">🥩 치즈함박스테이크</div>\n<div class=\"menu-line cat-soup\">🍜 참치비빔우동</div>\n<div class=\"menu-line cat-side\">곤약메추리알장조림</div>\n<div class=\"menu-line cat-side\">애호박볶음</div>\n<div class=\"menu-line cat-side\">🥗 브로콜리두부범벅</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "황태해장국",
+          "category": "soup"
+        },
+        {
+          "name": "제육볶음",
+          "category": "main"
+        },
+        {
+          "name": "치즈함박스테이크",
+          "category": "main"
+        },
+        {
+          "name": "참치비빔우동",
+          "category": "soup"
+        },
+        {
+          "name": "곤약메추리알장조림",
+          "category": "side"
+        },
+        {
+          "name": "애호박볶음",
+          "category": "side"
+        },
+        {
+          "name": "브로콜리두부범벅",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "단호박죽",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-27",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
