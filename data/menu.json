@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-28 00:00:51",
-  "updated_at_display": "2026.10.28 00:00",
+  "updated_at": "2026-10-28 00:20:27",
+  "updated_at_display": "2026.10.28 00:20",
   "date": "2026-10-28",
   "date_display": "10월 28일",
   "weekday": "수",
   "weather": {
-    "temp": 3.8,
+    "temp": 3.5,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -163,7 +163,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-28",
-      "checked_at": "00:00",
+      "checked_at": "00:20",
       "pipeline_version": 3
     },
     {
@@ -227,7 +227,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-28",
-      "checked_at": "00:00",
+      "checked_at": "00:20",
       "pipeline_version": 3
     },
     {
@@ -364,7 +364,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-10-28",
-      "checked_at": "00:00",
+      "checked_at": "00:20",
       "pipeline_version": 3
     }
   ]
