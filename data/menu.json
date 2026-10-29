@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-29 10:40:28",
-  "updated_at_display": "2026.10.29 10:40",
+  "updated_at": "2026-10-29 11:00:46",
+  "updated_at_display": "2026.10.29 11:00",
   "date": "2026-10-29",
   "date_display": "10월 29일",
   "weekday": "목",
   "weather": {
-    "temp": 8.3,
+    "temp": 9.1,
     "precipitation": 0.0,
     "condition": "구름 조금",
     "emoji": "⛅"
@@ -387,16 +387,77 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 된장찌개</div>\n<div class=\"menu-line cat-side\">🌶️ 매운깐풍육</div>\n<div class=\"menu-line cat-side\">너비아니육전&amp;부추무침</div>\n<div class=\"menu-line cat-side\">타코야끼</div>\n<div class=\"menu-line cat-kimchi\">얼갈이겉절이</div>\n<div class=\"menu-line cat-main\">들기름김구이</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">누룽지</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "된장찌개",
+          "category": "soup"
+        },
+        {
+          "name": "매운깐풍육",
+          "category": "side"
+        },
+        {
+          "name": "너비아니육전&부추무침",
+          "category": "side"
+        },
+        {
+          "name": "타코야끼",
+          "category": "side"
+        },
+        {
+          "name": "얼갈이겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "들기름김구이",
+          "category": "main"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "누룽지",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-29",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
