@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-10-30 10:40:29",
-  "updated_at_display": "2026.10.30 10:40",
+  "updated_at": "2026-10-30 11:00:48",
+  "updated_at_display": "2026.10.30 11:00",
   "date": "2026-10-30",
   "date_display": "10월 30일",
   "weekday": "금",
   "weather": {
-    "temp": 14.6,
+    "temp": 15.7,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -435,16 +435,85 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 떡만두국</div>\n<div class=\"menu-line cat-soup\">🥩 🍲 닭볶음탕</div>\n<div class=\"menu-line cat-side\">새우감자고로케</div>\n<div class=\"menu-line cat-side\">소떡소떡</div>\n<div class=\"menu-line cat-side\">메추리알장조림</div>\n<div class=\"menu-line cat-side\">애호박볶음</div>\n<div class=\"menu-line cat-side\">무우말랭이</div>\n<div class=\"menu-line cat-side\">멸치볶음</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "떡만두국",
+          "category": "soup"
+        },
+        {
+          "name": "닭볶음탕",
+          "category": "soup"
+        },
+        {
+          "name": "새우감자고로케",
+          "category": "side"
+        },
+        {
+          "name": "소떡소떡",
+          "category": "side"
+        },
+        {
+          "name": "메추리알장조림",
+          "category": "side"
+        },
+        {
+          "name": "애호박볶음",
+          "category": "side"
+        },
+        {
+          "name": "무우말랭이",
+          "category": "side"
+        },
+        {
+          "name": "멸치볶음",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "단호박죽",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-10-30",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
