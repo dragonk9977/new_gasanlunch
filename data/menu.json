@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-04 00:40:27",
-  "updated_at_display": "2026.11.04 00:40",
+  "updated_at": "2026-11-04 09:00:48",
+  "updated_at_display": "2026.11.04 09:00",
   "date": "2026-11-04",
   "date_display": "11월 4일",
   "weekday": "수",
   "weather": {
-    "temp": 8.1,
+    "temp": 9.6,
     "precipitation": 0.0,
     "condition": "구름 조금",
     "emoji": "⛅"
@@ -151,19 +151,101 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/scarD/dJMcabNdPhG/C0R4mJ2Uj8UMMvzfApYeUk/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 🌶️ 매콤갈비찜</div>\n<div class=\"menu-line cat-main\">🥩 가스오언양불고기</div>\n<div class=\"menu-line cat-main\">🐟 생선까스&amp;감자튀김</div>\n<div class=\"menu-line cat-soup\">🍜 🍲 홍합짬뽕탕</div>\n<div class=\"menu-line cat-side\">🥗 양념두부조림</div>\n<div class=\"menu-line cat-side\">상추겉절이</div>\n<div class=\"menu-line cat-side\">무생채</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">🍲 국내산포기김치</div>\n<div class=\"menu-line cat-snack\">벨기에와플&amp;생크림&amp;딸기잼</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">ICE매실차</div>\n<div class=\"menu-line cat-drink\">따뜻한옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/scarD/dJMcabNdPhG/C0R4mJ2Uj8UMMvzfApYeUk/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/c72LK7/dJMcaamVoEB/zYemKrRmtnMPQVKGWBKEBk/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "생선",
+          "emoji": "🐟"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "매콤갈비찜",
+          "category": "main"
+        },
+        {
+          "name": "가스오언양불고기",
+          "category": "main"
+        },
+        {
+          "name": "생선까스&감자튀김",
+          "category": "main"
+        },
+        {
+          "name": "홍합짬뽕탕",
+          "category": "soup"
+        },
+        {
+          "name": "양념두부조림",
+          "category": "side"
+        },
+        {
+          "name": "상추겉절이",
+          "category": "side"
+        },
+        {
+          "name": "무생채",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드&드레싱2종",
+          "category": "side"
+        },
+        {
+          "name": "국내산포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "벨기에와플&생크림&딸기잼",
+          "category": "snack"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "숭늉",
+          "category": "drink"
+        },
+        {
+          "name": "ICE매실차",
+          "category": "drink"
+        },
+        {
+          "name": "따뜻한옥수수차",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-04",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     },
     {
@@ -215,19 +297,97 @@
           "lng": 126.8860495
         }
       ],
-      "source": "kakao_profile",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/EjPvH/dJMcagHJ4E7/jKCaZkKSuKKiFrsvbzTKJ1/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 돼지갈비찜</div>\n<div class=\"menu-line cat-main\">회오리소세지감자</div>\n<div class=\"menu-line cat-main\">순대야채볶음</div>\n<div class=\"menu-line cat-main\">미트볼토마토소스</div>\n<div class=\"menu-line cat-soup\">🍜 🍲 해물고추짬뽕탕</div>\n<div class=\"menu-line cat-side\">마늘쫑멸치어묵볶음</div>\n<div class=\"menu-line cat-side\">쑥갓무침</div>\n<div class=\"menu-line cat-side\">🥗 그린샐러드 &amp; 드레싱</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-snack\">🍜 라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-drink\">누룽지 숭늉</div>\n<div class=\"menu-line cat-drink\">🍚 잡곡밥&amp;백미밥</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/EjPvH/dJMcagHJ4E7/jKCaZkKSuKKiFrsvbzTKJ1/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/jY5bm/dJMcacL7Vse/BKfdTe4efHgiDTx84Tejgk/img.png"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "밥",
+          "emoji": "🍚"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "돼지갈비찜",
+          "category": "main"
+        },
+        {
+          "name": "회오리소세지감자",
+          "category": "main"
+        },
+        {
+          "name": "순대야채볶음",
+          "category": "main"
+        },
+        {
+          "name": "미트볼토마토소스",
+          "category": "main"
+        },
+        {
+          "name": "해물고추짬뽕탕",
+          "category": "soup"
+        },
+        {
+          "name": "마늘쫑멸치어묵볶음",
+          "category": "side"
+        },
+        {
+          "name": "쑥갓무침",
+          "category": "side"
+        },
+        {
+          "name": "그린샐러드 & 드레싱",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "라면땅 or 새우칩",
+          "category": "snack"
+        },
+        {
+          "name": "식빵 토스트",
+          "category": "snack"
+        },
+        {
+          "name": "요거트&시리얼",
+          "category": "snack"
+        },
+        {
+          "name": "누룽지 숭늉",
+          "category": "drink"
+        },
+        {
+          "name": "잡곡밥&백미밥",
+          "category": "drink"
+        }
+      ],
       "price": 8000,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-04",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     },
     {
@@ -352,19 +512,93 @@
           "lng": 126.88241839
         }
       ],
-      "source": "kakao_first",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/cIaXQ5/dJMcaiL43gx/LAx99okar3g7pEXtatXv7K/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"밥심 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 수제족발찜</div>\n<div class=\"menu-line cat-main\">상추쌈세트</div>\n<div class=\"menu-line cat-main\">엽기마라떡볶이</div>\n<div class=\"menu-line cat-main\">🍜 🍲 메밀비빔막국수</div>\n<div class=\"menu-line cat-main\">🍚 김치볶음밥카츠</div>\n<div class=\"menu-line cat-side\">멸치김치된장지짐</div>\n<div class=\"menu-line cat-side\">명엽채볶음</div>\n<div class=\"menu-line cat-side\">부추치커리겉절이</div>\n<div class=\"menu-line cat-side\">청포묵김가루</div>\n<div class=\"menu-line cat-soup\">🍲 시래기된장국</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-snack\">누룽지</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/cIaXQ5/dJMcaiL43gx/LAx99okar3g7pEXtatXv7K/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/XNB0k/dJMcagVam3u/9719inIrGSAkJCvrVk2bfk/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "밥",
+          "emoji": "🍚"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        }
+      ],
+      "items": [
+        {
+          "name": "수제족발찜",
+          "category": "main"
+        },
+        {
+          "name": "상추쌈세트",
+          "category": "main"
+        },
+        {
+          "name": "엽기마라떡볶이",
+          "category": "main"
+        },
+        {
+          "name": "메밀비빔막국수",
+          "category": "main"
+        },
+        {
+          "name": "김치볶음밥카츠",
+          "category": "main"
+        },
+        {
+          "name": "멸치김치된장지짐",
+          "category": "side"
+        },
+        {
+          "name": "명엽채볶음",
+          "category": "side"
+        },
+        {
+          "name": "부추치커리겉절이",
+          "category": "side"
+        },
+        {
+          "name": "청포묵김가루",
+          "category": "side"
+        },
+        {
+          "name": "시래기된장국",
+          "category": "soup"
+        },
+        {
+          "name": "깍두기",
+          "category": "kimchi"
+        },
+        {
+          "name": "누룽지",
+          "category": "snack"
+        },
+        {
+          "name": "아이스커피",
+          "category": "drink"
+        },
+        {
+          "name": "한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-04",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     }
   ]
