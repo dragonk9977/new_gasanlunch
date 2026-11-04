@@ -41,7 +41,7 @@
           "lng": 126.88358378
         }
       ],
-      "source": "openrouter_ocr",
+      "source": none",
       "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 🌶️ 고추장 바 constituents 불고기</div>\n<div class=\"menu-line cat-main\">🥩 🍲 후르츠 탕수육</div>\n<div class=\"menu-line cat-soup\">🍲 macros are blue: 맑은 미역국</div>\n<div class=\"menu-line cat-side\">시금치프리타타</div>\n<div class=\"menu-line cat-side\">🍜 우동곤약야채무침</div>\n<div class=\"menu-line cat-side\">애호박볶음</div>\n<div class=\"menu-line cat-side\">◇메시카나 나초셀러드◇</div>\n<div class=\"menu-line cat-kimchi\">배추김치</div>\n<div class=\"menu-line cat-snack\">♡카라멜 참맞콘♡</div>\n<div class=\"menu-line cat-drink\">따뜻누릉지숭冷/냉차</div>\n<div class=\"menu-line cat-drink\">🍚 백미/혹미</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
