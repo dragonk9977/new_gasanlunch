@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-11-05 09:10:26",
-  "updated_at_display": "2026.11.05 09:10",
+  "updated_at": "2026-11-05 09:20:26",
+  "updated_at_display": "2026.11.05 09:20",
   "date": "2026-11-05",
   "date_display": "11월 5일",
   "weekday": "목",
   "weather": {
-    "temp": 9.6,
-    "precipitation": 0.1,
-    "condition": "이슬비",
-    "emoji": "🌦️"
+    "temp": null,
+    "precipitation": null,
+    "condition": "",
+    "emoji": "🌡️"
   },
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
