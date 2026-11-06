@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-06 10:20:33",
-  "updated_at_display": "2026.11.06 10:20",
+  "updated_at": "2026-11-06 10:30:34",
+  "updated_at_display": "2026.11.06 10:30",
   "date": "2026-11-06",
   "date_display": "11월 6일",
   "weekday": "금",
   "weather": {
-    "temp": 5.7,
+    "temp": 6.0,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
