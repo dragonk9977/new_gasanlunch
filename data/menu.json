@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-10 09:40:31",
-  "updated_at_display": "2026.11.10 09:40",
+  "updated_at": "2026-11-10 10:00:43",
+  "updated_at_display": "2026.11.10 10:00",
   "date": "2026-11-10",
   "date_display": "11월 10일",
   "weekday": "화",
   "weather": {
-    "temp": 3.0,
+    "temp": 4.3,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -143,19 +143,97 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🍜 눈꽃치즈토마토파스타</div>\n<div class=\"menu-line cat-main\">🥩 불맛오삼불고기</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-soup\">🌶️ 🍲 🥗 얼큰콩나물해장국</div>\n<div class=\"menu-line cat-side\">집게맛살&amp;감자고로케&amp;케찹</div>\n<div class=\"menu-line cat-side\">한식잡채</div>\n<div class=\"menu-line cat-side\">꽃맛살흑임자사라다</div>\n<div class=\"menu-line cat-side\">양배추찜&amp;매실쌈장</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">김치볶음</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">ICE매실차</div>\n<div class=\"menu-line cat-drink\">따뜻한옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/bXtrFD/dJMcaileqTV/HfP3VLghqQ3pJsgtb1AcwK/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "눈꽃치즈토마토파스타",
+          "category": "main"
+        },
+        {
+          "name": "불맛오삼불고기",
+          "category": "main"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "얼큰콩나물해장국",
+          "category": "soup"
+        },
+        {
+          "name": "집게맛살&감자고로케&케찹",
+          "category": "side"
+        },
+        {
+          "name": "한식잡채",
+          "category": "side"
+        },
+        {
+          "name": "꽃맛살흑임자사라다",
+          "category": "side"
+        },
+        {
+          "name": "양배추찜&매실쌈장",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드&드레싱2종",
+          "category": "side"
+        },
+        {
+          "name": "김치볶음",
+          "category": "kimchi"
+        },
+        {
+          "name": "깍두기",
+          "category": "kimchi"
+        },
+        {
+          "name": "숭늉",
+          "category": "drink"
+        },
+        {
+          "name": "ICE매실차",
+          "category": "drink"
+        },
+        {
+          "name": "따뜻한옥수수차",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-10",
-      "checked_at": "09:40",
+      "checked_at": "10:00",
       "pipeline_version": 3
     },
     {
