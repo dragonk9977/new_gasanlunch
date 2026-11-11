@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-12 00:30:36",
-  "updated_at_display": "2026.11.12 00:30",
+  "updated_at": "2026-11-12 00:40:28",
+  "updated_at_display": "2026.11.12 00:40",
   "date": "2026-11-12",
   "date_display": "11월 12일",
   "weekday": "목",
@@ -148,10 +148,10 @@
         }
       ],
       "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/Zu8OS/dJMcajxJ76l/Um7zUNjkXdylF8WD5eNwZK/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/Zu8OS/dJMcajxJ76l/Um7zUNjkXdylF8WD5eNwZK/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg"
       },
       "badges": [],
       "items": [],
@@ -159,7 +159,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-12",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     },
     {
@@ -223,7 +223,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-12",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     },
     {
@@ -360,7 +360,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-12",
-      "checked_at": "00:30",
+      "checked_at": "00:40",
       "pipeline_version": 3
     }
   ]
