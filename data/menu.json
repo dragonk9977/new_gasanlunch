@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-12 09:00:46",
-  "updated_at_display": "2026.11.12 09:00",
+  "updated_at": "2026-11-12 09:10:28",
+  "updated_at_display": "2026.11.12 09:10",
   "date": "2026-11-12",
   "date_display": "11월 12일",
   "weekday": "목",
   "weather": {
-    "temp": 8.3,
+    "temp": 8.9,
     "precipitation": 0.0,
     "condition": "대체로 맑음",
     "emoji": "🌤️"
@@ -299,7 +299,7 @@
       "items": [],
       "price": 8000,
       "source_hash": null,
-      "menu_status": "today",
+      "menu_status": "preserved_from_previous_run",
       "menu_date": "2026-11-12",
       "checked_at": "09:00",
       "pipeline_version": 3
