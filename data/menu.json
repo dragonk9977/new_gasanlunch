@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-12 09:20:26",
-  "updated_at_display": "2026.11.12 09:20",
+  "updated_at": "2026-11-12 09:30:35",
+  "updated_at_display": "2026.11.12 09:30",
   "date": "2026-11-12",
   "date_display": "11월 12일",
   "weekday": "목",
   "weather": {
-    "temp": 8.9,
+    "temp": 9.5,
     "precipitation": 0.0,
     "condition": "대체로 맑음",
     "emoji": "🌤️"
@@ -289,19 +289,101 @@
           "lng": 126.8860495
         }
       ],
-      "source": "kakao_profile",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/bd2s03/dJMcafPJhIn/vtnchA3eJti0S5mYR4jD8k/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"런치투게더 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 🍲 묵은지닭다리살볶음탕</div>\n<div class=\"menu-line cat-main\">새우까스</div>\n<div class=\"menu-line cat-main\">🍜 볶음짜장&amp;면</div>\n<div class=\"menu-line cat-soup\">🥩 🍲 소고기무국</div>\n<div class=\"menu-line cat-side\">동그랑땡케찹조림</div>\n<div class=\"menu-line cat-side\">🥗 참나물겉절이</div>\n<div class=\"menu-line cat-side\">🥗 그린샐러드 &amp; 드레싱</div>\n<div class=\"menu-line cat-kimchi\">무생채</div>\n<div class=\"menu-line cat-snack\">식빵 토스트</div>\n<div class=\"menu-line cat-snack\">요거트&amp;시리얼</div>\n<div class=\"menu-line cat-snack\">🍜 라면땅 or 새우칩</div>\n<div class=\"menu-line cat-snack\">누룽지 숭늉</div>\n<div class=\"menu-line cat-snack\">귤</div>\n<div class=\"menu-line cat-soup\">🍜 셀프라면</div>\n<div class=\"menu-line cat-drink\">🍚 잡곡밥&amp;백미밥</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/bd2s03/dJMcafPJhIn/vtnchA3eJti0S5mYR4jD8k/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/Zs6nc/dJMcadcZSMw/yhuLY2KY5tWXSdmk3a2PbK/img.png"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "밥",
+          "emoji": "🍚"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "묵은지닭다리살볶음탕",
+          "category": "main"
+        },
+        {
+          "name": "새우까스",
+          "category": "main"
+        },
+        {
+          "name": "볶음짜장&면",
+          "category": "main"
+        },
+        {
+          "name": "소고기무국",
+          "category": "soup"
+        },
+        {
+          "name": "동그랑땡케찹조림",
+          "category": "side"
+        },
+        {
+          "name": "참나물겉절이",
+          "category": "side"
+        },
+        {
+          "name": "그린샐러드 & 드레싱",
+          "category": "side"
+        },
+        {
+          "name": "무생채",
+          "category": "kimchi"
+        },
+        {
+          "name": "식빵 토스트",
+          "category": "snack"
+        },
+        {
+          "name": "요거트&시리얼",
+          "category": "snack"
+        },
+        {
+          "name": "라면땅 or 새우칩",
+          "category": "snack"
+        },
+        {
+          "name": "누룽지 숭늉",
+          "category": "snack"
+        },
+        {
+          "name": "귤",
+          "category": "snack"
+        },
+        {
+          "name": "셀프라면",
+          "category": "soup"
+        },
+        {
+          "name": "잡곡밥&백미밥",
+          "category": "drink"
+        }
+      ],
       "price": 8000,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-12",
-      "checked_at": "09:20",
+      "checked_at": "09:30",
       "pipeline_version": 3
     },
     {
