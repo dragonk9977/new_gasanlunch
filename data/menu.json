@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-11-12 00:40:28",
-  "updated_at_display": "2026.11.12 00:40",
+  "updated_at": "2026-11-12 09:00:46",
+  "updated_at_display": "2026.11.12 09:00",
   "date": "2026-11-12",
   "date_display": "11월 12일",
   "weekday": "목",
   "weather": {
-    "temp": 6.2,
+    "temp": 8.3,
     "precipitation": 0.0,
-    "condition": "맑음",
-    "emoji": "☀️"
+    "condition": "대체로 맑음",
+    "emoji": "🌤️"
   },
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
@@ -147,19 +147,97 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🔥 🥩 김치제육볶음</div>\n<div class=\"menu-line cat-main\">🔥 도쿄멘치돈까스&amp;치킨까스</div>\n<div class=\"menu-line cat-main\">물만두&amp;파간장소스</div>\n<div class=\"menu-line cat-soup\">🥩 🍲 소고기무국</div>\n<div class=\"menu-line cat-soup\">🍜 짬뽕수제비</div>\n<div class=\"menu-line cat-side\">햄감자채볶음</div>\n<div class=\"menu-line cat-side\">모듬야채무침</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">깍두기</div>\n<div class=\"menu-line cat-kimchi\">🍲 국내산포기김치</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">ICE매실차</div>\n<div class=\"menu-line cat-drink\">따뜻한옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/dfQ8eK/dJMcafoCaMK/a9sb4zCDHgcn2INpkAeXD1/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "김치제육볶음",
+          "category": "main"
+        },
+        {
+          "name": "도쿄멘치돈까스&치킨까스",
+          "category": "main"
+        },
+        {
+          "name": "물만두&파간장소스",
+          "category": "main"
+        },
+        {
+          "name": "소고기무국",
+          "category": "soup"
+        },
+        {
+          "name": "짬뽕수제비",
+          "category": "soup"
+        },
+        {
+          "name": "햄감자채볶음",
+          "category": "side"
+        },
+        {
+          "name": "모듬야채무침",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드&드레싱2종",
+          "category": "side"
+        },
+        {
+          "name": "깍두기",
+          "category": "kimchi"
+        },
+        {
+          "name": "국내산포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "숭늉",
+          "category": "drink"
+        },
+        {
+          "name": "ICE매실차",
+          "category": "drink"
+        },
+        {
+          "name": "따뜻한옥수수차",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-12",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     },
     {
@@ -223,7 +301,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-12",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     },
     {
@@ -348,19 +426,101 @@
           "lng": 126.88241839
         }
       ],
-      "source": "kakao_first",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/KNZF2/dJMcaaOlSJn/TQEmMzWa0oCk2TYoswJoOk/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"밥심 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 🌶️ 🍲 매콤닭도리탕</div>\n<div class=\"menu-line cat-main\">🍲 시장국물떡볶이</div>\n<div class=\"menu-line cat-main\">🍜 토마토파스타</div>\n<div class=\"menu-line cat-soup\">🍲 북엇국</div>\n<div class=\"menu-line cat-side\">호떡쌀군만두</div>\n<div class=\"menu-line cat-side\">🍳 계란장조림</div>\n<div class=\"menu-line cat-side\">햄치즈샌드위치</div>\n<div class=\"menu-line cat-side\">🥗 야채샐러드</div>\n<div class=\"menu-line cat-kimchi\">유채겉절이</div>\n<div class=\"menu-line cat-kimchi\">깻잎지</div>\n<div class=\"menu-line cat-kimchi\">겉절이김치</div>\n<div class=\"menu-line cat-snack\">누룽지</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/KNZF2/dJMcaaOlSJn/TQEmMzWa0oCk2TYoswJoOk/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/buDcRD/dJMcagt9zU8/mVagJeU0WE51K4unJ7DDgK/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "계란",
+          "emoji": "🍳"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "매콤닭도리탕",
+          "category": "main"
+        },
+        {
+          "name": "시장국물떡볶이",
+          "category": "main"
+        },
+        {
+          "name": "토마토파스타",
+          "category": "main"
+        },
+        {
+          "name": "북엇국",
+          "category": "soup"
+        },
+        {
+          "name": "호떡쌀군만두",
+          "category": "side"
+        },
+        {
+          "name": "계란장조림",
+          "category": "side"
+        },
+        {
+          "name": "햄치즈샌드위치",
+          "category": "side"
+        },
+        {
+          "name": "야채샐러드",
+          "category": "side"
+        },
+        {
+          "name": "유채겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "깻잎지",
+          "category": "kimchi"
+        },
+        {
+          "name": "겉절이김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "누룽지",
+          "category": "snack"
+        },
+        {
+          "name": "아이스커피",
+          "category": "drink"
+        },
+        {
+          "name": "한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-12",
-      "checked_at": "00:40",
+      "checked_at": "09:00",
       "pipeline_version": 3
     }
   ]
