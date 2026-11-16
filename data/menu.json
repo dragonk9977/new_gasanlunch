@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-17 00:10:26",
-  "updated_at_display": "2026.11.17 00:10",
+  "updated_at": "2026-11-17 00:30:45",
+  "updated_at_display": "2026.11.17 00:30",
   "date": "2026-11-17",
   "date_display": "11월 17일",
   "weekday": "화",
@@ -48,7 +48,7 @@
       "source_hash": "656683990b6da3b3",
       "menu_status": "today",
       "menu_date": "2026-11-17",
-      "checked_at": "00:10",
+      "checked_at": "00:30",
       "pipeline_version": 3
     },
     {
@@ -92,7 +92,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-17",
-      "checked_at": "00:10",
+      "checked_at": "00:30",
       "pipeline_version": 3
     },
     {
@@ -156,7 +156,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-17",
-      "checked_at": "00:10",
+      "checked_at": "00:30",
       "pipeline_version": 3
     },
     {
@@ -293,7 +293,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-17",
-      "checked_at": "00:10",
+      "checked_at": "00:30",
       "pipeline_version": 3
     }
   ]
