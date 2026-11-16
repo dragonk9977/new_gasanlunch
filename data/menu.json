@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-16 09:30:40",
-  "updated_at_display": "2026.11.16 09:30",
+  "updated_at": "2026-11-16 09:40:26",
+  "updated_at_display": "2026.11.16 09:40",
   "date": "2026-11-16",
   "date_display": "11월 16일",
   "weekday": "월",
@@ -143,19 +143,97 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🍜 어묵쫄우동</div>\n<div class=\"menu-line cat-main\">우삼겹숙주볶음</div>\n<div class=\"menu-line cat-main\">칠리꿔바로우</div>\n<div class=\"menu-line cat-main\">🥗 온두부&amp;고기김치볶음</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-soup\">🥩 🌶️ 🍲 얼큰닭곰탕</div>\n<div class=\"menu-line cat-side\">🌶️ 매콤소스도토리묵</div>\n<div class=\"menu-line cat-side\">연근조림</div>\n<div class=\"menu-line cat-side\">무생채</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2종</div>\n<div class=\"menu-line cat-kimchi\">🍲 국내산포기김치</div>\n<div class=\"menu-line cat-drink\">숭늉</div>\n<div class=\"menu-line cat-drink\">ICE매실차</div>\n<div class=\"menu-line cat-drink\">옥수수차</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/cClRvc/dJMcaf22ZDw/KBW7PVFNWyezEDVM3bdjyk/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "어묵쫄우동",
+          "category": "main"
+        },
+        {
+          "name": "우삼겹숙주볶음",
+          "category": "main"
+        },
+        {
+          "name": "칠리꿔바로우",
+          "category": "main"
+        },
+        {
+          "name": "온두부&고기김치볶음",
+          "category": "main"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "얼큰닭곰탕",
+          "category": "soup"
+        },
+        {
+          "name": "매콤소스도토리묵",
+          "category": "side"
+        },
+        {
+          "name": "연근조림",
+          "category": "side"
+        },
+        {
+          "name": "무생채",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드&드레싱2종",
+          "category": "side"
+        },
+        {
+          "name": "국내산포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "숭늉",
+          "category": "drink"
+        },
+        {
+          "name": "ICE매실차",
+          "category": "drink"
+        },
+        {
+          "name": "옥수수차",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-16",
-      "checked_at": "09:30",
+      "checked_at": "09:40",
       "pipeline_version": 3
     },
     {
