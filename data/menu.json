@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-16 10:40:25",
-  "updated_at_display": "2026.11.16 10:40",
+  "updated_at": "2026-11-16 11:00:41",
+  "updated_at_display": "2026.11.16 11:00",
   "date": "2026-11-16",
   "date_display": "11월 16일",
   "weekday": "월",
   "weather": {
-    "temp": 10.8,
+    "temp": 11.9,
     "precipitation": 0.0,
     "condition": "구름 조금",
     "emoji": "⛅"
@@ -415,16 +415,81 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🌶️ 🍲 애호박고추장찌개</div>\n<div class=\"menu-line cat-main\">🥩 간장불고기</div>\n<div class=\"menu-line cat-side\">🥩 그릴함박타코야끼</div>\n<div class=\"menu-line cat-side\">🍜 치즈오븐파스타</div>\n<div class=\"menu-line cat-side\">🥗 시저샐러드</div>\n<div class=\"menu-line cat-side\">🥗 숙주나물</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">누룽지</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "매운맛",
+          "emoji": "🌶️"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "애호박고추장찌개",
+          "category": "soup"
+        },
+        {
+          "name": "간장불고기",
+          "category": "main"
+        },
+        {
+          "name": "그릴함박타코야끼",
+          "category": "side"
+        },
+        {
+          "name": "치즈오븐파스타",
+          "category": "side"
+        },
+        {
+          "name": "시저샐러드",
+          "category": "side"
+        },
+        {
+          "name": "숙주나물",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "누룽지",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-11-16",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
