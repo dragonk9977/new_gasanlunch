@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-11-16 00:40:22",
-  "updated_at_display": "2026.11.16 00:40",
+  "updated_at": "2026-11-16 09:01:01",
+  "updated_at_display": "2026.11.16 09:01",
   "date": "2026-11-16",
   "date_display": "11월 16일",
   "weekday": "월",
   "weather": {
-    "temp": 5.2,
+    "temp": 7.8,
     "precipitation": 0.0,
-    "condition": "대체로 맑음",
-    "emoji": "🌤️"
+    "condition": "흐림",
+    "emoji": "☁️"
   },
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
@@ -155,7 +155,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-16",
-      "checked_at": "00:40",
+      "checked_at": "09:01",
       "pipeline_version": 3
     },
     {
@@ -219,7 +219,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-16",
-      "checked_at": "00:40",
+      "checked_at": "09:01",
       "pipeline_version": 3
     },
     {
@@ -344,19 +344,93 @@
           "lng": 126.88241839
         }
       ],
-      "source": "kakao_first",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/FA7q4/dJMcabNlLZa/aRMfL8VmFespwEB4qIREz1/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"밥심 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🥩 돼지갈비찜</div>\n<div class=\"menu-line cat-main\">마라샹궈</div>\n<div class=\"menu-line cat-main\">🐟 생선까스</div>\n<div class=\"menu-line cat-main\">메밀온소바</div>\n<div class=\"menu-line cat-soup\">🍲 시래기된장국</div>\n<div class=\"menu-line cat-side\">브로콜리오징어 (with 초장)</div>\n<div class=\"menu-line cat-side\">멸치마늘쫑</div>\n<div class=\"menu-line cat-side\">🥗 콩나물어묵볶음</div>\n<div class=\"menu-line cat-side\">🥗 샐러드 (with 블루베리소스)</div>\n<div class=\"menu-line cat-kimchi\">겉절이</div>\n<div class=\"menu-line cat-soup\">🍜 한강라면</div>\n<div class=\"menu-line cat-drink\">누룽지</div>\n<div class=\"menu-line cat-drink\">아이스커피</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/FA7q4/dJMcabNlLZa/aRMfL8VmFespwEB4qIREz1/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/dnHARv/dJMcahzTOxd/0dnSfBBDyUu4gEDKSGcc7k/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "생선",
+          "emoji": "🐟"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "돼지갈비찜",
+          "category": "main"
+        },
+        {
+          "name": "마라샹궈",
+          "category": "main"
+        },
+        {
+          "name": "생선까스",
+          "category": "main"
+        },
+        {
+          "name": "메밀온소바",
+          "category": "main"
+        },
+        {
+          "name": "시래기된장국",
+          "category": "soup"
+        },
+        {
+          "name": "브로콜리오징어 (with 초장)",
+          "category": "side"
+        },
+        {
+          "name": "멸치마늘쫑",
+          "category": "side"
+        },
+        {
+          "name": "콩나물어묵볶음",
+          "category": "side"
+        },
+        {
+          "name": "샐러드 (with 블루베리소스)",
+          "category": "side"
+        },
+        {
+          "name": "겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "누룽지",
+          "category": "drink"
+        },
+        {
+          "name": "아이스커피",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-16",
-      "checked_at": "00:40",
+      "checked_at": "09:01",
       "pipeline_version": 3
     }
   ]
