@@ -1,10 +1,15 @@
 {
-  "updated_at": "2026-11-18 09:10:29",
-  "updated_at_display": "2026.11.18 09:10",
+  "updated_at": "2026-11-18 09:20:25",
+  "updated_at_display": "2026.11.18 09:20",
   "date": "2026-11-18",
   "date_display": "11월 18일",
   "weekday": "수",
-  "weather": null,
+  "weather": {
+    "temp": 5.5,
+    "precipitation": 0.0,
+    "condition": "구름 조금",
+    "emoji": "⛅"
+  },
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
     "lat": 37.471364252495015,
@@ -146,7 +151,7 @@
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-18",
-      "checked_at": "09:10",
+      "checked_at": "09:20",
       "pipeline_version": 3
     },
     {
