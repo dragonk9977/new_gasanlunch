@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-19 10:40:26",
-  "updated_at_display": "2026.11.19 10:40",
+  "updated_at": "2026-11-19 11:00:49",
+  "updated_at_display": "2026.11.19 11:00",
   "date": "2026-11-19",
   "date_display": "11월 19일",
   "weekday": "목",
   "weather": {
-    "temp": 2.5,
+    "temp": 3.0,
     "precipitation": 0.0,
     "condition": "대체로 맑음",
     "emoji": "🌤️"
@@ -419,16 +419,77 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 🥗 순두부찌개</div>\n<div class=\"menu-line cat-main\">🔥 🥩 대파제육볶음</div>\n<div class=\"menu-line cat-main\">🥩 갈비맛산적오븐구이</div>\n<div class=\"menu-line cat-kimchi\">김치전</div>\n<div class=\"menu-line cat-side\">어묵채볶음</div>\n<div class=\"menu-line cat-kimchi\">시금치겉절이</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">단호박죽</div>\n<div class=\"menu-line cat-drink\">음료</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "순두부찌개",
+          "category": "soup"
+        },
+        {
+          "name": "대파제육볶음",
+          "category": "main"
+        },
+        {
+          "name": "갈비맛산적오븐구이",
+          "category": "main"
+        },
+        {
+          "name": "김치전",
+          "category": "kimchi"
+        },
+        {
+          "name": "어묵채볶음",
+          "category": "side"
+        },
+        {
+          "name": "시금치겉절이",
+          "category": "kimchi"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "단호박죽",
+          "category": "side"
+        },
+        {
+          "name": "음료",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-11-19",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
