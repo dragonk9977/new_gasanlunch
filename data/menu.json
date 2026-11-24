@@ -1,15 +1,10 @@
 {
-  "updated_at": "2026-11-24 10:30:42",
-  "updated_at_display": "2026.11.24 10:30",
+  "updated_at": "2026-11-24 10:40:30",
+  "updated_at_display": "2026.11.24 10:40",
   "date": "2026-11-24",
   "date_display": "11월 24일",
   "weekday": "화",
-  "weather": {
-    "temp": 0.6,
-    "precipitation": 0.0,
-    "condition": "맑음",
-    "emoji": "☀️"
-  },
+  "weather": null,
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
     "lat": 37.471364252495015,
@@ -379,16 +374,77 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 사골떡국</div>\n<div class=\"menu-line cat-main\">🥩 오븐구운오리훈제야채찜</div>\n<div class=\"menu-line cat-main\">🥩 한입미니떡갈비</div>\n<div class=\"menu-line cat-snack\">미니찐빵</div>\n<div class=\"menu-line cat-side\">아삭이고추된장무침</div>\n<div class=\"menu-line cat-side\">유자청무생채</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">누룽지</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "사골떡국",
+          "category": "soup"
+        },
+        {
+          "name": "오븐구운오리훈제야채찜",
+          "category": "main"
+        },
+        {
+          "name": "한입미니떡갈비",
+          "category": "main"
+        },
+        {
+          "name": "미니찐빵",
+          "category": "snack"
+        },
+        {
+          "name": "아삭이고추된장무침",
+          "category": "side"
+        },
+        {
+          "name": "유자청무생채",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "누룽지",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-11-24",
+      "checked_at": "10:40",
       "pipeline_version": 3
     },
     {
