@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-11-24 10:10:33",
-  "updated_at_display": "2026.11.24 10:10",
+  "updated_at": "2026-11-24 10:20:33",
+  "updated_at_display": "2026.11.24 10:20",
   "date": "2026-11-24",
   "date_display": "11월 24일",
   "weekday": "화",
   "weather": {
-    "temp": 0.2,
+    "temp": 0.4,
     "precipitation": 0.0,
     "condition": "맑음",
     "emoji": "☀️"
@@ -143,19 +143,85 @@
           "lng": 126.88397958
         }
       ],
-      "source": "kakao_posts",
-      "html": "\n                    <img\n                        src=\"https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg\"\n                        class=\"menu-image\"\n                        alt=\"온정찬 오늘의 메뉴\"\n                    >\n                    ",
+      "source": "gemini_ocr",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-main\">🍜 🍲 한그릇코너-잔치국수</div>\n<div class=\"menu-line cat-main\">🥩 삼겹살구이&amp;김치볶음</div>\n<div class=\"menu-line cat-main\">🍲 통새우튀김&amp;고구마스틱맛탕</div>\n<div class=\"menu-line cat-soup\">🥩 🍜 🍲 차돌짬뽕국</div>\n<div class=\"menu-line cat-side\">교자만두찜&amp;파초간장</div>\n<div class=\"menu-line cat-side\">베이컨감자채볶음</div>\n<div class=\"menu-line cat-side\">물파래무무침</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드&amp;드레싱2</div>\n<div class=\"menu-line cat-kimchi\">생채무침</div>\n<div class=\"menu-line cat-kimchi\">🍲 국내산포기김치</div>\n<div class=\"menu-line cat-soup\">🍜 셀프한강라면</div>\n<div class=\"menu-line cat-drink\">매실차, 옥수수차, 숭늉</div>\n    </div>\n    ",
       "raw_ref": {
         "type": "image",
-        "url": "https://k.kakaocdn.net/dn/MgzGa/dJMcadDkpW6/54YUBWPaF7mGjbUEGYfss0/img_xl.jpg"
+        "url": "https://k.kakaocdn.net/dn/bhNYZc/dJMcabmko1A/XuSUpUUH8QO9zrnoEXPk1k/img_xl.jpg"
       },
-      "badges": [],
-      "items": [],
+      "badges": [
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "한그릇코너-잔치국수",
+          "category": "main"
+        },
+        {
+          "name": "삼겹살구이&김치볶음",
+          "category": "main"
+        },
+        {
+          "name": "통새우튀김&고구마스틱맛탕",
+          "category": "main"
+        },
+        {
+          "name": "차돌짬뽕국",
+          "category": "soup"
+        },
+        {
+          "name": "교자만두찜&파초간장",
+          "category": "side"
+        },
+        {
+          "name": "베이컨감자채볶음",
+          "category": "side"
+        },
+        {
+          "name": "물파래무무침",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드&드레싱2",
+          "category": "side"
+        },
+        {
+          "name": "생채무침",
+          "category": "kimchi"
+        },
+        {
+          "name": "국내산포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "셀프한강라면",
+          "category": "soup"
+        },
+        {
+          "name": "매실차, 옥수수차, 숭늉",
+          "category": "drink"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
       "menu_status": "today",
       "menu_date": "2026-11-24",
-      "checked_at": "10:10",
+      "checked_at": "10:20",
       "pipeline_version": 3
     },
     {
