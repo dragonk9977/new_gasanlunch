@@ -1,15 +1,10 @@
 {
-  "updated_at": "2026-11-26 10:40:28",
-  "updated_at_display": "2026.11.26 10:40",
+  "updated_at": "2026-11-26 11:00:47",
+  "updated_at_display": "2026.11.26 11:00",
   "date": "2026-11-26",
   "date_display": "11월 26일",
   "weekday": "목",
-  "weather": {
-    "temp": 9.9,
-    "precipitation": 0.0,
-    "condition": "대체로 맑음",
-    "emoji": "🌤️"
-  },
+  "weather": null,
   "office": {
     "address": "서울 금천구 가산디지털2로 30",
     "lat": 37.471364252495015,
@@ -439,16 +434,81 @@
           "lng": 126.88379085
         }
       ],
-      "source": "none",
-      "html": "\n                    <div class=\"error-menu\">\n                        오늘의 런치타임 메뉴를 찾지 못했습니다.\n                    </div>\n                    ",
-      "raw_ref": null,
-      "badges": [],
-      "items": [],
+      "source": "threads",
+      "html": "\n    <div class=\"text-menu\">\n        <div class=\"menu-line cat-soup\">🍲 황태해장국</div>\n<div class=\"menu-line cat-main\">🔥 🥩 제육볶음</div>\n<div class=\"menu-line cat-main\">🥩 🍲 맛쵸킹탕수육</div>\n<div class=\"menu-line cat-side\">알리오올리오</div>\n<div class=\"menu-line cat-side\">🥗 샤인머스켓방울토마토샐러드</div>\n<div class=\"menu-line cat-side\">🥗 청경채두부범벅</div>\n<div class=\"menu-line cat-side\">🥗 가든샐러드</div>\n<div class=\"menu-line cat-kimchi\">포기김치</div>\n<div class=\"menu-line cat-side\">누룽지</div>\n<div class=\"menu-line cat-soup\">🍜 음료/한강라면</div>\n    </div>\n    ",
+      "raw_ref": {
+        "type": "link",
+        "url": "https://www.threads.net/@lunchtime_ypp"
+      },
+      "badges": [
+        {
+          "label": "인기",
+          "emoji": "🔥"
+        },
+        {
+          "label": "고기",
+          "emoji": "🥩"
+        },
+        {
+          "label": "면",
+          "emoji": "🍜"
+        },
+        {
+          "label": "국물",
+          "emoji": "🍲"
+        },
+        {
+          "label": "건강식",
+          "emoji": "🥗"
+        }
+      ],
+      "items": [
+        {
+          "name": "황태해장국",
+          "category": "soup"
+        },
+        {
+          "name": "제육볶음",
+          "category": "main"
+        },
+        {
+          "name": "맛쵸킹탕수육",
+          "category": "main"
+        },
+        {
+          "name": "알리오올리오",
+          "category": "side"
+        },
+        {
+          "name": "샤인머스켓방울토마토샐러드",
+          "category": "side"
+        },
+        {
+          "name": "청경채두부범벅",
+          "category": "side"
+        },
+        {
+          "name": "가든샐러드",
+          "category": "side"
+        },
+        {
+          "name": "포기김치",
+          "category": "kimchi"
+        },
+        {
+          "name": "누룽지",
+          "category": "side"
+        },
+        {
+          "name": "음료/한강라면",
+          "category": "soup"
+        }
+      ],
       "price": 7500,
       "source_hash": null,
-      "menu_status": "missing",
-      "menu_date": null,
-      "checked_at": null,
+      "menu_status": "today",
+      "menu_date": "2026-11-26",
+      "checked_at": "11:00",
       "pipeline_version": 3
     },
     {
